@@ -1,0 +1,42 @@
+#!/usr/bin/env python3
+
+import sys, re
+from subprocess import check_output
+from utils import get_branch_name, check_commit_issue_number, get_branch_issue_number
+
+# Collect parameters
+commit_info = {
+    "filepath": sys.argv[1],
+    "type": "",
+    "hash": "",
+}
+
+if len(sys.argv) > 2:
+    commit_info["type"] = sys.argv[2]
+if len(sys.argv) > 3:
+    commit_info["hash"] = (
+        check_output(["git", "rev-parse", "HEAD"]).strip().decode("utf-8")
+    )  # sys.argv[3]
+
+
+def add_issue_number_to_commit_msg(commit_msg_filepath, issue_number):
+    with open(commit_msg_filepath, "r+") as f:
+        existing_commit_msg = f.read()
+
+        # Add issue to commit msg
+        msg = f"({issue_number}) {existing_commit_msg}"
+        # Insert at start of file
+        f.seek(0, 0)
+        # Write to commit msg file
+        f.write(msg)
+        # Close file
+        f.close()
+
+
+# 1. Check if commit message has an issue number (regex). If so, exit.
+# 2. Check if current branch is headless. If so, exit.
+# 3. Check if current branch has issue number. If so, update message.
+check_commit_issue_number(commit_info["filepath"])
+branch_name = get_branch_name()
+branch_issue_number = get_branch_issue_number(branch_name)
+add_issue_number_to_commit_msg(commit_info["filepath"], branch_issue_number)

@@ -24,6 +24,6 @@
     "typescript": "^5.2.2"
   },
   "scripts": {
-    "prepare": "husky install"
+    "postinstall": "husky install"
   }
 }
