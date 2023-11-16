@@ -1,4 +1,4 @@
-#Democratization of blockchain RNG via Chanlink_VRF and CCIP
+# Democratization of blockchain RNG via Chanlink_VRF and CCIP
 ```mermaid
 flowchart TD
     A[Lottery initiator on the DAPP's Chain] -->|Connected via metamask| B[DAPP]
