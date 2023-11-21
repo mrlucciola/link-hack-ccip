@@ -5,7 +5,7 @@
     "ellong820",
     "jw418"
   ],
-  "packageManager": "yarn@3.5.1",
+  "packageManager": "yarn@3.6.4",
   "private": true,
   "engines": {
     "node": ">=18.15.0",
