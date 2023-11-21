@@ -25,6 +25,10 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
+    // mui
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "strictNullChecks": true,
     // general
     "incremental": true,
   },
