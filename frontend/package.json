@@ -4,11 +4,6 @@
   "description": "Broswer extension code for CCIP wallet app.",
   "private": true,
   "type": "module",
-  "packageManager": "yarn@3.5.1",
-  "engines": {
-    "node": ">=18.15.0",
-    "yarn": "^3.5.1"
-  },
   "browserslist": {
     "production": [
       ">0.2%",

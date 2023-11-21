@@ -9,11 +9,10 @@
   "private": true,
   "engines": {
     "node": ">=18.15.0",
-    "yarn": "^3.5.1"
+    "yarn": "^3.6.4"
   },
   "workspaces": [
-    "services/*",
-    "client"
+    "frontend"
   ],
   "devDependencies": {
     "@types/node": "^20.9.0",
