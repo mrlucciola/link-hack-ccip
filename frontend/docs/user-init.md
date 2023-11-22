@@ -1,3 +1,5 @@
+# `User Init` flow
+
 ```mermaid
 ---
 title: User-init flow
@@ -49,3 +51,76 @@ flowchart LR
    - [BottomNav]
      - [Button] Back
      - [Button] Confirm
+
+# `User Init` components
+
+```mermaid
+---
+title: User Init components
+---
+flowchart LR
+   subgraph SplashView
+      splashAnimation
+   end
+   splashAnimation -->|Wait| WelcomeView
+
+   subgraph WelcomeView
+      start[Get Started button]
+   end
+   start -->|Click| SetupKeysView
+
+   subgraph SetupKeysView
+      direction LR
+      info[Info About Keys]
+      subgraph GenerateKeyButton
+      end
+      subgraph StagedKeysList
+         subgraph KeyForm
+            subgraph KeyTextField
+            end
+            subgraph KeyAliasTextField
+            end
+            subgraph RemoveKeyButton
+            end
+         end
+         subgraph AddKeyButton
+         end
+      end
+      CompleteSetupButton
+
+   end
+   CompleteSetupButton -->|"`**Click**:
+   *Activates when
+   1+ key(s) in
+   StagedKeysList*`"| CompleteView
+
+   subgraph CompleteView
+   end
+```
+
+# `User Init` state
+
+```mermaid
+---
+title: User Init state
+---
+erDiagram
+   USER {
+      KEY[] keys
+      %% CONTACT[] contacts
+   }
+   KEY {
+      string privateKey
+      string secretPhrase
+      ADDRESS[] addresses
+   }
+   ADDRESS {
+      number nonce
+      string address
+      string alias
+   }
+
+   USER ||--|{ KEY: ""
+   KEY ||--|{ ADDRESS: ""
+
+```
