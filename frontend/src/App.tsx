@@ -10,7 +10,7 @@ const App: FC = () => {
   const [count, setCount] = useState(0);
 
   return (
-    <>
+    <div style={{ textAlign: "center", padding: "2rem" }}>
       <div className="title">
         <a href="https://react.dev" target="_blank">
           <img
@@ -39,7 +39,7 @@ const App: FC = () => {
       >
         MUI GRID App
       </Grid>
-    </>
+    </div>
   );
 };
 
