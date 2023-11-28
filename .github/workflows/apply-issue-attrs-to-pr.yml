@@ -60,6 +60,7 @@ jobs:
             console.log('\n\n')
 
             const issueLabels = Array.isArray(issue.labels) ? issue.labels : [];
+            //
             const assignees = issue.assignee ? [issue.assignee.login] : issue.assignees.map(a => a.login);
             const milestone = issue.milestone;
 
