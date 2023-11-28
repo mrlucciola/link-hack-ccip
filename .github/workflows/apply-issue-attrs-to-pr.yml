@@ -105,7 +105,6 @@ jobs:
                 repo: process.env.repo,
                 issue_number: prNumber,
                 // OPTIONAL
-                body: issue.body,
                 milestone: issue.milestone.number,
                 labels: issueLabelStrs,
                 assignees: assignees,
