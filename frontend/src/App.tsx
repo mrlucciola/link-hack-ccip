@@ -1,32 +1,22 @@
 import { FC } from "react";
 // mui
 import Grid from "@mui/material/Unstable_Grid2";
+import Base from "./pages/Base";
 
-// components
-import LogoComponent from "./LogoComponent";
-
-const App: FC = () => {  
+const App: FC = () => {
   return (
     <Grid
-    sx={{
-      textAlign: "center",
-      padding: "2rem",
-      width: 320,
-      height: 430,
-      margin: "0 auto",
-    }}
-  >
-    <LogoComponent />
-    <Grid
-      className="App"
       container
-      direction="column"
+      flexDirection="column"
       alignItems="center"
       wrap="nowrap"
-    >      
-      MUI GRID App L
-    </Grid>  
-  </Grid>
+      minHeight="100%"
+      maxHeight="100%"
+      height="100%"
+    >
+      {/* @note this nesting is unnecessary and will be conditionally rendered based on user-initiation state */}
+      <Base />
+    </Grid>
   );
 };
 
