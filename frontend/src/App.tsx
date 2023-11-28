@@ -1,46 +1,28 @@
 import { FC } from "react";
-// mui
-import Grid from "@mui/material/Unstable_Grid2";
+// components
+import Base from "./views/Base";
 
-import { useState } from "react";
-import chainlinkLogo from "./assets/Chainlink.svg";
-import "./App.css";
+// @todo this is a placeholder - move to state
+type IView = "onboarding" | "base";
+let initCurrentView: IView = "base";
 
 const App: FC = () => {
-  const [count, setCount] = useState(0);
+  // @todo change name schema from `userinitiation`/`init`/etc. to `onboarding`
+  // @todo replace with state
+  const currentView = initCurrentView;
 
-  return (
-    <>
-      <div className="title">
-        <a href="https://react.dev" target="_blank">
-          <img
-            src={chainlinkLogo}
-            className="logo chainlink"
-            alt="Chainlink logo"
-          />
-        </a>
-        <span>CCIP Wallet</span>
-      </div>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
+  switch (currentView) {
+    case "base":
+      return <Base />;
+    case "onboarding":
+      // @todo add <Onboarding /> - prev <Init... />
+      break;
 
-      <Grid
-        className="App"
-        container
-        direction="column"
-        alignItems="center"
-        wrap="nowrap"
-      >
-        MUI GRID App
-      </Grid>
-    </>
-  );
+    default:
+      // @todo add `CrashView` component
+      // return <CrashView />
+      return <div>App crashed</div>;
+  }
 };
 
 export default App;
