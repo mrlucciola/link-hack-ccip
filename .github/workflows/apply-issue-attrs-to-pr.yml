@@ -55,13 +55,8 @@ jobs:
             });
             const issue = issueRes.data;
 
-            console.log('\n\nassignee:', issue.assignee)
-            console.log('assignees:', issue.assignees)
-            console.log('\n\n')
-
             const issueLabels = Array.isArray(issue.labels) ? issue.labels : [];
-            //
-            const assignees = issue.assignee ? [issue.assignee.login] : issue.assignees.map(a => a.login);
+            const assignees = Array.isArray(issue.assignees) ? issue.assignees.map(a => a.login) : [];
             const milestone = issue.milestone;
 
             const issueLabelStrs = issueLabels.map(label => label.name);
@@ -110,9 +105,10 @@ jobs:
                 milestone
               });
               console.log("Successfully added milestone to its linked pull request.");
-            } catch {
+            } catch err {
               console.log('Error: adding milestone');
               errors.milestone = true;
+              throw new Error(err)
             }
 
             // @todo add error logic for discovered errors
