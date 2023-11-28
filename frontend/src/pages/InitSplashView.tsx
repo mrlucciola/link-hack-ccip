@@ -3,38 +3,38 @@ import { Grid, Typography, Button } from "@mui/material";
 const InitSplashView = () => {
   return (
     <Grid
-      container
-      direction="column"
-      justifyContent="center"
-      alignItems="center"
-      style={{
-        minHeight: "100%",
-        minWidth: "100%",
-        position: "relative",
-        padding: "2rem",
-        textAlign: "center",
+    container
+    direction="column"
+    justifyContent="center"
+    alignItems="center"
+    sx={{
+      textAlign: "center",        
+      width: 320,
+      height: 430,
+      margin: "0 auto",
+      position: "relative", // Ajout de position relative ici
+    }}
+  >
+    <Typography
+      variant="h4"
+      component="h1"
+      sx={{
+        position: "absolute",
+        top: "45%",
+        transform: "translateY(-50%)",
       }}
     >
-      <Typography
-        variant="h4"
-        component="h1"
-        style={{
-          position: "absolute",
-          top: "45%",
-          transform: "translateY(-50%)",
-        }}
-      >
-        Welcome to CCIP Wallet
-      </Typography>
-      <Grid
-        item
-        style={{ position: "absolute", bottom: "1.5rem", width: "100%" }}
-      >
-        <Button variant="contained" style={{ width: "85%" }}>
-          Get started
-        </Button>
-      </Grid>
+      Welcome to CCIP Wallet
+    </Typography>
+    <Grid
+      item
+      sx={{ position: "absolute", bottom: "1.5rem", width: "90%" }}
+    >
+      <Button variant="contained" sx={{width: "100%"}}>
+        Get started
+      </Button>
     </Grid>
+  </Grid>
   );
 };
 
