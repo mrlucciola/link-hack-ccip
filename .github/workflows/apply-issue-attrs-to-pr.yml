@@ -1,0 +1,139 @@
+name: Apply issue labels, assignees & project when opening PR
+run-name: Applying attributes and to PR #${{ github.event.pull_request.number }} from branch ${{ github.event.pull_request.head.ref }}
+on:
+  pull_request:
+    types: [opened]
+jobs:
+  label-pr:
+    permissions: write-all
+    runs-on: ubuntu-latest
+    steps:
+      - name: Apply issue attrs to associated PR
+        uses: actions/github-script@v7
+        env:
+          owner: ${{ github.repository_owner }}
+          repo: ${{ github.event.repository.name }}
+          pr_number: ${{ github.event.issue.number }}
+        with:
+          script: |
+            const eventActionType = context.payload.action;
+            const issueBranchHead = context.payload.pull_request.head.ref;
+            // const prNumber = context.payload.pull_request.number;
+            console.log(
+              `PR #${process.env.pr_number} (${eventActionType}) branch: "${issueBranchHead}"`,
+            );
+            console.log('\n\nPR DATA:', context.payload.pull_request, '\n\n')
+
+            // throw if issueBranchHead is not type `string`
+            if (typeof issueBranchHead !== typeof " ") {
+              const errorMsg = `'issueBranchHead' type is not string. issueBranchHead='${issueBranchHead}' -- type='${typeof issueBranchHead}'`;
+              throw new Error(errorMsg);
+            }
+
+            // throw if branch has no hyphens:
+            //   - issue number is prepended to branch name via hyphen
+            if (!issueBranchHead.includes("-")) {
+              const errorMsg = `'issueBranchHead' does not include hyphens: ${issueBranchHead}`;
+              throw new Error(errorMsg);
+            }
+
+            // get issue from branch name
+            const issueBranchNumber = issueBranchHead.split("-")[0];
+
+            // throw if result is empty
+            if (issueBranchNumber === "") throw new Error("'issueBranchNumber' === ''.");
+
+            // throw if result is not number
+            if (!(/^\d+$/.test(issueBranchNumber))) {
+              const errorMsg = `'issueBranchNumber' is not a number: issueBranchNumber='${issueBranchNumber}'.`;
+              throw new Error(errorMsg);
+            }
+
+            // STEP 1: Get data from issue
+            const issueRes = await github.rest.issues.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issueBranchNumber,
+            });
+            const issue = issueRes.data;
+
+            const issueLabels = Array.isArray(issue.labels) ? issue.labels : [];
+            const assignees = Array.isArray(issue.assignees) ? issue.assignees.map(a => a.login) : [];
+            const milestone = issue.milestone.number;
+
+            const issueLabelStrs = issueLabels.map(label => label.name);
+
+            // PART 2: Update PR (PR is a type of issue)
+            const errors = {
+              labels: false,
+              assignees: false,
+              milestone: false,
+            }
+
+            // Send request to add labels to PR
+            // try {
+            //   await github.rest.issues.addLabels({
+            //     owner: context.repo.owner,
+            //     repo: context.repo.repo,
+            //     issue_number: prNumber,
+            //     labels: issueLabelStrs
+            //   });
+            //   console.log("Successfully added issue labels to its linked pull request.");
+            // } catch {
+            //   console.log('Error: adding labels');
+            //   errors.labels = true;
+            // }
+
+            // Send request to add assignees to PR
+            // try {
+            //   await github.rest.issues.addAssignees({
+            //     owner: context.repo.owner,
+            //     repo: context.repo.repo,
+            //     issue_number: prNumber,
+            //     assignees
+            //   });
+            //   console.log("Successfully added assignees to its linked pull request.");
+            // } catch {
+            //   console.log('Error: adding assignees');
+            //   errors.assignees = true;
+            // }
+
+            // Send request to add milestone to PR
+            try {
+              console.log('\nreq info (below)\n');
+              console.log('payload', {
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: prNumber,
+                //
+                body: issue.body,
+                // milestone: issue.milestone.number,
+                // labels: issueLabelStrs,
+                // assignees: assignees,
+              });
+              console.log('\nreq info (above)\n');
+              
+              const res = await github.rest.issues.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: prNumber,
+                //
+                title: issue.title,
+                body: issue.body,
+                assignee: issue.assignee.login,
+                state: issue.state,
+                state_reason: issue.state_reason,
+                // milestone: issue.milestone.number,
+                labels: issueLabelStrs,
+                assignees: assignees,
+              });
+              console.log("Successfully added milestone to its linked pull request.", milestone);
+              console.log('\nres (below)\n', res, '\nres (above)\n');
+            } catch (err) {
+              console.log('Error: adding milestone');
+              errors.milestone = true;
+              throw new Error(err);
+            }
+
+            // @todo add error logic for discovered errors
+            //
