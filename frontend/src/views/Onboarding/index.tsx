@@ -3,9 +3,9 @@ import { FC } from "react";
 import RootLayout from "../../layouts/RootLayout";
 
 const Onboarding: FC = () => {
-  return <RootLayout>
-    
-  </RootLayout>;
+  // add sub-view state to use with switch statement
+  // add switch statement to control which sub-view is open
+  return <RootLayout></RootLayout>;
 };
 
 export default Onboarding;
