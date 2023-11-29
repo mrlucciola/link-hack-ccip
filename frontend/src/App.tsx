@@ -1,23 +1,28 @@
 import { FC } from "react";
-// mui
-import Grid from "@mui/material/Unstable_Grid2";
-import Base from "./pages/Base";
+// components
+import Base from "./views/Base";
+
+// @todo this is a placeholder - move to state
+type IView = "onboarding" | "base";
+let initCurrentView: IView = "base";
 
 const App: FC = () => {
-  return (
-    <Grid
-      container
-      flexDirection="column"
-      alignItems="center"
-      wrap="nowrap"
-      minHeight="100%"
-      maxHeight="100%"
-      height="100%"
-    >
-      {/* @note this nesting is unnecessary and will be conditionally rendered based on user-initiation state */}
-      <Base />
-    </Grid>
-  );
+  // @todo change name schema from `userinitiation`/`init`/etc. to `onboarding`
+  // @todo replace with state
+  const currentView = initCurrentView;
+
+  switch (currentView) {
+    case "base":
+      return <Base />;
+    case "onboarding":
+      // @todo add <Onboarding /> - prev <Init... />
+      break;
+
+    default:
+      // @todo add `CrashView` component
+      // return <CrashView />
+      return <div>App crashed</div>;
+  }
 };
 
 export default App;
