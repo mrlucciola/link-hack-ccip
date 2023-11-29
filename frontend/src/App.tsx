@@ -3,6 +3,7 @@ import { FC } from "react";
 import { useViewStore } from "./mobx/stores";
 // components
 import Base from "./views/Base";
+import Onboarding from "./views/Onboarding";
 
 const App: FC = () => {
   const currentRootView = useViewStore((s) => s.currentRootView);
@@ -11,8 +12,7 @@ const App: FC = () => {
     case "base":
       return <Base />;
     case "onboarding":
-      // @todo add <Onboarding /> - prev <Init... />
-      break;
+      return <Onboarding />;
 
     default:
       // @todo add `CrashView` component
