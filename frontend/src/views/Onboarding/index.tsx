@@ -3,7 +3,9 @@ import { FC } from "react";
 import RootLayout from "../../layouts/RootLayout";
 
 const Onboarding: FC = () => {
-  return <RootLayout></RootLayout>;
+  return <RootLayout>
+    
+  </RootLayout>;
 };
 
 export default Onboarding;

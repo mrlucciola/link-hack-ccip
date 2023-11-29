@@ -3,7 +3,7 @@ import { FC } from "react";
 import Grid from "@mui/material/Unstable_Grid2";
 import { Typography } from "@mui/material";
 
-const InitCompletedView: FC = () => {
+const CompleteView: FC = () => {
   const text =
     "Setup complete. You may change your keys and accounts in Settings.";
 
@@ -26,4 +26,4 @@ const InitCompletedView: FC = () => {
   );
 };
 
-export default InitCompletedView;
+export default CompleteView;
