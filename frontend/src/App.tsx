@@ -1,17 +1,13 @@
 import { FC } from "react";
+// state
+import { useViewStore } from "./mobx/stores";
 // components
 import Base from "./views/Base";
 
-// @todo this is a placeholder - move to state
-type IView = "onboarding" | "base";
-let initCurrentView: IView = "base";
-
 const App: FC = () => {
-  // @todo change name schema from `userinitiation`/`init`/etc. to `onboarding`
-  // @todo replace with state
-  const currentView = initCurrentView;
+  const currentRootView = useViewStore((s) => s.currentRootView);
 
-  switch (currentView) {
+  switch (currentRootView) {
     case "base":
       return <Base />;
     case "onboarding":

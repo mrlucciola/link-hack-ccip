@@ -1,7 +1,8 @@
 import { Context, useContext } from "react";
 // local
-import { RootStore, AppStoreKeys } from "../stores";
+import { RootStore } from "../stores";
 import { rootStoreCtx } from "./context";
+import { AppStoreKeys } from "../interfaces";
 
 const useStoreData = <Selection, ContextData, Store>(
   context: Context<ContextData>,

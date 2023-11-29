@@ -4,9 +4,11 @@ import { makeAutoObservable } from "mobx";
 import { RootStore } from ".";
 import { StateStore } from "../interfaces";
 
+export type RootViewType = "onboarding" | "base";
+
 /** Main store
  */
-export class MainStore implements StateStore {
+export class ViewStore implements StateStore {
   // ctor
   constructor(public root: RootStore) {
     // init
@@ -15,6 +17,8 @@ export class MainStore implements StateStore {
 
   /////////////////////////////////////////////////////////
   ////////////////////// OBSERVABLES //////////////////////
+  // @todo hydrate from persistent storage
+  currentRootView: RootViewType = "base";
   ////////////////////// OBSERVABLES //////////////////////
   /////////////////////////////////////////////////////////
 
@@ -25,6 +29,9 @@ export class MainStore implements StateStore {
 
   /////////////////////////////////////////////////////////
   //////////////////////// ACTIONS ////////////////////////
+  setCurrentRootView(newView: RootViewType) {
+    this.currentRootView = newView;
+  }
   //////////////////////// ACTIONS ////////////////////////
   /////////////////////////////////////////////////////////
 
