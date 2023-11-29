@@ -1,6 +1,7 @@
 import { FC } from "react";
 // components
 import Base from "./views/Base";
+import Onboarding from "./views/Onboarding";
 
 // @todo this is a placeholder - move to state
 type IView = "onboarding" | "base";
@@ -15,8 +16,7 @@ const App: FC = () => {
     case "base":
       return <Base />;
     case "onboarding":
-      // @todo add <Onboarding /> - prev <Init... />
-      break;
+      return <Onboarding />;
 
     default:
       // @todo add `CrashView` component
