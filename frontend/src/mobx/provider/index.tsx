@@ -3,11 +3,22 @@ import { useLocalObservable } from "mobx-react-lite";
 // local
 import { RootStore } from "../stores";
 import { rootStoreCtx } from "./context";
+import { GenericStore } from "../interfaces";
 
-export const StoreProvider: FC<{ children: ReactNode }> = ({ children }) => {
-  const store = useLocalObservable(() => new RootStore());
+type Class<S extends GenericStore> = new (...args: any[]) => S;
 
-  return (
-    <rootStoreCtx.Provider value={store}>{children}</rootStoreCtx.Provider>
+export const newStoreProvider = <S extends GenericStore>(
+  storeCtx: React.Context<S | null>,
+  storeClass: Class<S>
+) => {
+  const store = useLocalObservable(() => new storeClass());
+
+  return ({ children }: { children: ReactNode }) => (
+    <storeCtx.Provider value={store}>{children}</storeCtx.Provider>
   );
 };
+
+export const StoreProvider: FC<{ children: ReactNode }> = newStoreProvider(
+  rootStoreCtx,
+  RootStore
+);

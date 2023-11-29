@@ -3,7 +3,7 @@ import { Context, useContext } from "react";
 import { RootStore, AppStoreKeys } from "../stores";
 import { rootStoreCtx } from "./context";
 
-const useStoreData = <Selection, ContextData, Store>(
+export const useStoreData = <Selection, ContextData, Store>(
   context: Context<ContextData>,
   storeSelector: (contextData: ContextData) => Store,
   dataSelector: (store: Store) => Selection
