@@ -1,33 +1,28 @@
 import { FC } from "react";
-// mui
-import Grid from "@mui/material/Unstable_Grid2";
-
 // components
-import LogoComponent from "./LogoComponent";
+import Base from "./views/Base";
 
-const App: FC = () => {  
-  return (
-    <Grid
-    sx={{
-      textAlign: "center",
-      padding: "2rem",
-      width: 320,
-      height: 430,
-      margin: "0 auto",
-    }}
-  >
-    <LogoComponent />
-    <Grid
-      className="App"
-      container
-      direction="column"
-      alignItems="center"
-      wrap="nowrap"
-    >      
-      MUI GRID App L
-    </Grid>  
-  </Grid>
-  );
+// @todo this is a placeholder - move to state
+type IView = "onboarding" | "base";
+let initCurrentView: IView = "base";
+
+const App: FC = () => {
+  // @todo change name schema from `userinitiation`/`init`/etc. to `onboarding`
+  // @todo replace with state
+  const currentView = initCurrentView;
+
+  switch (currentView) {
+    case "base":
+      return <Base />;
+    case "onboarding":
+      // @todo add <Onboarding /> - prev <Init... />
+      break;
+
+    default:
+      // @todo add `CrashView` component
+      // return <CrashView />
+      return <div>App crashed</div>;
+  }
 };
 
 export default App;
