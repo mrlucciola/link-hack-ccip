@@ -1,0 +1,76 @@
+name: Apply issue labels, assignees & project when opening PR
+run-name: Applying attributes and to PR #${{ github.event.pull_request.number }} from branch ${{ github.event.pull_request.head.ref }}
+on:
+  pull_request_target: # NOT pull_request
+    types: [opened]
+jobs:
+  label-pr:
+    permissions: write-all
+    runs-on: ubuntu-latest
+    steps:
+      - name: Apply issue attrs to associated PR
+        uses: actions/github-script@v7
+        env:
+          owner: ${{ github.repository_owner }}
+          repo: ${{ github.event.repository.name }}
+        with:
+          script: |
+            const eventActionType = context.payload.action;
+            const issueBranchHead = context.payload.pull_request.head.ref;
+            const prNumber = context.payload.pull_request.number;
+            console.log(
+              `PR #${prNumber} (${eventActionType}) branch: "${issueBranchHead}"`,
+            );
+
+            // 0) BRANCH NAME VALIDATION
+            // 0.1) Throw error if issueBranchHead is not type `string`
+            if (typeof issueBranchHead !== typeof " ") {
+              const errorMsg = `'issueBranchHead' type is not string. issueBranchHead='${issueBranchHead}' -- type='${typeof issueBranchHead}'`;
+              throw new Error(errorMsg);
+            }
+            // 0.2) Throw error if branch has no hyphens:
+            //   - issue number is prepended to branch name via hyphen
+            if (!issueBranchHead.includes("-")) {
+              const errorMsg = `'issueBranchHead' does not include hyphens: ${issueBranchHead}`;
+              throw new Error(errorMsg);
+            }
+            // Get issue number from branch name
+            const issueBranchNumber = issueBranchHead.split("-")[0];
+            // 0.3) Throw error if result is empty
+            if (issueBranchNumber === "") throw new Error("'issueBranchNumber' === ''.");
+            // 0.4) Throw error if result is not number
+            if (!(/^\d+$/.test(issueBranchNumber))) {
+              const errorMsg = `'issueBranchNumber' is not a number: issueBranchNumber='${issueBranchNumber}'.`;
+              throw new Error(errorMsg);
+            }
+
+            // 1) Get data from issue ticket
+            const issueRes = await github.rest.issues.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issueBranchNumber,
+            });
+            const issue = issueRes.data;
+
+            // Format request data
+            const labels = Array.isArray(issue.labels) && issue.labels.length > 0 ? issue.labels.map(l => l.name) : [];
+            const assignees = Array.isArray(issue.assignees) && issue.assignees.length > 0 ? issue.assignees.map(a => a.login) : [];
+
+            // 2) Update PR (PR is a type of issue)
+            try {
+              const payload = {
+                // REQUIRED
+                owner: process.env.owner,
+                repo: process.env.repo,
+                issue_number: prNumber,
+                // OPTIONAL
+                milestone: issue.milestone.number,
+                labels,
+                assignees,
+              }
+
+              const res = await github.rest.issues.update(payload);
+              console.log("Successfully added issue-attributes to its linked PR.");
+            } catch (err) {
+              throw new Error(err);
+            }
