@@ -1,121 +1,6 @@
 name: Apply issue labels, assignees & project when opening PR
 run-name: Applying attributes and to PR #${{ github.event.pull_request.number }} from branch ${{ github.event.pull_request.head.ref }}
 on:
-  pull_request:
-    types: [opened]
-jobs:
-  label-pr:
-    permissions:
-      issues: read
-      pull-requests: write
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/github-script@v7
-        id: apply-issue-attrs
-        name: apply issue attrs to new pull request
-        with:
-          script: |
-            const eventActionType = context.payload.action;
-            const prBranchHead = context.payload.pull_request.head.ref;
-            const prNumber = context.payload.pull_request.number;
-            console.log(
-              `PR #${prNumber} (${eventActionType}) branch:\n${prBranchHead})`,
-            );
-
-            // throw if prBranchHead is not type `string`
-            if (typeof prBranchHead !== typeof " ") {
-              const errorMsg = `'prBranchHead' type is not string. prBranchHead='${prBranchHead}' -- type='${typeof prBranchHead}'`;
-              throw new Error(errorMsg);
-            }
-
-            // throw if branch has no hyphens:
-            //   - issue number is prepended to branch name via hyphen
-            if (!prBranchHead.includes("-")) {
-              const errorMsg = `'prBranchHead' does not include hyphens: ${prBranchHead}`;
-              throw new Error(errorMsg);
-            }
-
-            // get issue from branch name
-            const branchIssueNumber = prBranchHead.split("-")[0];
-
-            // throw if result is empty
-            if (branchIssueNumber === "") throw new Error("'branchIssueNumber' === ''.");
-
-            // throw if result is not number
-            if (!(/^\d+$/.test(branchIssueNumber))) {
-              const errorMsg = `'branchIssueNumber' is not a number: branchIssueNumber='${branchIssueNumber}'.`;
-              throw new Error(errorMsg);
-            }
-
-            // get data from issue
-            const issueRes = await github.rest.issues.get({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: branchIssueNumber,
-            });
-            const issue = issueRes.data;
-
-            console.log('\n\nassignee:', issue.assignee)
-            console.log('assignees:', issue.assignees)
-            console.log('\n\n')
-
-            const issueLabels = Array.isArray(issue.labels) ? issue.labels : [];
-            const assignees = issue.assignee ? [issue.assignee.login] : issue.assignees.map(a => a.login);
-            const milestone = issue.milestone;
-
-            const issueLabelStrs = issueLabels.map(label => label.name);
-
-            // PART 2: Update PR (PR is a type of issue)
-            const errors = {
-              labels: false,
-              assignees: false,
-              milestone: false,
-            }
-
-            // Send request to add labels to PR
-            try {
-              await github.rest.issues.addLabels({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: prNumber,
-                labels: issueLabelStrs
-              });
-              console.log("Successfully added issue labels to its linked pull request.");
-            } catch {
-              console.log('Error: adding labels');
-              errors.labels = true;
-            }
-
-            // Send request to add assignees to PR
-            try {
-            await github.rest.issues.addAssignees({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: prNumber,
-              assignees
-            });
-            console.log("Successfully added assignees to its linked pull request.");
-            } catch {
-              console.log('Error: adding assignees');
-              errors.assignees = true;
-            }
-
-            // Send request to add milestone to PR
-            try {
-              await github.rest.issues.update({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: prNumber,
-                milestone
-              });
-              console.log("Successfully added milestone to its linked pull request.");
-            } catch {
-              console.log('Error: adding milestone');
-              errors.milestone = true;
-            }
-
-            // @todo add error logic for discovered errors
-=======
   pull_request_target: # NOT pull_request
     types: [opened]
 jobs:
@@ -168,8 +53,8 @@ jobs:
             const issue = issueRes.data;
 
             // Format request data
-            const labels = Array.isArray(issue.labels) ? issueLabels.map(l => l.name) : [];
-            const assignees = Array.isArray(issue.assignees) ? issue.assignees.map(a => a.login) : [];
+            const labels = Array.isArray(issue.labels) && issue.labels.length > 0 ? issue.labels.map(l => l.name) : [];
+            const assignees = Array.isArray(issue.assignees) && issue.assignees.length > 0 ? issue.assignees.map(a => a.login) : [];
 
             // 2) Update PR (PR is a type of issue)
             try {
