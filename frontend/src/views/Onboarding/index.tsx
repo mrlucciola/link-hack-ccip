@@ -1,16 +1,16 @@
 import { FC } from "react";
 // state
 import { observer } from "mobx-react-lite";
-import { OnboardingStoreProvider, useOnboardingState } from "./store";
+import { useOnboardingStore } from "../../mobx/stores";
 // components
-import SetupKeysView from "./SetupKeysView";
+import SetupWalletsView from "./SetupWalletsView";
 
-const OnboardingView: FC = observer(() => {
-  const currentView = useOnboardingState((s) => s.currentView);
+const Onboarding: FC = () => {
+  const currentView = useOnboardingStore((s) => s.currentView);
 
   switch (currentView) {
-    case "keySetup":
-      return <SetupKeysView />;
+    case "walletSetup":
+      return <SetupWalletsView />;
     case "splash":
       return <div>splash</div>;
     case "welcome":
@@ -21,16 +21,6 @@ const OnboardingView: FC = observer(() => {
     default:
       return <div>default</div>;
   }
-});
-
-const Onboarding: FC = () => {
-  // add sub-view state to use with switch statement
-  // add switch statement to control which sub-view is open
-  return (
-    <OnboardingStoreProvider>
-      <OnboardingView />
-    </OnboardingStoreProvider>
-  );
 };
 
-export default Onboarding;
+export default observer(Onboarding);

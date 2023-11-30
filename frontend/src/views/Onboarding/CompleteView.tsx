@@ -1,11 +1,11 @@
 import { FC } from "react";
-// mui
+// style
 import Grid from "@mui/material/Unstable_Grid2";
 import { Typography } from "@mui/material";
 
 const CompleteView: FC = () => {
   const text =
-    "Setup complete. You may change your keys and accounts in Settings.";
+    "Setup complete. You may change your wallets and accounts in Settings.";
 
   return (
     <Grid

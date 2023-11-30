@@ -1,8 +1,8 @@
 import { FC, useState } from "react";
 // state
 import { observer } from "mobx-react-lite";
-import { UserWallet, newUserWallet, useOnboardingState } from "../store";
-// mui
+import { useOnboardingStore } from "../../../mobx/stores";
+// style
 import Grid from "@mui/material/Unstable_Grid2/Grid2";
 import {
   Box,
@@ -14,6 +14,8 @@ import {
   Typography,
 } from "@mui/material";
 import { FaCopy } from "react-icons/fa";
+// interfaces
+import { UserWallet, newUserWallet } from "../interfaces";
 
 const textInfoStyle = {
   "& .MuiInputBase-input": {
@@ -29,28 +31,26 @@ const CopyIconAdornment = (
   </InputAdornment>
 );
 
-const KeyField: FC<{ label: string; value: string; isMultiline?: boolean }> = ({
-  label,
-  value,
-  isMultiline,
-}) => {
-  return (
-    <TextField
-      fullWidth
-      size="small"
-      disabled
-      variant="filled"
-      sx={textInfoStyle}
-      margin="none"
-      InputProps={{ endAdornment: CopyIconAdornment }}
-      multiline={isMultiline}
-      label={label}
-      value={value}
-    />
-  );
-};
+const KeyField: FC<{ label: string; value: string; isMultiline?: boolean }> =
+  observer(({ label, value, isMultiline }) => {
+    return (
+      <TextField
+        fullWidth
+        size="small"
+        disabled
+        variant="filled"
+        sx={textInfoStyle}
+        margin="none"
+        InputProps={{ endAdornment: CopyIconAdornment }}
+        InputLabelProps={{ shrink: true }}
+        multiline={isMultiline}
+        label={label}
+        value={value}
+      />
+    );
+  });
 
-/** ## Open model and generate a new wallet/private key
+/** ### Open modal and generate a new wallet
  *
  * Adds randomly generated wallet to state using a setter.
  */
@@ -61,13 +61,18 @@ const openModal =
     setter(newWallet);
   };
 
-const GenerateKeyUtil: FC = () => {
-  const addNewWallet = useOnboardingState((s) => s.addNewWallet);
-  const setCurrentWallet = useOnboardingState((s) => s.setCurrentWallet);
-  const setCurrentWalletAlias = useOnboardingState(
+/** ### Create a new wallet with a random seed
+ *
+ * @todo research best way to securely generate wallet in an insecure context
+ * @todo refactor to simplify jsx
+ */
+const GenerateWalletUtil: FC = () => {
+  const addNewWallet = useOnboardingStore((s) => s.addNewWallet);
+  const setCurrentWallet = useOnboardingStore((s) => s.setCurrentWallet);
+  const setCurrentWalletAlias = useOnboardingStore(
     (s) => s.setCurrentWalletAlias
   );
-  const currentWallet = useOnboardingState((s) => s.currentWallet);
+  const currentWallet = useOnboardingStore((s) => s.currentWallet);
   const [alias, setAlias] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   // event handlers
@@ -86,7 +91,7 @@ const GenerateKeyUtil: FC = () => {
         fullWidth
         onClick={openModal(handleOpen, setCurrentWallet)}
       >
-        Generate new key
+        Generate new wallet
       </Button>
       <Modal open={isOpen} onClose={handleClose}>
         <Box
@@ -108,7 +113,7 @@ const GenerateKeyUtil: FC = () => {
           overflow="scroll"
         >
           <Typography variant="h6" component="h2">
-            Your new key
+            Your new wallet
           </Typography>
           <Typography sx={{ my: 1 }}>
             Please store this information in a secure manner. This message will
@@ -120,14 +125,14 @@ const GenerateKeyUtil: FC = () => {
               size="small"
               margin="dense"
               focused
-              label="Set a name for your key:"
+              label="Set a name for your wallet:"
               value={alias}
               onChange={(e) => setAlias(e.currentTarget.value)}
             />
             <KeyField label="Public address" value={currentWallet.address} />
             <KeyField label="Private key" value={currentWallet.privateKey} />
             <KeyField
-              label="Secret mnemonic phrase"
+              label="Secret mnemonic/seed phrase"
               value={currentWallet.mnemonic?.phrase!}
               isMultiline={true}
             />
@@ -138,7 +143,7 @@ const GenerateKeyUtil: FC = () => {
             sx={{ mt: 1 }}
             onClick={handleClose}
           >
-            Create key
+            Create wallet
           </Button>
         </Box>
       </Modal>
@@ -146,4 +151,4 @@ const GenerateKeyUtil: FC = () => {
   );
 };
 
-export default observer(GenerateKeyUtil);
+export default observer(GenerateWalletUtil);

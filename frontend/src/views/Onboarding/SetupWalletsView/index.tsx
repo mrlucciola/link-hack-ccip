@@ -1,18 +1,18 @@
 import { FC } from "react";
 // components
 import RootLayout from "../../../layouts/RootLayout";
-import GenerateKeyUtil from "./GenerateKeyUtil";
-import StagedKeysForm from "./StagedKeysForm";
+import GenerateWalletUtil from "./GenerateWalletUtil";
+import StagedWalletsForm from "./StagedWalletsForm";
 import CompleteOnboardingButton from "./CompleteOnboardingButton";
 
-const SetupKeysView: FC = () => {
+const SetupWalletsView: FC = () => {
   return (
     <RootLayout justifyContent="space-between">
-      <GenerateKeyUtil />
-      <StagedKeysForm />
+      <GenerateWalletUtil />
+      <StagedWalletsForm />
       <CompleteOnboardingButton />
     </RootLayout>
   );
 };
 
-export default SetupKeysView;
+export default SetupWalletsView;

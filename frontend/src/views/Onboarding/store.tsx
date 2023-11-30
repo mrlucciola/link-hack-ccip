@@ -1,24 +1,12 @@
-import { FC, ReactNode } from "react";
-import { HDNodeWallet, Wallet } from "ethers";
 // state
 import { makeAutoObservable } from "mobx";
-import { useLocalObservable } from "mobx-react-lite";
-import { createStoreCtx } from "../../mobx/provider/context";
-import { useStoreData } from "../../mobx/provider/hooks";
+import {
+  OnboardingViewType,
+  UserWallet,
+  newWalletFromMnemonic,
+} from "./interfaces";
 
-export type OnboardingViewType = "keySetup" | "splash" | "welcome" | "complete";
-
-export class UserWallet extends HDNodeWallet {
-  alias: string = "";
-}
-export const newUserWallet = () => {
-  const newWallet = Wallet.createRandom() as UserWallet;
-  newWallet.alias = "";
-
-  return newWallet;
-};
-
-/** Onboarding store
+/** ## Onboarding store
  */
 export class OnboardingStore {
   // ctor
@@ -29,7 +17,7 @@ export class OnboardingStore {
 
   /////////////////////////////////////////////////////////
   ////////////////////// OBSERVABLES //////////////////////
-  currentView: OnboardingViewType = "keySetup";
+  currentView: OnboardingViewType = "walletSetup";
   wallets: UserWallet[] = [];
   currentWallet: UserWallet = {} as UserWallet;
   ////////////////////// OBSERVABLES //////////////////////
@@ -52,7 +40,27 @@ export class OnboardingStore {
     this.currentWallet = newWallet;
   }
   setCurrentWalletAlias(alias: string) {
+    console.log("new alias in state:", alias);
     this.currentWallet.alias = alias;
+  }
+  setWalletWithMnemonicByIdx(idx: number, newMnemonic: string) {
+    const alias = this.wallets[idx].alias;
+    // @todo add mnemonic validation handling
+    const newWallet = newWalletFromMnemonic(newMnemonic, alias);
+    this.wallets[idx] = newWallet;
+  }
+  setWalletAliasByIdx(idx: number, newAlias: string) {
+    this.wallets[idx] = { ...this.wallets[idx], alias: newAlias } as UserWallet;
+  }
+  /** Set the text-field value - does not change anything about the rest of the wallet */
+  setWalletMnemonicByIdx(idx: number, newMnemonic: string) {
+    this.wallets[idx] = {
+      ...this.wallets[idx],
+      mnemonic: { phrase: newMnemonic },
+    } as UserWallet;
+  }
+  removeWalletByIdx(walletIdx: number) {
+    this.wallets = this.wallets.filter((_w, idx) => idx !== walletIdx);
   }
   //////////////////////// ACTIONS ////////////////////////
   /////////////////////////////////////////////////////////
@@ -62,22 +70,3 @@ export class OnboardingStore {
   //////////////////////// HELPERS ////////////////////////
   /////////////////////////////////////////////////////////
 }
-
-const onboardingStoreCtx = createStoreCtx<OnboardingStore>();
-
-export const OnboardingStoreProvider: FC<{ children: ReactNode }> = ({
-  children,
-}) => {
-  const store = useLocalObservable(() => new OnboardingStore());
-
-  return (
-    <onboardingStoreCtx.Provider value={store}>
-      {children}
-    </onboardingStoreCtx.Provider>
-  );
-};
-
-export const useOnboardingState = <Selection,>(
-  dataSelector: (store: OnboardingStore) => Selection
-) =>
-  useStoreData(onboardingStoreCtx, (contextData) => contextData!, dataSelector);
