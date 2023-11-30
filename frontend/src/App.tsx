@@ -8,7 +8,6 @@ import Onboarding from "./views/Onboarding";
 
 const App: FC = () => {
   const currentRootView = useViewStore((s) => s.currentRootView);
-  console.log("currentrootview", currentRootView);
 
   switch (currentRootView) {
     case "base":

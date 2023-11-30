@@ -3,28 +3,24 @@ import { FC } from "react";
 import { observer } from "mobx-react-lite";
 import { OnboardingStoreProvider, useOnboardingState } from "./store";
 // components
-import RootLayout from "../../layouts/RootLayout";
+import SetupKeysView from "./SetupKeysView";
 
 const OnboardingView: FC = observer(() => {
   const currentView = useOnboardingState((s) => s.currentView);
-  console.log("currentView", currentView);
 
   switch (currentView) {
     case "keySetup":
-      // return <SetupKeysView />;
-      break;
+      return <SetupKeysView />;
     case "splash":
-      break;
+      return <div>splash</div>;
     case "welcome":
-      break;
+      return <div>welcome</div>;
     case "complete":
-      break;
+      return <div>complete</div>;
 
     default:
-      break;
+      return <div>default</div>;
   }
-
-  return <RootLayout>asdf</RootLayout>;
 });
 
 const Onboarding: FC = () => {
