@@ -1,24 +1,24 @@
+import { FC, ReactNode } from "react";
 // state
 import { makeAutoObservable } from "mobx";
-// stores
-import { RootStore } from ".";
-import { StateStore } from "../interfaces";
+import { useLocalObservable } from "mobx-react-lite";
+import { createStoreCtx } from "../../mobx/provider/context";
+import { useStoreData } from "../../mobx/provider/hooks";
 
-export type RootViewType = "onboarding" | "base";
+export type OnboardingViewType = "keySetup" | "splash" | "welcome" | "complete";
 
-/** Main store
+/** Onboarding store
  */
-export class ViewStore implements StateStore {
+export class OnboardingStore {
   // ctor
-  constructor(public root: RootStore) {
+  constructor() {
     // init
     makeAutoObservable(this, {}, { autoBind: true });
   }
 
   /////////////////////////////////////////////////////////
   ////////////////////// OBSERVABLES //////////////////////
-  // @todo hydrate from persistent storage
-  currentRootView: RootViewType = "onboarding";
+  currentView: OnboardingViewType = "keySetup";
   ////////////////////// OBSERVABLES //////////////////////
   /////////////////////////////////////////////////////////
 
@@ -29,8 +29,8 @@ export class ViewStore implements StateStore {
 
   /////////////////////////////////////////////////////////
   //////////////////////// ACTIONS ////////////////////////
-  setCurrentRootView(newView: RootViewType) {
-    this.currentRootView = newView;
+  setCurrentView(newView: OnboardingViewType) {
+    this.currentView = newView;
   }
   //////////////////////// ACTIONS ////////////////////////
   /////////////////////////////////////////////////////////
@@ -40,3 +40,22 @@ export class ViewStore implements StateStore {
   //////////////////////// HELPERS ////////////////////////
   /////////////////////////////////////////////////////////
 }
+
+const onboardingStoreCtx = createStoreCtx<OnboardingStore>();
+
+export const OnboardingStoreProvider: FC<{ children: ReactNode }> = ({
+  children,
+}) => {
+  const store = useLocalObservable(() => new OnboardingStore());
+
+  return (
+    <onboardingStoreCtx.Provider value={store}>
+      {children}
+    </onboardingStoreCtx.Provider>
+  );
+};
+
+export const useOnboardingState = <Selection,>(
+  dataSelector: (store: OnboardingStore) => Selection
+) =>
+  useStoreData(onboardingStoreCtx, (contextData) => contextData!, dataSelector);

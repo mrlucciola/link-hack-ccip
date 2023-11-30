@@ -7,7 +7,7 @@ import { RootStore } from "../stores";
 export type StoreType<S> = ReturnType<() => S>;
 
 // context
-const createStoreCtx = <S extends GenericStore>() =>
+export const createStoreCtx = <S extends GenericStore>() =>
   createContext<S | null>(null);
 
 export const rootStoreCtx = createStoreCtx<RootStore>();
