@@ -7,6 +7,8 @@ import { useViewStore } from "../../../mobx/stores";
 
 /** ### Conclude the onboarding process
  * Changes the root-curentRootView state to `base`
+ *
+ * @todo add state to handle validation checks for enabling the button
  */
 const CompleteOnboardingButton: FC = () => {
   const setCurrentRootView = useViewStore((s) => s.setCurrentRootView);
@@ -16,6 +18,8 @@ const CompleteOnboardingButton: FC = () => {
       variant="contained"
       sx={{ m: 1 }}
       onClick={() => setCurrentRootView("base")}
+      // @todo add state to handle validation checks for enabling the button
+      // disabled
     >
       Complete setup
     </Button>

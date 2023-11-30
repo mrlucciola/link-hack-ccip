@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useEffect } from "react";
 // state
 import { observer } from "mobx-react-lite";
 import { useOnboardingStore } from "../../../../mobx/stores";
@@ -10,15 +10,31 @@ import WalletInputForm from "./WalletInputForm";
 // interfaces
 import { UserWallet } from "../../interfaces";
 
+const newBlankWallet = (): UserWallet => {
+  return {
+    alias: "",
+    mnemonic: { phrase: "" },
+    // @todo avoid this - consider adding `id` field to serve as a react component key
+    address: crypto.randomUUID(),
+  } as UserWallet;
+};
+
 /** ### Display list of wallet forms
  *
- * Each item in the wallet list is rendered using a WalletInputForm
+ * Each item in the wallet list is rendered using a WalletInputForm.
  *
- * Provide a blank field if wallet list is empty
+ * Provide a blank field if wallet list is empty.
+ *
  * @todo add local state in `GenerateWalletUtil` which disables the mnemonic field in walletinputform
  */
 const WalletList: FC = observer(() => {
+  const addNewWallet = useOnboardingStore((s) => s.addNewWallet);
   const wallets = useOnboardingStore((s) => s.wallets);
+  // effects
+  useEffect(() => {
+    wallets.length === 0 && addNewWallet(newBlankWallet());
+  }, []);
+  // build
   const walletList = wallets.map((w, idx) => (
     <WalletInputForm walletIdx={idx} key={`${w.address}${idx}`} />
   ));
@@ -32,14 +48,7 @@ const AddWalletButton: FC = () => {
   const addNewWallet = useOnboardingStore((s) => s.addNewWallet);
   // event handler
   const clickAddBlankWallet = () => {
-    const newBlankWallet = {
-      alias: "",
-      mnemonic: { phrase: "" },
-      // @todo avoid this - consider adding `id` field to serve as a react component key
-      address: crypto.randomUUID(),
-    } as UserWallet;
-
-    addNewWallet(newBlankWallet);
+    addNewWallet(newBlankWallet());
   };
 
   return (
