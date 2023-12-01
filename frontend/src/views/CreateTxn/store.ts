@@ -4,6 +4,7 @@ import { StateStore } from "../../mobx/interfaces";
 import { RootStore } from "../../mobx/stores";
 // interfaces
 import { CreateTxnViewType } from ".";
+import { Recipient } from "./interfaces";
 
 /** ## CreateTxn store
  */
@@ -17,6 +18,7 @@ export class CreateTxnStore implements StateStore {
   /////////////////////////////////////////////////////////
   ////////////////////// OBSERVABLES //////////////////////
   currentView: CreateTxnViewType = "selectRecipient";
+  recipient: Recipient = {} as Recipient;
   ////////////////////// OBSERVABLES //////////////////////
   /////////////////////////////////////////////////////////
 
