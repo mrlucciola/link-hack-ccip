@@ -1,12 +1,10 @@
 import { FC } from "react";
 // components
 import BodyLayout from "../../../layouts/BodyLayout";
-import ContactSelector from "./ContactSelector";
-import AddressField from "./AddressField";
 
-/** ### Display: Recipient selector
+/** ### Display: Select Sources
  */
-const SelectRecipient: FC = () => {
+const SelectSrc: FC = () => {
   return (
     <BodyLayout justifyContent="space-between" overflow="scroll">
       <AddressField />
@@ -15,4 +13,4 @@ const SelectRecipient: FC = () => {
   );
 };
 
-export default SelectRecipient;
+export default SelectSrc;
