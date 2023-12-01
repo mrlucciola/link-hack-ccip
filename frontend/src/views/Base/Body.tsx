@@ -1,20 +1,24 @@
 import { FC } from "react";
-// style
-import Grid from "@mui/material/Unstable_Grid2";
+// state
+import { observer } from "mobx-react-lite";
+import { useBaseStore } from "../../mobx/stores";
+import { BaseViewType } from "./store";
+// components
+import CreateTxn from "../CreateTxn";
 
-const Body: FC = () => {
-  return (
-    <Grid
-      container
-      direction="column"
-      flexWrap="wrap"
-      flexGrow={1}
-      overflow="scroll"
-      p="2em"
-    >
-      body
-    </Grid>
-  );
+// This is becoming a bit convoluted. However, I don't want to use a big routing library just yet.
+const bodyViewMap: { [key in BaseViewType]: JSX.Element } = {
+  home: <div>home</div>, // <Home />,
+  createTxn: <CreateTxn />,
+  // one prop for each view that /base/body would render
+  // each element in this object should be wrapped with <BodyViewLayout></BodyViewLayout>
 };
 
-export default Body;
+/** ### View controller for /Base/Body */
+const Body: FC = () => {
+  const currentView = useBaseStore((s) => s.currentView);
+
+  return bodyViewMap[currentView];
+};
+
+export default observer(Body);

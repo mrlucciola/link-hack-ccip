@@ -1,14 +1,13 @@
 // state
 import { makeAutoObservable } from "mobx";
-// stores
-import { RootStore } from ".";
-import { StateStore } from "../interfaces";
+import { StateStore } from "../../mobx/interfaces";
+import { RootStore } from "../../mobx/stores";
+// interfaces
+export type BaseViewType = "home" | "createTxn";
 
-export type RootViewType = "onboarding" | "base";
-
-/** Main store
+/** ## Base store
  */
-export class ViewStore implements StateStore {
+export class BaseStore implements StateStore {
   // ctor
   constructor(public root: RootStore) {
     // init
@@ -17,8 +16,7 @@ export class ViewStore implements StateStore {
 
   /////////////////////////////////////////////////////////
   ////////////////////// OBSERVABLES //////////////////////
-  // @todo hydrate from persistent storage
-  currentRootView: RootViewType = "base";
+  currentView: BaseViewType = "createTxn";
   ////////////////////// OBSERVABLES //////////////////////
   /////////////////////////////////////////////////////////
 
@@ -29,8 +27,8 @@ export class ViewStore implements StateStore {
 
   /////////////////////////////////////////////////////////
   //////////////////////// ACTIONS ////////////////////////
-  setCurrentRootView(newView: RootViewType) {
-    this.currentRootView = newView;
+  setCurrentView(newView: BaseViewType) {
+    this.currentView = newView;
   }
   //////////////////////// ACTIONS ////////////////////////
   /////////////////////////////////////////////////////////
