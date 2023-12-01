@@ -1,4 +1,6 @@
 import { FC } from "react";
+// state
+import { useCreateTxnStore } from "../../../mobx/stores";
 // style
 import {
   Avatar,
@@ -9,9 +11,8 @@ import {
   ListItemText,
 } from "@mui/material";
 // interfaces
-import { Contact } from "../../../mobx/interfaces";
+import { Address, Contact } from "../../../mobx/interfaces";
 import { BlockchainId } from "../../../mobx/data/supportedBlockchains";
-import { useCreateTxnStore } from "../../../mobx/stores";
 
 // from https://mui.com/material-ui/react-avatar/
 function stringAvatar(name: string) {
@@ -22,9 +23,11 @@ function stringAvatar(name: string) {
   return { children: `${firstInit}${secondInit}` };
 }
 
-const BlockchainElemGroup: FC<{ blockchainIds: BlockchainId[] }> = ({
-  blockchainIds,
-}) => {
+const BlockchainElemGroup: FC<{ addrs: Address[] }> = ({ addrs }) => {
+  // build blockchain arr
+  const bcIdSet = new Set(addrs.map((a) => a.blockchainId));
+  const blockchainIds: BlockchainId[] = Array.from(bcIdSet);
+
   const blockchainElems = blockchainIds.map((bc, idx) => {
     return (
       <Avatar
@@ -49,22 +52,21 @@ const BlockchainElemGroup: FC<{ blockchainIds: BlockchainId[] }> = ({
 
 /** ### Display: Contact info
  *
- * @todo if click on contact w/ one addr, add to state and proceed
  * @todo if click on contact w/ mult addr, open modal/drawer to show the list of addrs
  */
 const ContactElem: FC<{ contactInfo: Contact }> = ({ contactInfo }) => {
   const setRecipient = useCreateTxnStore((s) => s.setRecipient);
   const setCurrentView = useCreateTxnStore((s) => s.setCurrentView);
+  // format address text
   const addrs = contactInfo.addresses;
-  const addrOrAddrAmt =
-    addrs.length === 1 ? addrs[0].value : `${addrs.length} addresses`;
-  const bcSet = new Set(addrs.map((a) => a.blockchainId));
-  const bcsFromAddr: BlockchainId[] = Array.from(bcSet);
+  const isMultAddr = addrs.length > 1;
+  const addrOrAddrAmt = isMultAddr
+    ? addrs[0].value
+    : `${addrs.length} addresses`;
 
   return (
     <ListItemButton
       onClick={() => {
-        console.log("click button");
         if (contactInfo.addresses.length === 1) {
           setRecipient(contactInfo);
         } else {
@@ -80,7 +82,7 @@ const ContactElem: FC<{ contactInfo: Contact }> = ({ contactInfo }) => {
 
       <ListItemText primary={contactInfo.fullName} secondary={addrOrAddrAmt} />
 
-      <BlockchainElemGroup blockchainIds={bcsFromAddr} />
+      <BlockchainElemGroup addrs={addrs} />
     </ListItemButton>
   );
 };
