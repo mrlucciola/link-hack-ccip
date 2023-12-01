@@ -1,5 +1,6 @@
 import { FC } from "react";
 // state
+import { observer } from "mobx-react-lite";
 import { useViewStore } from "./mobx/stores";
 // components
 import Base from "./views/Base";
@@ -21,4 +22,4 @@ const App: FC = () => {
   }
 };
 
-export default App;
+export default observer(App);

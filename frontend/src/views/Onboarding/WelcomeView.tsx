@@ -1,5 +1,5 @@
 import { FC } from "react";
-// mui
+// style
 import Grid from "@mui/material/Unstable_Grid2";
 import { Typography, Button } from "@mui/material";
 

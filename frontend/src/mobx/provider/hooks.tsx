@@ -4,7 +4,7 @@ import { RootStore } from "../stores";
 import { rootStoreCtx } from "./context";
 import { AppStoreKeys } from "../interfaces";
 
-const useStoreData = <Selection, ContextData, Store>(
+export const useStoreData = <Selection, ContextData, Store>(
   context: Context<ContextData>,
   storeSelector: (contextData: ContextData) => Store,
   dataSelector: (store: Store) => Selection
