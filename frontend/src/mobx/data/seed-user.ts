@@ -2,50 +2,50 @@ import { Contact, newAddress } from "../interfaces";
 
 export const contactInit: [string, Contact][] = [
   [
-    "user1",
+    "jdoe",
     {
-      id: "user1",
-      fullName: "john doe",
-      addresses: [newAddress("0xd0xk3nf8ww", "op", "johns friend arthur")],
+      id: "jdoe",
+      fullName: "John Doe",
+      addresses: [newAddress("0xd0xk3nf8ww", "op", "Primary address")],
     },
   ],
   [
-    "user2",
+    "franksinatra",
     {
-      id: "user2",
-      fullName: "frank sinatra",
+      id: "franksinatra",
+      fullName: "Frank Sinatra",
       addresses: [
-        newAddress("0x9din3hduc8", "eth", "cristina"),
-        newAddress("0x0dj1i28fu4", "eth", ""),
+        newAddress("0x9din3hduc8", "eth", "NFT address"),
+        newAddress("0x0dj1i28fu4", "eth", "Dropbox"),
       ],
     },
   ],
   [
-    "user3",
+    "cdeli",
     {
-      id: "user3",
-      fullName: "silvia",
+      id: "cdeli",
+      fullName: "Corner Deli",
       addresses: [
-        newAddress("0x800acjwkj3", "arb", "patrick"),
-        newAddress("0xoxj901b389", "eth", "taylor"),
-        newAddress("0xzoj29d8f02", "op", "travis"),
+        newAddress("0x800acjwkj3", "arb", "Dropbox: vendors"),
+        newAddress("0xoxj901b389", "eth", "Dropbox: customers"),
+        newAddress("0xzoj29d8f02", "matic", "Treasury"),
       ],
     },
   ],
   [
-    "user4",
+    "alice",
     {
-      id: "user4",
-      fullName: "alice",
-      addresses: [newAddress("0xd8cj3nsovy", "matic", "bob")],
+      id: "alice",
+      fullName: "Alice",
+      addresses: [newAddress("0xd8cj3nsovy", "matic", "Main")],
     },
   ],
   [
-    "user5",
+    "bobb",
     {
-      id: "user5",
-      fullName: "bob",
-      addresses: [newAddress("0xa0xl4n67x8", "avax", "alice")],
+      id: "bobb",
+      fullName: "Bob Burnquist",
+      addresses: [newAddress("0xa0xl4n67x8", "avax", "Personal")],
     },
   ],
 ];
