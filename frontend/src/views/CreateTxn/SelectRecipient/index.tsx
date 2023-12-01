@@ -14,7 +14,7 @@ import {
 import ContactSelector from "./ContactSelector";
 
 const AddressField: FC = observer(() => {
-  // @todo validation
+  // @todo add validation
   const placeholderIsError = false;
   // add data to root state
   const blockchainAbbreviationLookup: string[] = ["eth", "op"];
