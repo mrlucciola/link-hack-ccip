@@ -4,7 +4,7 @@ import { observer } from "mobx-react-lite";
 import { TextField } from "@mui/material";
 
 const ContactSearch: FC = () => {
-  return <TextField label="Search for contact" />;
+  return <TextField size="small" label="Search for contact" fullWidth />;
 };
 
 export default observer(ContactSearch);

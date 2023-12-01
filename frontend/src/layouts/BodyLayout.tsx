@@ -9,15 +9,13 @@ const BodyLayout: FC<GridProps> = ({ children, ...props }) => {
   return (
     <Grid
       container
-      direction="column"
+      flexDirection="column"
       justifyContent="flex-start"
       minWidth="100%"
       maxWidth="100%"
       width="100%"
-      flexWrap="wrap"
+      flexWrap="nowrap"
       flexGrow={1}
-      overflow="scroll"
-      p="2em"
       {...props}
     >
       {children}

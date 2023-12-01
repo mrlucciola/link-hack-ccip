@@ -2,13 +2,12 @@
 import { makeAutoObservable } from "mobx";
 // stores
 import { RootStore } from ".";
-import { StateStore } from "../interfaces";
+import { Contact, StateStore } from "../interfaces";
+import { contactInit } from "../data/seed-user";
 
-export type RootViewType = "onboarding" | "base";
-
-/** View store
+/** ## User store
  */
-export class ViewStore implements StateStore {
+export class UserStore implements StateStore {
   // ctor
   constructor(public root: RootStore) {
     // init
@@ -17,8 +16,8 @@ export class ViewStore implements StateStore {
 
   /////////////////////////////////////////////////////////
   ////////////////////// OBSERVABLES //////////////////////
-  // @todo hydrate from persistent storage
-  currentRootView: RootViewType = "base";
+  // @todo remove the seed data when done testing
+  contacts: Map<string, Contact> = new Map<string, Contact>(contactInit);
   ////////////////////// OBSERVABLES //////////////////////
   /////////////////////////////////////////////////////////
 
@@ -29,8 +28,16 @@ export class ViewStore implements StateStore {
 
   /////////////////////////////////////////////////////////
   //////////////////////// ACTIONS ////////////////////////
-  setCurrentRootView(newView: RootViewType) {
-    this.currentRootView = newView;
+  /** ### Add/update single contact to `contacts` collection. */
+  setContact(newContact: Contact) {
+    this.contacts.set(newContact.id, newContact);
+  }
+  /** ### Set `contacts` state variable. ### Warning: this replaces the original set. */
+  setContacts(newContacts: Contact[]) {
+    const mapInitContacts: [string, Contact][] = newContacts.map((c) => {
+      return [c.id, c];
+    });
+    this.contacts = new Map<string, Contact>(mapInitContacts);
   }
   //////////////////////// ACTIONS ////////////////////////
   /////////////////////////////////////////////////////////

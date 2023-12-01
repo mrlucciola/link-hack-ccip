@@ -18,8 +18,12 @@ const AddressField: FC = observer(() => {
   const placeholderIsError = false;
   // add data to root state
   const blockchainAbbreviationLookup: string[] = ["eth", "op"];
-  const bcElems = blockchainAbbreviationLookup.map((bc) => {
-    return <MenuItem value={bc}>{bc}</MenuItem>;
+  const bcElems = blockchainAbbreviationLookup.map((bc, idx) => {
+    return (
+      <MenuItem value={bc} key={`${bc}${idx}`}>
+        {bc}
+      </MenuItem>
+    );
   });
   const [bcSelect, setBcSelect] = useState("");
   // event handler
@@ -61,7 +65,7 @@ const AddressField: FC = observer(() => {
 
 const SelectRecipient: FC = () => {
   return (
-    <BodyLayout>
+    <BodyLayout justifyContent="space-between" overflow="scroll">
       <AddressField />
       <ContactSelector />
     </BodyLayout>
