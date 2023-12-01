@@ -45,7 +45,6 @@ const MnemonicField: FC<{ walletIdx: number }> = observer(({ walletIdx }) => {
   const wallet = useOnboardingStore((s) => s.wallets)[walletIdx];
 
   useEffect(() => {
-    console.log("runnin");
     let timeoutId: null | ReturnType<typeof setTimeout> = null;
 
     if (validateMnemonic(wallet.mnemonic!.phrase) === true) {

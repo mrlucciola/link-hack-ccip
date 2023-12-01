@@ -1,9 +1,10 @@
 import { FC } from "react";
 // state
 import { observer } from "mobx-react-lite";
-import CreateTxn from "../CreateTxn";
 import { useBaseStore } from "../../mobx/stores";
 import { BaseViewType } from "./store";
+// components
+import CreateTxn from "../CreateTxn";
 
 // This is becoming a bit convoluted. However, I don't want to use a big routing library just yet.
 const bodyViewMap: { [key in BaseViewType]: JSX.Element } = {
