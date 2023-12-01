@@ -1,9 +1,10 @@
 // state
 import { makeAutoObservable } from "mobx";
-import { Contact, StateStore } from "../../mobx/interfaces";
+import { StateStore } from "../../mobx/interfaces";
 import { RootStore } from "../../mobx/stores";
 // interfaces
 import { CreateTxnViewType } from ".";
+import { Recipient } from "./interfaces";
 
 /** ## CreateTxn store
  */
@@ -17,7 +18,7 @@ export class CreateTxnStore implements StateStore {
   /////////////////////////////////////////////////////////
   ////////////////////// OBSERVABLES //////////////////////
   currentView: CreateTxnViewType = "selectRecipient";
-  recipient: Contact = {} as Contact;
+  recipient: Recipient = {} as Recipient;
   ////////////////////// OBSERVABLES //////////////////////
   /////////////////////////////////////////////////////////
 
@@ -31,7 +32,7 @@ export class CreateTxnStore implements StateStore {
   setCurrentView(newView: CreateTxnViewType) {
     this.currentView = newView;
   }
-  setRecipient(newRecipient: Contact) {
+  setRecipient(newRecipient: Recipient) {
     this.recipient = newRecipient;
   }
   //////////////////////// ACTIONS ////////////////////////
