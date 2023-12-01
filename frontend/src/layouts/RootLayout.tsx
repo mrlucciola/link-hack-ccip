@@ -1,11 +1,11 @@
 import { FC } from "react";
 // style
 import Grid from "@mui/material/Unstable_Grid2";
-import Grid2PropsNamespace from "@mui/material/Unstable_Grid2/Grid2Props";
+import GridPropsNamespace from "@mui/material/Unstable_Grid2/Grid2Props";
 
-type Grid2Props = Grid2PropsNamespace.Grid2Props;
+type GridProps = GridPropsNamespace.Grid2Props;
 
-const RootLayout: FC<Grid2Props> = ({ children, ...props }) => {
+const RootLayout: FC<GridProps> = ({ children, ...props }) => {
   return (
     <Grid
       container
