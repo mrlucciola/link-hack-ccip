@@ -4,7 +4,7 @@ import { observer } from "mobx-react-lite";
 import { useOnboardingStore } from "../../../../mobx/stores";
 // style
 import Grid from "@mui/material/Unstable_Grid2/Grid2";
-import { Button } from "@mui/material";
+import { Button, Typography } from "@mui/material";
 // components
 import WalletInputForm from "./WalletInputForm";
 // interfaces
@@ -39,7 +39,11 @@ const WalletList: FC = observer(() => {
     <WalletInputForm walletIdx={idx} key={`${w.address}${idx}`} />
   ));
 
-  return <Grid>{walletList}</Grid>;
+  return (
+    <Grid container width="100%">
+      {walletList}
+    </Grid>
+  );
 });
 
 /** ### Add new wallet-form to the list of staged wallets
@@ -66,9 +70,30 @@ const AddWalletButton: FC = () => {
  */
 const StagedWalletsForm: FC = () => {
   return (
-    <Grid p={1}>
-      <WalletList />
-      <AddWalletButton />
+    <Grid
+      container
+      p={1}
+      direction="column"
+      justifyContent="flex-start"
+      overflow="hidden"
+    >
+      <Typography variant="h5" component="h5" width="100%">
+        Wallets to add
+      </Typography>
+      <Grid
+        container
+        px={1}
+        flex={1}
+        overflow="scroll"
+        flexWrap="nowrap"
+        direction="column"
+        width="100%"
+        maxWidth="100%"
+        justifyContent="flex-start"
+      >
+        <WalletList />
+        <AddWalletButton />
+      </Grid>
     </Grid>
   );
 };

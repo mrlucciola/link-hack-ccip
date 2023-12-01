@@ -65,7 +65,7 @@ const MnemonicField: FC<{ walletIdx: number }> = observer(({ walletIdx }) => {
       variant="filled"
       margin="none"
       fullWidth
-      label="Wallet secret mnemonic (a.k.a. seed phrase)"
+      label="Wallet secret mnemonic (seed phrase)"
       InputLabelProps={{ shrink: true }}
       value={wallet.mnemonic!.phrase}
       onChange={(e) => setWalletMnemonicByIdx(walletIdx, e.currentTarget.value)}
@@ -85,7 +85,7 @@ const WalletInputForm: FC<{ walletIdx: number }> = ({ walletIdx }) => {
   const removeWalletByIdx = useOnboardingStore((s) => s.removeWalletByIdx);
 
   return (
-    <Grid container direction="column" p={1} component={Paper}>
+    <Grid container direction="column" p={1} component={Paper} width="100%">
       <Badge
         badgeContent={
           <IconButton color="error" size="small">
