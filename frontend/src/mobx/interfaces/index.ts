@@ -1,4 +1,9 @@
 import { RootStore } from "../stores";
+import {
+  BlockchainId,
+  BlockchainInfo,
+  getBlockchainInfo,
+} from "../data/supportedBlockchains";
 
 export interface GenericStore {}
 
@@ -8,3 +13,27 @@ export interface StateStore extends GenericStore {
 
 export type AppStoreKeys = keyof RootStore;
 export type AppStoreTypes = RootStore[AppStoreKeys];
+
+export class Address {
+  constructor(
+    public value: string,
+    public blockchainId: BlockchainId,
+    public label: string
+  ) {}
+  get blockchainInfo(): BlockchainInfo {
+    return getBlockchainInfo(this.blockchainId);
+  }
+}
+export const newAddress = (
+  value: string,
+  blockchainId: BlockchainId,
+  label: string
+): Address => new Address(value, blockchainId, label);
+
+export class Contact {
+  constructor(
+    public id: string,
+    public fullName: string,
+    public addresses: Address[]
+  ) {}
+}

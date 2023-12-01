@@ -6,7 +6,7 @@ import { StateStore } from "../interfaces";
 
 export type RootViewType = "onboarding" | "base";
 
-/** Main store
+/** View store
  */
 export class ViewStore implements StateStore {
   // ctor
