@@ -76,8 +76,6 @@ export class CreateTxnStore implements StateStore {
     } else {
       this.enabledAddrs.set(
         addrToEnable.value,
-        // @todo allow user to control limit
-        // newEnabledAddr(addrToEnable.value, 0, isEnabled)
         newEnabledAddr(
           addrToEnable.value,
           addrToEnable.totalMktValue,
@@ -86,14 +84,15 @@ export class CreateTxnStore implements StateStore {
       );
     }
   }
-  // unused
-  setAddrSpendLimit(addrToAdjust: Address, newSpendLimit: number) {
+  setAddrSpendLimit(addrToAdjust: Address, newSpendLimit: string) {
     const addr = this.enabledAddrs.get(addrToAdjust.value);
+    // @todo add validation for spend limit
+    const validatedSpendLimit = Number(newSpendLimit) || 0;
 
     if (addr) {
       this.enabledAddrs.set(addrToAdjust.value, {
         ...addr,
-        spendLimit: newSpendLimit,
+        spendLimit: validatedSpendLimit,
       });
     }
   }

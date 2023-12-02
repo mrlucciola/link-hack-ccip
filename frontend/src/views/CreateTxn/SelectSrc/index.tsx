@@ -22,7 +22,8 @@ import ConfirmSrcButton from "./ConfirmSrcButton";
  *    - @todo (separate ticket) group by: key, blockchain, labels
  *    - @todo (separate ticket) advanced sort - label, last used, blockchain, addr value, wallet value
  *    - @todo (separate ticket) Toggle all addresss under key
- * - Display showing amount enabled (@todo move to overview)
+ * - (temporary) Display showing amount enabled
+ *    - @todo move to overview
  * - @todo hideable overview that persists throughout all Create-Txn views
  */
 const SelectSrc: FC = () => {

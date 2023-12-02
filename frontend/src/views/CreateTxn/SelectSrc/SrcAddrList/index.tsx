@@ -12,7 +12,7 @@ import SrcAddr from "./SrcAddr";
 /** ### List subheader displaying spend limit/value enabled to send
  * @todo move spend limit to `TxnOverview` hideable element
  */
-const SrcValueEnabled: FC = observer(() => {
+const SrcValueEnabledDisplay: FC = observer(() => {
   const totalSpendLimit = useCreateTxnStore((s) => s.totalSpendLimitFmt);
 
   return <ListSubheader>Spend Limit: {totalSpendLimit}</ListSubheader>;
@@ -39,7 +39,7 @@ const SrcAddrList: FC = () => {
       maxWidth="100%"
       px={1}
       component={Grid}
-      subheader={<SrcValueEnabled />}
+      subheader={<SrcValueEnabledDisplay />}
     >
       {srcAddrElems}
     </List>
