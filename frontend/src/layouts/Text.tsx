@@ -1,4 +1,4 @@
-const fmtCenterEllipsis = (
+export const fmtCenterEllipsis = (
   text: string,
   charsI: number = 5,
   charsF: number | null = null

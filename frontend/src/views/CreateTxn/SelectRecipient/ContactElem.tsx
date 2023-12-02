@@ -132,9 +132,7 @@ const ContactElem: FC<{ contactInfo: Contact }> = ({ contactInfo }) => {
     <>
       <ListItemButton
         onClick={() => {
-          console.log("ct", contactInfo.fullName, isMultAddr);
           if (isMultAddr) {
-            // @todo open modal/drawer to show the list of addrs
             handleOpen();
           } else {
             setRecipient(newRecipient(contactInfo, addrs[0]));
