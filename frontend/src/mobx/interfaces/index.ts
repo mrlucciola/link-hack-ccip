@@ -23,6 +23,17 @@ export class Address {
   get blockchainInfo(): BlockchainInfo {
     return getBlockchainInfo(this.blockchainId);
   }
+  // @todo add totalMktValue to state
+  get totalMktValue(): number {
+    return -10000;
+  }
+  get totalMktValueFmt(): string {
+    return this.totalMktValue.toLocaleString("en-US", {
+      style: "currency",
+      currency: "USD", // adjust for locale
+      minimumFractionDigits: 2,
+    });
+  }
 }
 export const newAddress = (
   value: string,
