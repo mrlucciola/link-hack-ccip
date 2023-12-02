@@ -19,6 +19,7 @@ const createTxnViewMap: { [key in CreateTxnViewType]: JSX.Element } = {
 /** ### View controller for CreateTxn
  *
  * @todo hideable overview that persists throughout all Create-Txn views
+ * @todo Move state provider to this scope (remove from global scope)
  */
 const CreateTxn: FC = () => {
   const currentView = useCreateTxnStore((s) => s.currentView);

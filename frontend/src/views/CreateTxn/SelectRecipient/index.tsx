@@ -5,6 +5,7 @@ import ContactSelector from "./ContactSelector";
 import AddressField from "./AddressField";
 
 /** ### Display: Recipient selector
+ * - @todo Enter send amt
  */
 const SelectRecipient: FC = () => {
   return (

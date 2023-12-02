@@ -25,7 +25,7 @@ export class Address {
   }
   // @todo add totalMktValue to state
   get totalMktValue(): number {
-    return -10000;
+    return 10000;
   }
   get totalMktValueFmt(): string {
     return this.totalMktValue.toLocaleString("en-US", {

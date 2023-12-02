@@ -15,7 +15,7 @@ import {
 } from "@mui/material";
 // interfaces
 import { Address } from "../../../../mobx/interfaces";
-import { fmtCenterEllipsis } from "../../../../layouts/Text";
+import { fmtCenterEllipsis } from "../../../../layouts/text";
 
 const SrcAddr: FC<{ addr: Address }> = ({ addr }) => {
   const [isSelected, setIsSelected] = useState(false);
