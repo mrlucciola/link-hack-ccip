@@ -10,12 +10,14 @@ import SrcAddrList from "./SrcAddrList";
  *       - addr value
  *       - addr name
  *       - balance (usd)
- *       - balance detail (usd)
- *       - token-types in addr
+ *       - @todo balance detail (usd)
+ *       - @todo token-types in addr
  *       - enable/disable
- *       - spend limit
+ *       - @todo spend limit
+ *       - @todo wallet
+ *       - @todo key
  *    - Search account name or key
- *    - Sort addr by name
+ *    - @todo Sort addr by name
  *    - @todo (separate ticket) filter
  *    - @todo (separate ticket) group by: key, blockchain, labels
  *    - @todo (separate ticket) advanced sort - last used, blockchain, addr value, wallet value
