@@ -27,6 +27,8 @@ const ConfirmSrcButton: FC = () => {
       component="div"
       sx={{ flexDirection: "column", textTransform: "none" }}
       disabled={!(isSpendLimitGtSendAmt && isEnabledAddrsCtGt0)}
+      // @todo change view to "review txn"
+      // onClick={handle}
     >
       <Typography variant="body1" fontWeight={600}>
         Confirm

@@ -17,13 +17,53 @@ import { Address } from "../../../../mobx/interfaces";
 import { fmtCenterEllipsis } from "../../../../layouts/text";
 import { InputAdornment } from "@mui/material";
 
+const SpendLimit: FC<{
+  addr: Address;
+  spendLimitInput: string;
+  setSpendLimitInput: (input: string) => void;
+}> = ({ addr, spendLimitInput, setSpendLimitInput }) => {
+  const setAddrSpendLimit = useCreateTxnStore((s) => s.setAddrSpendLimit);
+  const enabledAddr = useCreateTxnStore((s) => s.enabledAddrs.get(addr.value));
+  const isEnabled = enabledAddr?.isEnabled;
+  // event handler
+  const onChangeSpendLimit = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    // @todo add validation for spend limit
+    setSpendLimitInput(e.target.value);
+    setAddrSpendLimit(addr, e.target.value);
+  };
+
+  return isEnabled ? (
+    <TextField
+      size="small"
+      variant="standard"
+      InputLabelProps={{ shrink: true }}
+      margin="none"
+      InputProps={{
+        style: { fontSize: "0.9em" },
+        startAdornment: (
+          <InputAdornment position="start">
+            <Typography variant="caption" mb="0.25em" mr="-0.3em">
+              $
+            </Typography>
+          </InputAdornment>
+        ),
+      }}
+      label="Spend limit"
+      value={spendLimitInput}
+      onChange={onChangeSpendLimit}
+    />
+  ) : (
+    <></>
+  );
+};
 /** ### Shows controls and info about User's address
  *
  * @todo add validation for spend limit
  */
 const SrcAddr: FC<{ addr: Address }> = ({ addr }) => {
   const setAddrStatus = useCreateTxnStore((s) => s.setAddrStatus);
-  const setAddrSpendLimit = useCreateTxnStore((s) => s.setAddrSpendLimit);
   const enabledAddr = useCreateTxnStore((s) => s.enabledAddrs.get(addr.value));
   const [spendLimitInput, setSpendLimitInput] = useState("");
   const isEnabled = enabledAddr?.isEnabled;
@@ -31,13 +71,6 @@ const SrcAddr: FC<{ addr: Address }> = ({ addr }) => {
   // event handlers
   const onCheck = (e: React.ChangeEvent<HTMLInputElement>) => {
     setAddrStatus(addr, e.target.checked);
-  };
-  const onChangeSpendLimit = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    // @todo add validation for spend limit
-    setSpendLimitInput(e.target.value);
-    setAddrSpendLimit(addr, e.target.value);
   };
   // format values
   const addrFmt = (
@@ -80,27 +113,11 @@ const SrcAddr: FC<{ addr: Address }> = ({ addr }) => {
           flexWrap: "nowrap",
         }}
       >
-        {isEnabled && (
-          <TextField
-            size="small"
-            variant="standard"
-            InputLabelProps={{ shrink: true }}
-            margin="none"
-            InputProps={{
-              style: { fontSize: "0.9em" },
-              startAdornment: (
-                <InputAdornment position="start">
-                  <Typography variant="caption" mb="0.25em" mr="-0.3em">
-                    $
-                  </Typography>
-                </InputAdornment>
-              ),
-            }}
-            label="Spend limit"
-            value={spendLimitInput}
-            onChange={onChangeSpendLimit}
-          />
-        )}
+        <SpendLimit
+          addr={addr}
+          spendLimitInput={spendLimitInput}
+          setSpendLimitInput={setSpendLimitInput}
+        />
         <Checkbox onChange={onCheck} />
       </ListItemSecondaryAction>
     </ListItemButton>

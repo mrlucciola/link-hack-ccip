@@ -14,7 +14,7 @@ import ConfirmSrcButton from "./ConfirmSrcButton";
  *       - @todo balance detail (usd)
  *       - @todo token-types in addr
  *       - enable/disable
- *       - @todo spend limit
+ *       - spend limit
  *       - @todo wallet
  *       - @todo key
  *    - @todo Search address name or key
