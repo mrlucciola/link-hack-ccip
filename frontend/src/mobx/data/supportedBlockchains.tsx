@@ -1,13 +1,12 @@
 export const blockchainIds = ["eth", "op", "arb", "matic", "avax"] as const;
 export type BlockchainId = (typeof blockchainIds)[number];
 
-
 export const getBlockchainInfo = (bcId: BlockchainId) => {
   return supportedBlockchains[bcId];
 };
 
 export interface BlockchainInfo {
-  id: string;
+  id: BlockchainId;
   label: string;
   img?: { sm: string; md: string };
 }

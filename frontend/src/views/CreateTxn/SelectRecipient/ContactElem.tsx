@@ -15,18 +15,19 @@ import {
   Typography,
 } from "@mui/material";
 // interfaces
-import { Address, Contact } from "../../../mobx/interfaces";
+import { Contact } from "../../../mobx/interfaces";
+import { Address } from "../../../mobx/interfaces/address";
 import { BlockchainId } from "../../../mobx/data/supportedBlockchains";
 import { newRecipient } from "../interfaces";
 
 // from https://mui.com/material-ui/react-avatar/
-function stringAvatar(name: string) {
+export const stringAvatar = (name: string) => {
   const splitName = name.toLocaleUpperCase().split(" ");
   const firstInit = splitName[0][0];
   const secondInit = splitName.length > 1 ? splitName[1][0] : "";
 
   return { children: `${firstInit}${secondInit}` };
-}
+};
 
 const BlockchainElemGroup: FC<{ addrs: Address[] }> = ({ addrs }) => {
   // build blockchain arr

@@ -5,6 +5,6 @@ export const mktValueFmt = (
 ): string =>
   mktValue.toLocaleString(locale, {
     style: "currency",
-    currency: currency,
+    currency,
     minimumFractionDigits: 2,
   });

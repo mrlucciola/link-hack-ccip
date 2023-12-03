@@ -2,7 +2,8 @@
 import { makeAutoObservable } from "mobx";
 // stores
 import { RootStore } from ".";
-import { Address, Contact, StateStore } from "../interfaces";
+import { Contact, StateStore } from "../interfaces";
+import { Address } from "../interfaces/address";
 import { seedContactsMap, seedAddressesMap } from "../data/seed-user";
 
 /** ## User store
@@ -47,19 +48,19 @@ export class UserStore implements StateStore {
   }
 
   /** ### Add/update single address to `addresses` collection. */
-  setAddress(newAddress: Address) {
-    this.addresses.set(newAddress.value, newAddress);
+  setAddress(addrToAddOrSet: Address) {
+    this.addresses.set(addrToAddOrSet.value, addrToAddOrSet);
   }
   /** ### Set `addresses` state variable.
    * ### Option: replace/keep the original set. */
-  setAddresses(newAddresses: Address[], replace: boolean = false) {
+  setAddresses(addrsToAddOrSet: Address[], replace: boolean = false) {
     if (replace) {
-      const mapInitAddresses: [string, Address][] = newAddresses.map((a) => {
+      const mapInitAddresses: [string, Address][] = addrsToAddOrSet.map((a) => {
         return [a.value, a];
       });
       this.addresses = new Map<string, Address>(mapInitAddresses);
     } else {
-      newAddresses.forEach((a) => this.addresses.set(a.value, a));
+      addrsToAddOrSet.forEach((a) => this.addresses.set(a.value, a));
     }
   }
   /** ### Remove single address from `addresses` collection. */

@@ -1,9 +1,10 @@
 import { FC } from "react";
 // state
 import { observer } from "mobx-react-lite";
-import { useCreateTxnStore } from "../../../../mobx/stores";
+import { useCreateTxnStore } from "../../../mobx/stores";
 // style
-import { Button, Typography } from "@mui/material";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
 
 /** ### "Confirm sources" button
  *
