@@ -15,7 +15,7 @@ const BodyLayout: FC<GridProps> = ({ children, ...props }) => {
       maxWidth="100%"
       width="100%"
       flexWrap="nowrap"
-      flexGrow={1}
+      flex={1}
       {...props}
     >
       {children}
