@@ -14,6 +14,7 @@ import {
 } from "./interfaces";
 // utils
 import { mktValueFmt } from "../../utils/fmt";
+import { BlockchainId } from "../../mobx/data/supportedBlockchains";
 
 /** ## CreateTxn store
  */
@@ -34,6 +35,8 @@ export class CreateTxnStore implements StateStore {
   >();
   // @todo (separate ticket) select tokens and amounts, currently defaults to usdc
   totalSendAmt: number = 0;
+  sendAddr: string = "";
+  sendBlockchain?: BlockchainId = undefined;
   ////////////////////// OBSERVABLES //////////////////////
   /////////////////////////////////////////////////////////
 
@@ -150,6 +153,12 @@ export class CreateTxnStore implements StateStore {
     const validatedSendAmt = Number(sendAmtInput) || 0;
 
     this.totalSendAmt = validatedSendAmt;
+  }
+  setSendAddr(newSendAddr: string) {
+    this.sendAddr = newSendAddr;
+  }
+  setSendBlockchain(newSendBlockchain: BlockchainId) {
+    this.sendBlockchain = newSendBlockchain;
   }
   //////////////////////// ACTIONS ////////////////////////
   /////////////////////////////////////////////////////////

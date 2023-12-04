@@ -1,19 +1,28 @@
-import { FC } from "react";
+import { FC, useState } from "react";
+// style
+import Collapse from "@mui/material/Collapse";
 // components
 import BodyLayout from "../../../layouts/BodyLayout";
 import SendAmtField from "./SendAmtField";
-import AddressField from "./AddressField";
+import SendAddressField from "./SendAddressField";
 import ContactSelector from "./ContactSelector";
 
 /** ### Display: Recipient selector
  * - @todo Enter send amt
  */
 const SelectRecipient: FC = () => {
+  const [isContactsOpen, setIsContactsOpen] = useState(false);
   return (
-    <BodyLayout justifyContent="space-between" flex={1} overflow="scroll">
-      <SendAmtField />
-      <AddressField />
-      <ContactSelector />
+    <BodyLayout justifyContent="flex-start" flex={1} overflow="scroll">
+      <Collapse in={!isContactsOpen} timeout={{ enter: 250, exit: 250 }}>
+        <SendAmtField />
+        <SendAddressField />
+      </Collapse>
+
+      <ContactSelector
+        isContactsOpen={isContactsOpen}
+        setIsContactsOpen={setIsContactsOpen}
+      />
     </BodyLayout>
   );
 };
