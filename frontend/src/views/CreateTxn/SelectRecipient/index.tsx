@@ -1,6 +1,7 @@
 import { FC, useState } from "react";
 // state
 import { observer } from "mobx-react-lite";
+import { useCreateTxnStore } from "../../../mobx/stores";
 // style
 import Collapse from "@mui/material/Collapse";
 import Button from "@mui/material/Button";
@@ -10,7 +11,7 @@ import SendAmtField from "./SendAmtField";
 import SendAddressField from "./SendAddressField";
 import ContactSelector from "./ContactSelector";
 import Typography from "@mui/material/Typography";
-import { useCreateTxnStore } from "../../../mobx/stores";
+// data @todo move to state DataStore
 import {
   BlockchainId,
   supportedBlockchains,
