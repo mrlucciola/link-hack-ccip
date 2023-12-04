@@ -1,6 +1,8 @@
-import { observer } from "mobx-react-lite";
 import { FC } from "react";
+// state
+import { observer } from "mobx-react-lite";
 import { useSettingsStore } from "../../mobx/stores";
+// components
 import RootLayout from "../../layouts/RootLayout";
 
 const SettingsNav: FC = observer(() => {
@@ -18,7 +20,7 @@ const SettingsViewController: FC = observer(() => {
   const currentView = useSettingsStore((s) => s.currentView);
 
   // return settingsViewMap[currentView]
-  
+
   // delete this (use the above commented-out line):
   return (
     <div>

@@ -2,31 +2,30 @@ import { FC, useState } from "react";
 // state
 import { useCreateTxnStore } from "../../../mobx/stores";
 // style
-import {
-  Avatar,
-  AvatarGroup,
-  Box,
-  List,
-  ListItemAvatar,
-  ListItemButton,
-  ListItemSecondaryAction,
-  ListItemText,
-  Modal,
-  Typography,
-} from "@mui/material";
+import Avatar from "@mui/material/Avatar";
+import AvatarGroup from "@mui/material/AvatarGroup";
+import Box from "@mui/material/Box";
+import List from "@mui/material/List";
+import ListItemAvatar from "@mui/material/ListItemAvatar";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemSecondaryAction from "@mui/material/ListItemSecondaryAction";
+import ListItemText from "@mui/material/ListItemText";
+import Modal from "@mui/material/Modal";
+import Typography from "@mui/material/Typography";
 // interfaces
-import { Address, Contact } from "../../../mobx/interfaces";
+import { Contact } from "../../../mobx/interfaces";
+import { Address } from "../../../mobx/interfaces/address";
 import { BlockchainId } from "../../../mobx/data/supportedBlockchains";
 import { newRecipient } from "../interfaces";
 
 // from https://mui.com/material-ui/react-avatar/
-function stringAvatar(name: string) {
+export const stringAvatar = (name: string) => {
   const splitName = name.toLocaleUpperCase().split(" ");
   const firstInit = splitName[0][0];
   const secondInit = splitName.length > 1 ? splitName[1][0] : "";
 
   return { children: `${firstInit}${secondInit}` };
-}
+};
 
 const BlockchainElemGroup: FC<{ addrs: Address[] }> = ({ addrs }) => {
   // build blockchain arr
@@ -132,9 +131,7 @@ const ContactElem: FC<{ contactInfo: Contact }> = ({ contactInfo }) => {
     <>
       <ListItemButton
         onClick={() => {
-          console.log("ct", contactInfo.fullName, isMultAddr);
           if (isMultAddr) {
-            // @todo open modal/drawer to show the list of addrs
             handleOpen();
           } else {
             setRecipient(newRecipient(contactInfo, addrs[0]));

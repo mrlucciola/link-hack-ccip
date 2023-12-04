@@ -40,7 +40,6 @@ export class OnboardingStore {
     this.currentWallet = newWallet;
   }
   setCurrentWalletAlias(alias: string) {
-    console.log("new alias in state:", alias);
     this.currentWallet.alias = alias;
   }
   setWalletWithMnemonicByIdx(idx: number, newMnemonic: string) {

@@ -1,12 +1,11 @@
 import { FC } from "react";
-// state
-import { observer } from "mobx-react-lite";
 // components
 import BodyLayout from "../../../layouts/BodyLayout";
 import ContactSelector from "./ContactSelector";
 import AddressField from "./AddressField";
 
 /** ### Display: Recipient selector
+ * - @todo Enter send amt
  */
 const SelectRecipient: FC = () => {
   return (
@@ -17,4 +16,4 @@ const SelectRecipient: FC = () => {
   );
 };
 
-export default observer(SelectRecipient);
+export default SelectRecipient;
