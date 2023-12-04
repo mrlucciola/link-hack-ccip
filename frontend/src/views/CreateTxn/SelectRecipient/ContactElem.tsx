@@ -16,7 +16,8 @@ import Typography from "@mui/material/Typography";
 import { Contact } from "../../../mobx/interfaces";
 import { Address } from "../../../mobx/interfaces/address";
 import { BlockchainId } from "../../../mobx/data/supportedBlockchains";
-import { newRecipient } from "../interfaces";
+// import { newRecipient } from "../interfaces";
+import { fmtCenterEllipsis } from "../../../layouts/Text";
 
 // from https://mui.com/material-ui/react-avatar/
 export const stringAvatar = (name: string) => {
@@ -63,19 +64,25 @@ const MultiAddrModal: FC<{
   isOpen: boolean;
   handleClose: () => void;
   contactInfo: Contact;
-}> = ({ isOpen, handleClose, contactInfo }) => {
-  const setCurrentView = useCreateTxnStore((s) => s.setCurrentView);
-  const setRecipient = useCreateTxnStore((s) => s.setRecipient);
+  setIsContactsOpen: (input: boolean) => void;
+}> = ({ isOpen, handleClose, contactInfo, setIsContactsOpen }) => {
+  // @todo replace with RecipientForm
+  // const setRecipient = useCreateTxnStore((s) => s.setRecipient);
+  const setSendBlockchain = useCreateTxnStore((s) => s.setSendBlockchain);
+  const setSendAddr = useCreateTxnStore((s) => s.setSendAddr);
 
   // @todo
   // build list of addrs
   const addrElems = contactInfo.addresses.map((addr) => (
     <ListItemButton
       onClick={() => {
-        setRecipient(newRecipient(contactInfo, addr));
-        setCurrentView("selectSrc");
-        handleClose();
+        // set recipient addr and blockchain
+        setSendBlockchain(addr.blockchainId);
+        setSendAddr(addr.value);
+        // @todo replace with RecipientForm
+        setIsContactsOpen(false);
       }}
+      key={addr.lookupId}
     >
       <ListItemText primary={addr.value} secondary={addr.label} />
       <ListItemSecondaryAction>
@@ -110,19 +117,22 @@ const MultiAddrModal: FC<{
 };
 
 /** ### Display: Contact info
- *
- * @todo if click on contact w/ mult addr, open modal/drawer to show the list of addrs
+ * @todo move to mobx state
  */
-const ContactElem: FC<{ contactInfo: Contact }> = ({ contactInfo }) => {
-  const setRecipient = useCreateTxnStore((s) => s.setRecipient);
-  const setCurrentView = useCreateTxnStore((s) => s.setCurrentView);
+const ContactElem: FC<{
+  contactInfo: Contact;
+  setIsContactsOpen: (input: boolean) => void;
+}> = ({ contactInfo, setIsContactsOpen }) => {
+  const setSendBlockchain = useCreateTxnStore((s) => s.setSendBlockchain);
+  const setSendAddr = useCreateTxnStore((s) => s.setSendAddr);
+  // const setRecipient = useCreateTxnStore((s) => s.setRecipient);
   const [isOpen, setIsOpen] = useState(false);
   // format address text
   const addrs = contactInfo.addresses;
   const isMultAddr = addrs.length > 1;
   const addrOrAddrAmt = isMultAddr
     ? `${addrs.length} addresses`
-    : addrs[0].value;
+    : fmtCenterEllipsis(addrs[0].value);
   // modal event handlers
   const handleOpen = () => setIsOpen(true);
   const handleClose = () => setIsOpen(false);
@@ -134,9 +144,10 @@ const ContactElem: FC<{ contactInfo: Contact }> = ({ contactInfo }) => {
           if (isMultAddr) {
             handleOpen();
           } else {
-            setRecipient(newRecipient(contactInfo, addrs[0]));
-            // change view
-            setCurrentView("selectSrc");
+            // set recipient addr and blockchain
+            setSendBlockchain(contactInfo.addresses[0].blockchainId);
+            setSendAddr(contactInfo.addresses[0].value);
+            setIsContactsOpen(false);
           }
         }}
       >
@@ -151,10 +162,12 @@ const ContactElem: FC<{ contactInfo: Contact }> = ({ contactInfo }) => {
 
         <BlockchainElemGroup addrs={addrs} />
       </ListItemButton>
+
       <MultiAddrModal
         isOpen={isOpen}
         handleClose={handleClose}
         contactInfo={contactInfo}
+        setIsContactsOpen={setIsContactsOpen}
       />
     </>
   );

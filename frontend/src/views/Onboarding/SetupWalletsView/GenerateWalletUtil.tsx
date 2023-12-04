@@ -4,15 +4,13 @@ import { observer } from "mobx-react-lite";
 import { useOnboardingStore } from "../../../mobx/stores";
 // style
 import Grid from "@mui/material/Unstable_Grid2/Grid2";
-import {
-  Box,
-  Button,
-  IconButton,
-  InputAdornment,
-  Modal,
-  TextField,
-  Typography,
-} from "@mui/material";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import IconButton from "@mui/material/IconButton";
+import InputAdornment from "@mui/material/InputAdornment";
+import Modal from "@mui/material/Modal";
+import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
 import { FaCopy } from "react-icons/fa";
 // interfaces
 import { UserWallet, newUserWallet } from "../interfaces";

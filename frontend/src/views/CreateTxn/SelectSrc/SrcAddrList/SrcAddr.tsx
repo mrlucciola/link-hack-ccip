@@ -15,7 +15,7 @@ import AddrDetailCollapse from "./AddrDetailCollapse";
 // interfaces
 import { Address } from "../../../../mobx/interfaces/address";
 // utils
-import { fmtCenterEllipsis } from "../../../../layouts/text";
+import { fmtCenterEllipsis } from "../../../../layouts/Text";
 
 /** ### Shows controls and info about User's address
  *

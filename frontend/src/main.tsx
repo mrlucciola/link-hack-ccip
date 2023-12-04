@@ -13,12 +13,12 @@ import App from "./App.tsx";
 import "./index.css";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  <StoreProvider>
-    <React.StrictMode>
+  // <React.StrictMode>
+    <StoreProvider>
       <ThemeProvider theme={lightTheme}>
         <CssBaseline />
         <App />
       </ThemeProvider>
-    </React.StrictMode>
-  </StoreProvider>
+    </StoreProvider>
+  // </React.StrictMode> 
 );

@@ -1,7 +1,8 @@
 import { FC } from "react";
 // style
 import Grid from "@mui/material/Unstable_Grid2";
-import { Typography, Button } from "@mui/material";
+import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
 
 const WelcomeView: FC = () => {
   return (

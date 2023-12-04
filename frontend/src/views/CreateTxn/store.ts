@@ -14,6 +14,7 @@ import {
 } from "./interfaces";
 // utils
 import { mktValueFmt } from "../../utils/fmt";
+import { BlockchainId } from "../../mobx/data/supportedBlockchains";
 
 /** ## CreateTxn store
  */
@@ -26,7 +27,7 @@ export class CreateTxnStore implements StateStore {
 
   /////////////////////////////////////////////////////////
   ////////////////////// OBSERVABLES //////////////////////
-  currentView: CreateTxnViewType = "selectSrc"; // default: selectRecipient
+  currentView: CreateTxnViewType = "selectRecipient"; // default: selectRecipient
   recipient: Recipient = {} as Recipient;
   enabledTokens: Map<string, EnabledAddrToken> = new Map<
     string,
@@ -34,6 +35,8 @@ export class CreateTxnStore implements StateStore {
   >();
   // @todo (separate ticket) select tokens and amounts, currently defaults to usdc
   totalSendAmt: number = 0;
+  sendAddr: string = "";
+  sendBlockchain: BlockchainId = "eth";
   ////////////////////// OBSERVABLES //////////////////////
   /////////////////////////////////////////////////////////
 
@@ -45,15 +48,15 @@ export class CreateTxnStore implements StateStore {
     this.enabledTokens.forEach((t) => {
       const addrLookup = `${t.blockchainId}-${t.addrId}`;
       const possibleEnabledAddr = enabledAddrsMap.get(addrLookup);
-      console.log(t.lookupId, t.isEnabled, t.mktValue);
+
       // add the token to the address
       if (possibleEnabledAddr) {
-        console.log(t.lookupId, t.isEnabled, t.mktValue);
         const updatedAddr: EnabledAddr = newEnabledAddr(
           possibleEnabledAddr.value,
           possibleEnabledAddr.blockchainId,
           { ...possibleEnabledAddr.tokens, [t.id]: t }
         );
+
         enabledAddrsMap.set(addrLookup, updatedAddr);
       } else {
         const updatedAddr: EnabledAddr = newEnabledAddr(
@@ -69,7 +72,6 @@ export class CreateTxnStore implements StateStore {
   get enabledAddrsCt(): number {
     return this.enabledAddrs.size;
   }
-  // @todo fix according to tokens
   /** ### Spend limit for all user accounts
    *
    * - Accounts must be **enabled**
@@ -143,9 +145,20 @@ export class CreateTxnStore implements StateStore {
         validatedSpendLimit,
         enabledToken.isEnabled
       );
-      // @todo refactor like above
       this.enabledTokens.set(token.lookupId, updatedToken);
     }
+  }
+  setSendAmt(sendAmtInput: string) {
+    // @todo add validation
+    const validatedSendAmt = Number(sendAmtInput) || 0;
+
+    this.totalSendAmt = validatedSendAmt;
+  }
+  setSendAddr(newSendAddr: string) {
+    this.sendAddr = newSendAddr;
+  }
+  setSendBlockchain(newSendBlockchain: BlockchainId) {
+    this.sendBlockchain = newSendBlockchain;
   }
   //////////////////////// ACTIONS ////////////////////////
   /////////////////////////////////////////////////////////
