@@ -8,16 +8,23 @@ import IconButton from "@mui/material/IconButton";
 import Collapse from "@mui/material/Collapse";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 
-const BackButton: FC<{ setIsContactsOpen: (input: boolean) => void }> = ({
-  setIsContactsOpen,
-}) => {
+const BackButton: FC<{
+  isContactsOpen: boolean;
+  setIsContactsOpen: (input: boolean) => void;
+}> = ({ isContactsOpen, setIsContactsOpen }) => {
   return (
-    <IconButton
-      sx={{ borderRadius: 1 }}
-      onClick={() => setIsContactsOpen(false)}
+    <Collapse
+      in={isContactsOpen}
+      timeout={{ enter: 250, exit: 250 }}
+      orientation="horizontal"
     >
-      <ArrowBackIosIcon />
-    </IconButton>
+      <IconButton
+        sx={{ borderRadius: 1 }}
+        onClick={() => setIsContactsOpen(false)}
+      >
+        <ArrowBackIosIcon />
+      </IconButton>
+    </Collapse>
   );
 };
 
@@ -29,13 +36,10 @@ const ContactSearch: FC<{
 
   return (
     <Grid container flexDirection="row" wrap="nowrap" p={1} flex={1}>
-      <Collapse
-        in={isContactsOpen}
-        timeout={{ enter: 250, exit: 250 }}
-        orientation="horizontal"
-      >
-        <BackButton setIsContactsOpen={setIsContactsOpen} />
-      </Collapse>
+      <BackButton
+        isContactsOpen={isContactsOpen}
+        setIsContactsOpen={setIsContactsOpen}
+      />
       <TextField
         size="small"
         label="Search contacts"
