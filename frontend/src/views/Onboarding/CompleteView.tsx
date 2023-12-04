@@ -1,7 +1,7 @@
 import { FC } from "react";
 // style
 import Grid from "@mui/material/Unstable_Grid2";
-import { Typography } from "@mui/material";
+import Typography from "@mui/material/Typography";
 
 const CompleteView: FC = () => {
   const text =

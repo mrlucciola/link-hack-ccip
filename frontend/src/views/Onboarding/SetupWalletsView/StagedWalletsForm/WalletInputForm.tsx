@@ -4,7 +4,10 @@ import { observer } from "mobx-react-lite";
 import { useOnboardingStore } from "../../../../mobx/stores";
 // style
 import Grid from "@mui/material/Unstable_Grid2/Grid2";
-import { Badge, IconButton, Paper, TextField } from "@mui/material";
+import Badge from "@mui/material/Badge";
+import IconButton from "@mui/material/IconButton";
+import Paper from "@mui/material/Paper";
+import TextField from "@mui/material/TextField";
 import { MdCancel } from "react-icons/md";
 
 const AliasField: FC<{ walletIdx: number }> = observer(({ walletIdx }) => {

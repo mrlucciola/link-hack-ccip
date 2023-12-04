@@ -1,9 +1,9 @@
 import { FC } from "react";
 // state
 import { observer } from "mobx-react-lite";
-// style
-import { Button } from "@mui/material";
 import { useViewStore } from "../../../mobx/stores";
+// style
+import Button from "@mui/material/Button";
 
 /** ### Conclude the onboarding process
  * Changes the root-curentRootView state to `base`

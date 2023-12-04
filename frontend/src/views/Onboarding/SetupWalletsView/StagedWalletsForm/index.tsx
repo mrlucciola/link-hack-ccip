@@ -4,7 +4,8 @@ import { observer } from "mobx-react-lite";
 import { useOnboardingStore } from "../../../../mobx/stores";
 // style
 import Grid from "@mui/material/Unstable_Grid2/Grid2";
-import { Button, Typography } from "@mui/material";
+import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
 // components
 import WalletInputForm from "./WalletInputForm";
 // interfaces
