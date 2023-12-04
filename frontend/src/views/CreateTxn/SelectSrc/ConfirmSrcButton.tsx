@@ -15,12 +15,14 @@ import Typography from "@mui/material/Typography";
  *    - Spend limit is less than send amount;
  */
 const ConfirmSrcButton: FC = () => {
-  // conditions for enabling advancement
+  const setCurrentView = useCreateTxnStore((s) => s.setCurrentView);
+  // Conditions for progressing to review stage
   const isSpendLimitGtSendAmt = useCreateTxnStore(
     (s) => s.isSpendLimitGtSendAmt
   );
   const enabledAddrsCt = useCreateTxnStore((s) => s.enabledAddrsCt);
   const isEnabledAddrsCtGt0 = enabledAddrsCt > 0;
+  const handleNextView = () => setCurrentView("reviewTxn");
 
   return (
     <Button
@@ -29,7 +31,7 @@ const ConfirmSrcButton: FC = () => {
       sx={{ flexDirection: "column", textTransform: "none" }}
       disabled={!(isSpendLimitGtSendAmt && isEnabledAddrsCtGt0)}
       // @todo change view to "review txn"
-      // onClick={handle}
+      onClick={handleNextView}
     >
       <Typography variant="body1" fontWeight={600}>
         Confirm

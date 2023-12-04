@@ -12,14 +12,13 @@ import {
   newEnabledAddr,
   newEnabledAddrToken,
 } from "./interfaces";
+import { BlockchainId } from "../../mobx/data/supportedBlockchains";
 // utils
 import { mktValueFmt } from "../../utils/fmt";
-import { BlockchainId } from "../../mobx/data/supportedBlockchains";
 
 /** ## CreateTxn store
  */
 export class CreateTxnStore implements StateStore {
-  // ctor
   constructor(public root: RootStore) {
     // init
     makeAutoObservable(this, {}, { autoBind: true });
@@ -27,15 +26,19 @@ export class CreateTxnStore implements StateStore {
 
   /////////////////////////////////////////////////////////
   ////////////////////// OBSERVABLES //////////////////////
-  currentView: CreateTxnViewType = "selectRecipient"; // default: selectRecipient
+  currentView: CreateTxnViewType = "reviewTxn"; // default: selectRecipient
   recipient: Recipient = {} as Recipient;
   enabledTokens: Map<string, EnabledAddrToken> = new Map<
     string,
     EnabledAddrToken
   >();
   // @todo (separate ticket) select tokens and amounts, currently defaults to usdc
-  totalSendAmt: number = 0;
-  sendAddr: string = "";
+  // @delete - testing
+  totalSendAmt: number = 38928.12;
+  // totalSendAmt: number = 0;
+  // @delete - testing
+  sendAddr: string = "0xodja8f03mvb89230x8c2nkj";
+  // sendAddr: string = "";
   sendBlockchain: BlockchainId = "eth";
   /** Local state variable that involved a lot of prop drilling. */
   isContactsOpen: boolean = false;
@@ -44,6 +47,12 @@ export class CreateTxnStore implements StateStore {
 
   /////////////////////////////////////////////////////////
   /////////////////////// COMPUTEDS ///////////////////////
+  /** @deprecated not configured */
+  get areAllFormsValid(): boolean {
+    // @delete - testing
+    return true;
+    // return false;
+  }
   get enabledAddrs(): Map<string, EnabledAddr> {
     const enabledAddrsMap = new Map<string, EnabledAddr>();
 
