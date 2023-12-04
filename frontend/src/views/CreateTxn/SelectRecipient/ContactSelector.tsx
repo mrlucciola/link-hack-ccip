@@ -32,7 +32,7 @@ const ContactSelector: FC<{
         in={isContactsOpen}
         timeout={{ enter: 500, exit: 250 }}
       >
-        <ContactList />
+        <ContactList setIsContactsOpen={setIsContactsOpen} />
       </Collapse>
     </Grid>
   );

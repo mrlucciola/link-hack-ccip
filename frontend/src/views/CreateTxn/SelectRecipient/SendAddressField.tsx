@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC } from "react";
 // state
 import { observer } from "mobx-react-lite";
 import { useCreateTxnStore } from "../../../mobx/stores";
@@ -20,10 +20,10 @@ import {
 const SendAddressField: FC = () => {
   const setSendAddr = useCreateTxnStore((s) => s.setSendAddr);
   const setSendBlockchain = useCreateTxnStore((s) => s.setSendBlockchain);
+  const sendAddr = useCreateTxnStore((s) => s.sendAddr);
+  const sendBlockchain = useCreateTxnStore((s) => s.sendBlockchain);
   // @todo add validation
   const placeholderIsError = false;
-  const [inputText, setInputText] = useState("");
-  const [bcSelect, setBcSelect] = useState<BlockchainId>("eth");
   // add data to root state
   const bcElems = Object.values(supportedBlockchains).map((bc, idx) => {
     return (
@@ -35,14 +35,10 @@ const SendAddressField: FC = () => {
   // event handlers
   const handleTextChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    setInputText(e.target.value);
-    setSendAddr(e.target.value);
-  };
-  const handleBlockchainChange = (e: SelectChangeEvent) => {
-    setBcSelect(e.target.value as BlockchainId);
+  ) => setSendAddr(e.target.value);
+
+  const handleBlockchainChange = (e: SelectChangeEvent) =>
     setSendBlockchain(e.target.value as BlockchainId);
-  };
 
   return (
     <Grid container flexDirection="row" flex={1} px={1} mt={1} wrap="nowrap">
@@ -54,7 +50,7 @@ const SendAddressField: FC = () => {
         autoFocus
         sx={{ flex: 1 }}
         // input
-        value={inputText}
+        value={sendAddr}
         onChange={handleTextChange}
         // validation
         error={placeholderIsError}
@@ -64,9 +60,9 @@ const SendAddressField: FC = () => {
       <Select
         size="small"
         margin="none"
-        value={bcSelect}
-        onChange={handleBlockchainChange}
         // label="Blockchain"
+        value={sendBlockchain}
+        onChange={handleBlockchainChange}
       >
         {bcElems}
       </Select>

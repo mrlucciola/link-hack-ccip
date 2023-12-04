@@ -36,7 +36,7 @@ export class CreateTxnStore implements StateStore {
   // @todo (separate ticket) select tokens and amounts, currently defaults to usdc
   totalSendAmt: number = 0;
   sendAddr: string = "";
-  sendBlockchain?: BlockchainId = undefined;
+  sendBlockchain: BlockchainId = "eth";
   ////////////////////// OBSERVABLES //////////////////////
   /////////////////////////////////////////////////////////
 

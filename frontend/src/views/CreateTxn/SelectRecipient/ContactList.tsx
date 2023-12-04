@@ -6,13 +6,21 @@ import { useUserStore } from "../../../mobx/stores";
 import Grid from "@mui/material/Unstable_Grid2/Grid2";
 import ContactElem from "./ContactElem";
 
-const ContactList: FC = () => {
+const ContactList: FC<{ setIsContactsOpen: (input: boolean) => void }> = ({
+  setIsContactsOpen,
+}) => {
   const contacts = useUserStore((s) => s.contacts);
 
   // build
   const contactElems: JSX.Element[] = [];
   contacts.forEach((c, idx) => {
-    contactElems.push(<ContactElem contactInfo={c} key={idx} />);
+    contactElems.push(
+      <ContactElem
+        contactInfo={c}
+        key={idx}
+        setIsContactsOpen={setIsContactsOpen}
+      />
+    );
   });
 
   return (
