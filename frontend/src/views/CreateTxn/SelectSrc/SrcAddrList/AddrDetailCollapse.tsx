@@ -14,10 +14,7 @@ import SpendLimit from "./SpendLimit";
 import { Address } from "../../../../mobx/interfaces/address";
 import { AddrToken } from "../../../../mobx/interfaces/token";
 
-const AddrTokenElem: FC<{
-  addr: Address;
-  token: AddrToken;
-}> = observer(({ addr, token }) => {
+const AddrTokenElem: FC<{ token: AddrToken }> = observer(({ token }) => {
   return (
     <ListItem divider dense>
       <ListItemAvatar>
@@ -32,7 +29,7 @@ const AddrTokenElem: FC<{
         secondary={token.mktValueFmt}
       />
 
-      <SpendLimit addr={addr} token={token} />
+      <SpendLimit token={token} />
     </ListItem>
   );
 });
@@ -46,7 +43,7 @@ const AddrDetailCollapse: FC<{
 }> = ({ addr, isOpen }) => {
   // build
   const tokenElems: JSX.Element[] = Object.values(addr.tokens).map((t) => (
-    <AddrTokenElem addr={addr} token={t} key={t.lookupId} />
+    <AddrTokenElem token={t} key={t.lookupId} />
   ));
 
   return (

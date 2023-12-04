@@ -8,49 +8,41 @@ import ListItemSecondaryAction from "@mui/material/ListItemSecondaryAction";
 import TextField from "@mui/material/TextField";
 // interfaces
 import { EnabledAddrToken } from "../../interfaces";
-import { Address } from "../../../../mobx/interfaces/address";
 import { AddrToken } from "../../../../mobx/interfaces/token";
-// utils
-import { mktValueFmt } from "../../../../utils/fmt";
-import { lookupTokenMktValue } from "../../../../mobx/data/tokens";
 
+/** ### "Spend-limit" field for an address-held token  */
 const SpendLimitField: FC<{
-  /** @deprecated */
-  addr?: Address;
   token: AddrToken;
-  enabledAddrToken: EnabledAddrToken | undefined;
+  enabledAddrToken: EnabledAddrToken;
 }> = observer(({ token, enabledAddrToken }) => {
   const setEnabledAddrTokenSpendLimit = useCreateTxnStore(
     (s) => s.setEnabledAddrTokenSpendLimit
   );
-  // @todo move lookup to class
-  const spendLimitMktValue = enabledAddrToken
-    ? lookupTokenMktValue(token.id) * enabledAddrToken.spendLimit
-    : 0;
-  const spendLimitMktValueFmt = mktValueFmt(spendLimitMktValue);
-
   const [spendLimitInput, setSpendLimitInput] = useState(
-    enabledAddrToken ? `${enabledAddrToken.spendLimit}` : `${token.amount}`
+    `${enabledAddrToken.spendLimit}` || `${token.amount}`
   );
   // event handler
   const onChangeSpendLimit = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    // @todo add validation for spend limit
     setSpendLimitInput(e.target.value);
+    // @todo can we use just mobx state for form?
     setEnabledAddrTokenSpendLimit(token, e.target.value);
   };
 
-  return enabledAddrToken && enabledAddrToken.isEnabled ? (
+  return enabledAddrToken.isEnabled ? (
     <TextField
       size="small"
       variant="standard"
+      // label text
       label="Spend limit"
+      InputLabelProps={{ shrink: true, sx: { mt: 0.1 } }}
+      // input text
       value={spendLimitInput}
       onChange={onChangeSpendLimit}
-      helperText={spendLimitMktValueFmt}
-      InputLabelProps={{ shrink: true, sx: { mt: 0.1 } }}
       InputProps={{ style: { fontSize: "0.9em" } }}
+      // helper text
+      helperText={enabledAddrToken.mktValueFmt}
       FormHelperTextProps={{ margin: "dense", sx: { mt: 0 } }}
     />
   ) : (
@@ -81,7 +73,9 @@ const SpendLimit: FC<{ token: AddrToken }> = ({ token }) => {
         flexWrap: "nowrap",
       }}
     >
-      <SpendLimitField token={token} enabledAddrToken={enabledAddrToken} />
+      {isEnabled && (
+        <SpendLimitField token={token} enabledAddrToken={enabledAddrToken} />
+      )}
       <Checkbox
         checked={isEnabled || false}
         onChange={onCheck}
