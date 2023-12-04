@@ -1,83 +1,24 @@
 import { Contact } from "../interfaces";
-import {
-  AddrToken,
-  Address,
-  newAddrToken,
-  newAddress,
-} from "../interfaces/address";
+import { Address, newAddress } from "../interfaces/address";
+import { newAddrToken } from "../interfaces/token";
 
 const seedAddrs: Address[] = [
-  newAddress({
-    value: "0xic939d0x98f02123",
-    blockchainId: "matic",
-    label: "",
-    get tokens(): AddrToken[] {
-      return [
-        newAddrToken(
-          { id: "usdc", blockchainId: this.blockchainId, amount: 11111.1111 },
-          this.value
-        ),
-      ];
-    },
+  newAddress("0xic939d0x98f02123", "matic", "", {
+    usdc: newAddrToken("usdc", "matic", "0xic939d0x98f02123", 11111.1111),
   }),
-  newAddress({
-    value: "0x8us93i09dlwpi09d",
-    blockchainId: "avax",
-    label: "Personal (Avalanche)",
-    get tokens(): AddrToken[] {
-      return [
-        newAddrToken(
-          { id: "usdc", blockchainId: this.blockchainId, amount: 20000 },
-          this.value
-        ),
-        newAddrToken(
-          { id: "aave", blockchainId: this.blockchainId, amount: 123.9998 },
-          this.value
-        ),
-        newAddrToken(
-          { id: "mkr", blockchainId: this.blockchainId, amount: 1.1 },
-          this.value
-        ),
-      ];
-    },
+  newAddress("0x8us93i09dlwpi09d", "avax", "Personal (Avalanche)", {
+    usdc: newAddrToken("usdc", "avax", "0x8us93i09dlwpi09d", 20000),
+    aave: newAddrToken("aave", "avax", "0x8us93i09dlwpi09d", 123.9998),
+    mkr: newAddrToken("mkr", "avax", "0x8us93i09dlwpi09d", 1.1),
   }),
-  newAddress({
-    value: "0xXyzzoj29d8f02098",
-    blockchainId: "op",
-    label: "Personal (Optimism)",
-    get tokens(): AddrToken[] {
-      return [
-        newAddrToken(
-          { id: "usdc", blockchainId: this.blockchainId, amount: 2993.9829 },
-          this.value
-        ),
-        newAddrToken(
-          { id: "aave", blockchainId: this.blockchainId, amount: 338.132 },
-          this.value
-        ),
-      ];
-    },
+  newAddress("0xXyzzoj29d8f02098", "op", "Personal (Optimism)", {
+    usdc: newAddrToken("usdc", "op", "0xXyzzoj29d8f02098", 2993.9829),
+    aave: newAddrToken("aave", "op", "0xXyzzoj29d8f02098", 338.132),
   }),
-  newAddress({
-    value: "0xabczoj29d8f02456",
-    blockchainId: "eth",
-    label: "NFT Drops",
-    get tokens(): AddrToken[] {
-      return [
-        newAddrToken(
-          { id: "usdc", blockchainId: this.blockchainId, amount: 22.4884 },
-          this.value
-        ),
-        newAddrToken(
-          { id: "aave", blockchainId: this.blockchainId, amount: 0.25123 },
-          this.value
-        ),
-        newAddrToken(
-          { id: "mkr", blockchainId: this.blockchainId, amount: 0.0005 },
-          this.value
-        ),
-      ];
-    },
+  newAddress("0xabczoj29d8f02456", "eth", "NFT Drops", {
+    usdc: newAddrToken("usdc", "eth", "0xabczoj29d8f02456", 22.4884),
+    aave: newAddrToken("aave", "eth", "0xabczoj29d8f02456", 0.25123),
+    mkr: newAddrToken("mkr", "eth", "0xabczoj29d8f02456", 0.0005),
   }),
 ];
 export const seedAddressesMap: Map<string, Address> = new Map<string, Address>(
@@ -89,34 +30,10 @@ const seedContacts: Contact[] = [
     id: "jdoe",
     fullName: "John Doe",
     addresses: [
-      newAddress({
-        value: "0xd0xk3nf8ww",
-        blockchainId: "matic",
-        label: "Primary address",
-        get tokens(): AddrToken[] {
-          return [
-            newAddrToken(
-              { id: "usdc", blockchainId: this.blockchainId, amount: 84.3 },
-              this.value
-            ),
-            newAddrToken(
-              {
-                id: "aave",
-                blockchainId: this.blockchainId,
-                amount: 789.52194,
-              },
-              this.value
-            ),
-            newAddrToken(
-              {
-                id: "mkr",
-                blockchainId: this.blockchainId,
-                amount: 30.42341,
-              },
-              this.value
-            ),
-          ];
-        },
+      newAddress("0xd0xk3nf8ww", "matic", "Primary address", {
+        usdc: newAddrToken("usdc", "matic", "0xd0xk3nf8ww", 84.3),
+        aave: newAddrToken("aave", "matic", "0xd0xk3nf8ww", 789.52194),
+        mkr: newAddrToken("mkr", "matic", "0xd0xk3nf8ww", 30.42341),
       }),
     ],
   },
@@ -124,35 +41,12 @@ const seedContacts: Contact[] = [
     id: "franksinatra",
     fullName: "Frank Sinatra",
     addresses: [
-      newAddress({
-        value: "0x9din3hduc8",
-        blockchainId: "avax",
-        label: "NFT address",
-        get tokens(): AddrToken[] {
-          return [
-            newAddrToken(
-              { id: "usdc", blockchainId: this.blockchainId, amount: 492 },
-              this.value
-            ),
-            newAddrToken(
-              { id: "aave", blockchainId: this.blockchainId, amount: 456 },
-              this.value
-            ),
-          ];
-        },
+      newAddress("0x9din3hduc8", "avax", "NFT address", {
+        usdc: newAddrToken("usdc", "avax", "0x9din3hduc8", 492),
+        aave: newAddrToken("aave", "avax", "0x9din3hduc8", 456),
       }),
-      newAddress({
-        value: "0x0dj1i28fu4",
-        blockchainId: "eth",
-        label: "Dropbox",
-        get tokens(): AddrToken[] {
-          return [
-            newAddrToken(
-              { id: "mkr", blockchainId: this.blockchainId, amount: 20.2 },
-              this.value
-            ),
-          ];
-        },
+      newAddress("0x0dj1i28fu4", "eth", "Dropbox", {
+        mkr: newAddrToken("mkr", "avax", "0x9din3hduc8", 20.2),
       }),
     ],
   },
@@ -160,73 +54,27 @@ const seedContacts: Contact[] = [
     id: "cdeli",
     fullName: "Corner Deli",
     addresses: [
-      newAddress({
-        value: "0x800acjwkj3",
-        blockchainId: "arb",
-        label: "Dropbox: vendors",
+      newAddress("0x800acjwkj3", "arb", "Dropbox: vendors"),
+      newAddress("0xoxj901b389", "arb", "Dropbox: customers (Arbitrum)", {
+        usdc: newAddrToken("usdc", "arb", "0xoxj901b389", 29481.32),
       }),
-      newAddress({
-        value: "0xoxj901b389",
-        blockchainId: "arb",
-        label: "Dropbox: customers (Arbitrum)",
-        get tokens(): AddrToken[] {
-          return [
-            newAddrToken(
-              { id: "usdc", blockchainId: this.blockchainId, amount: 29481.32 },
-              this.value
-            ),
-          ];
-        },
+      newAddress("0xoxj901b389", "op", "Dropbox: customers (Optimism)", {
+        usdc: newAddrToken("usdc", "op", "0xoxj901b389", 59209.11),
       }),
-      newAddress({
-        value: "0xoxj901b389",
-        blockchainId: "op",
-        label: "Dropbox: customers (Optimism)",
-        get tokens(): AddrToken[] {
-          return [
-            newAddrToken(
-              { id: "usdc", blockchainId: this.blockchainId, amount: 59209.11 },
-              this.value
-            ),
-          ];
-        },
-      }),
-      newAddress({
-        value: "0xzoj29d8f02",
-        blockchainId: "matic",
-        label: "Treasury",
-        get tokens(): AddrToken[] {
-          return [
-            newAddrToken(
-              { id: "mkr", blockchainId: this.blockchainId, amount: 6.251 },
-              this.value
-            ),
-          ];
-        },
+      newAddress("0xzoj29d8f02", "matic", "Treasury", {
+        mkr: newAddrToken("mkr", "matic", "0xzoj29d8f02", 6.251),
       }),
     ],
   },
   {
     id: "alice",
     fullName: "Alice",
-    addresses: [
-      newAddress({
-        value: "0xd8cj3nsovy",
-        blockchainId: "matic",
-        label: "Main",
-      }),
-    ],
+    addresses: [newAddress("0xd8cj3nsovy", "matic", "Main")],
   },
   {
     id: "bobb",
     fullName: "Bob Burnquist",
-    addresses: [
-      newAddress({
-        value: "0xa0xl4n67x8",
-        blockchainId: "avax",
-        label: "Personal",
-      }),
-    ],
+    addresses: [newAddress("0xa0xl4n67x8", "avax", "Personal")],
   },
 ];
 export const seedContactsMap: Map<string, Contact> = new Map<string, Contact>(

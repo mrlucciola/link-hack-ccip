@@ -1,7 +1,12 @@
 import { BlockchainId } from "../../mobx/data/supportedBlockchains";
-import { TokenId } from "../../mobx/data/tokens";
+import { TokenId, lookupTokenMktValue } from "../../mobx/data/tokens";
 import { Contact } from "../../mobx/interfaces";
-import { Address } from "../../mobx/interfaces/address";
+import {
+  Address,
+  BaseAddress,
+  IAddrTokens,
+} from "../../mobx/interfaces/address";
+import { BaseAddrToken } from "../../mobx/interfaces/token";
 
 export class Recipient {
   constructor(public contact: Contact, public address: Address) {}
@@ -9,40 +14,61 @@ export class Recipient {
 export const newRecipient = (contact: Contact, address: Address) =>
   new Recipient(contact, address);
 
-export class EnabledAddr implements Pick<Address, "value"> {
+export class EnabledAddr extends BaseAddress<EnabledAddrToken> {
   constructor(
-    public value: string,
-    public blockchainId: BlockchainId,
-    public spendLimit: number,
-    public tokens: { [key in TokenId]: EnabledAddrToken }
-  ) {}
-  get lookupId(): string {
-    return `${this.blockchainId}-${this.value}`;
+    value: string,
+    blockchainId: BlockchainId,
+    public tokens: IAddrTokens<EnabledAddrToken>
+  ) {
+    super(value, blockchainId, tokens);
+  }
+
+  get totalMktValue(): number {
+    let sum = 0;
+
+    Object.values(this.tokens).forEach((t) => {
+      sum += t.mktValue;
+    });
+
+    return sum;
   }
   get isEnabled(): boolean {
-    return this.spendLimit > 0;
+    return this.totalMktValue > 0;
   }
 }
 export const newEnabledAddr = (
   value: string,
   blockchainId: BlockchainId,
-  spendLimit: number,
-  tokens?: { [key in TokenId]: EnabledAddrToken }
+  tokens?: IAddrTokens<EnabledAddrToken>
 ): EnabledAddr => {
   return new EnabledAddr(
     value,
     blockchainId,
-    spendLimit,
-    tokens || ({} as { [key in TokenId]: EnabledAddrToken })
+    tokens || ({} as IAddrTokens<EnabledAddrToken>)
   );
 };
 
-export class EnabledAddrToken {
-  constructor(public spendLimit: number, public isEnabled: boolean) {}
+export class EnabledAddrToken extends BaseAddrToken {
+  constructor(
+    id: TokenId,
+    blockchainid: BlockchainId,
+    addrId: string,
+    public spendLimit: number,
+    public isEnabled: boolean
+  ) {
+    super(id, blockchainid, addrId);
+  }
+
+  get mktValue(): number {
+    return this.isEnabled ? lookupTokenMktValue(this.id) * this.spendLimit : 0;
+  }
 }
 export const newEnabledAddrToken = (
+  id: TokenId,
+  blockchainId: BlockchainId,
+  addrId: string,
   spendLimit: number,
   isEnabled: boolean = false
 ): EnabledAddrToken => {
-  return new EnabledAddrToken(spendLimit, isEnabled);
+  return new EnabledAddrToken(id, blockchainId, addrId, spendLimit, isEnabled);
 };

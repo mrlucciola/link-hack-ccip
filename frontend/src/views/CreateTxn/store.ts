@@ -1,10 +1,10 @@
 // state
 import { makeAutoObservable } from "mobx";
 import { StateStore } from "../../mobx/interfaces";
-import { AddrToken, Address } from "../../mobx/interfaces/address";
 import { RootStore } from "../../mobx/stores";
 // interfaces
 import { CreateTxnViewType } from ".";
+import { AddrToken } from "../../mobx/interfaces/token";
 import {
   EnabledAddr,
   EnabledAddrToken,
@@ -12,9 +12,8 @@ import {
   newEnabledAddr,
   newEnabledAddrToken,
 } from "./interfaces";
+// utils
 import { mktValueFmt } from "../../utils/fmt";
-import { TokenId, lookupTokenMktValue } from "../../mobx/data/tokens";
-import { BlockchainId } from "../../mobx/data/supportedBlockchains";
 
 /** ## CreateTxn store
  */
@@ -43,26 +42,24 @@ export class CreateTxnStore implements StateStore {
   get enabledAddrs(): Map<string, EnabledAddr> {
     const enabledAddrsMap = new Map<string, EnabledAddr>();
 
-    this.enabledTokens.forEach((t, lookup) => {
-      const tokenId: TokenId = lookup.split("-")[0] as TokenId;
-      const blockchainId: BlockchainId = lookup.split("-")[1] as BlockchainId;
-      const addrValue = lookup.split("-")[2];
-      const addrLookup = `${blockchainId}-${addrValue}`;
-
+    this.enabledTokens.forEach((t) => {
+      const addrLookup = `${t.blockchainId}-${t.addrId}`;
       const possibleEnabledAddr = enabledAddrsMap.get(addrLookup);
+      console.log(t.lookupId, t.isEnabled, t.mktValue);
+      // add the token to the address
       if (possibleEnabledAddr) {
+        console.log(t.lookupId, t.isEnabled, t.mktValue);
         const updatedAddr: EnabledAddr = newEnabledAddr(
           possibleEnabledAddr.value,
           possibleEnabledAddr.blockchainId,
-          possibleEnabledAddr.spendLimit +
-            (t.isEnabled ? lookupTokenMktValue(tokenId) * t.spendLimit : 0)
+          { ...possibleEnabledAddr.tokens, [t.id]: t }
         );
         enabledAddrsMap.set(addrLookup, updatedAddr);
       } else {
         const updatedAddr: EnabledAddr = newEnabledAddr(
-          addrValue,
-          blockchainId,
-          t.isEnabled ? lookupTokenMktValue(tokenId) * t.spendLimit : 0
+          t.addrId,
+          t.blockchainId,
+          { [t.id]: t }
         );
         enabledAddrsMap.set(addrLookup, updatedAddr);
       }
@@ -73,10 +70,16 @@ export class CreateTxnStore implements StateStore {
     return this.enabledAddrs.size;
   }
   // @todo fix according to tokens
+  /** ### Spend limit for all user accounts
+   *
+   * - Accounts must be **enabled**
+   * - Accounts must have a balance > 0
+   */
   get totalSpendLimit(): number {
     let sum = 0;
+
     this.enabledAddrs.forEach((addr) => {
-      if (addr.isEnabled) sum += addr.spendLimit;
+      if (addr.isEnabled) sum += addr.totalMktValue;
     });
 
     return sum;
@@ -102,41 +105,46 @@ export class CreateTxnStore implements StateStore {
   setRecipient(newRecipient: Recipient) {
     this.recipient = newRecipient;
   }
-  setEnabledAddrTokenStatus(
-    addrWithToken: Address,
-    tokenToEnable: AddrToken,
-    isEnabled: boolean
-  ) {
-    const enabledTokenId = this.getEnabledTokenId(
-      tokenToEnable.id,
-      addrWithToken
-    );
-    const enabledToken = this.enabledTokens.get(enabledTokenId);
+  setEnabledAddrTokenStatus(tokenToEnable: AddrToken, isEnabled: boolean) {
+    const enabledToken = this.enabledTokens.get(tokenToEnable.lookupId);
 
     if (enabledToken) {
-      this.enabledTokens.set(enabledTokenId, { ...enabledToken, isEnabled });
+      const updatedToken = newEnabledAddrToken(
+        enabledToken.id,
+        enabledToken.blockchainId,
+        enabledToken.addrId,
+        enabledToken.spendLimit,
+        isEnabled
+      );
+      this.enabledTokens.set(enabledToken.lookupId, updatedToken);
     } else {
       this.enabledTokens.set(
-        enabledTokenId,
-        newEnabledAddrToken(tokenToEnable.amount, isEnabled)
+        tokenToEnable.lookupId,
+        newEnabledAddrToken(
+          tokenToEnable.id,
+          tokenToEnable.blockchainId,
+          tokenToEnable.addrId,
+          tokenToEnable.amount,
+          isEnabled
+        )
       );
     }
   }
-  setEnabledAddrTokenSpendLimit(
-    addrToAdjust: Address,
-    tokenId: TokenId,
-    newSpendLimitInput: string
-  ) {
-    const enabledTokenId = this.getEnabledTokenId(tokenId, addrToAdjust);
+  setEnabledAddrTokenSpendLimit(token: AddrToken, newSpendLimitInput: string) {
     // @todo add validation for spend limit
     const validatedSpendLimit = Number(newSpendLimitInput) || 0;
 
-    const token = this.enabledTokens.get(enabledTokenId);
-    if (token) {
-      this.enabledTokens.set(enabledTokenId, {
-        ...token,
-        spendLimit: validatedSpendLimit,
-      });
+    const enabledToken = this.enabledTokens.get(token.lookupId);
+    if (enabledToken) {
+      const updatedToken = newEnabledAddrToken(
+        enabledToken.id,
+        enabledToken.blockchainId,
+        enabledToken.addrId,
+        validatedSpendLimit,
+        enabledToken.isEnabled
+      );
+      // @todo refactor like above
+      this.enabledTokens.set(token.lookupId, updatedToken);
     }
   }
   //////////////////////// ACTIONS ////////////////////////
@@ -144,15 +152,6 @@ export class CreateTxnStore implements StateStore {
 
   /////////////////////////////////////////////////////////
   //////////////////////// HELPERS ////////////////////////
-  getEnabledAddrToken(
-    addr: Address,
-    tokenId: TokenId
-  ): EnabledAddrToken | undefined {
-    return this.enabledTokens.get(this.getEnabledTokenId(tokenId, addr));
-  }
-  getEnabledTokenId(tokenId: TokenId, addr: Address): string {
-    return `${tokenId}-${addr.blockchainId}-${addr.value}`;
-  }
   //////////////////////// HELPERS ////////////////////////
   /////////////////////////////////////////////////////////
 }

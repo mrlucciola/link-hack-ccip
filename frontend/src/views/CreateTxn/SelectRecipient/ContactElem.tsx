@@ -2,18 +2,16 @@ import { FC, useState } from "react";
 // state
 import { useCreateTxnStore } from "../../../mobx/stores";
 // style
-import {
-  Avatar,
-  AvatarGroup,
-  Box,
-  List,
-  ListItemAvatar,
-  ListItemButton,
-  ListItemSecondaryAction,
-  ListItemText,
-  Modal,
-  Typography,
-} from "@mui/material";
+import Avatar from "@mui/material/Avatar";
+import AvatarGroup from "@mui/material/AvatarGroup";
+import Box from "@mui/material/Box";
+import List from "@mui/material/List";
+import ListItemAvatar from "@mui/material/ListItemAvatar";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemSecondaryAction from "@mui/material/ListItemSecondaryAction";
+import ListItemText from "@mui/material/ListItemText";
+import Modal from "@mui/material/Modal";
+import Typography from "@mui/material/Typography";
 // interfaces
 import { Contact } from "../../../mobx/interfaces";
 import { Address } from "../../../mobx/interfaces/address";

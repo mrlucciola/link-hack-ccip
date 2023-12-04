@@ -8,16 +8,18 @@ import ListItemSecondaryAction from "@mui/material/ListItemSecondaryAction";
 import TextField from "@mui/material/TextField";
 // interfaces
 import { EnabledAddrToken } from "../../interfaces";
-import { AddrToken, Address } from "../../../../mobx/interfaces/address";
+import { Address } from "../../../../mobx/interfaces/address";
+import { AddrToken } from "../../../../mobx/interfaces/token";
 // utils
 import { mktValueFmt } from "../../../../utils/fmt";
 import { lookupTokenMktValue } from "../../../../mobx/data/tokens";
 
 const SpendLimitField: FC<{
-  addr: Address;
+  /** @deprecated */
+  addr?: Address;
   token: AddrToken;
   enabledAddrToken: EnabledAddrToken | undefined;
-}> = observer(({ addr, token, enabledAddrToken }) => {
+}> = observer(({ token, enabledAddrToken }) => {
   const setEnabledAddrTokenSpendLimit = useCreateTxnStore(
     (s) => s.setEnabledAddrTokenSpendLimit
   );
@@ -36,7 +38,7 @@ const SpendLimitField: FC<{
   ) => {
     // @todo add validation for spend limit
     setSpendLimitInput(e.target.value);
-    setEnabledAddrTokenSpendLimit(addr, token.id, e.target.value);
+    setEnabledAddrTokenSpendLimit(token, e.target.value);
   };
 
   return enabledAddrToken && enabledAddrToken.isEnabled ? (
@@ -56,25 +58,18 @@ const SpendLimitField: FC<{
   );
 });
 
-const SpendLimit: FC<{ addr: Address; token: AddrToken }> = ({
-  addr,
-  token,
-}) => {
+const SpendLimit: FC<{ token: AddrToken }> = ({ token }) => {
   const setEnabledAddrTokenStatus = useCreateTxnStore(
     (s) => s.setEnabledAddrTokenStatus
   );
-  const enabledTokenId = useCreateTxnStore((s) =>
-    s.getEnabledTokenId(token.id, addr)
-  );
   const enabledAddrToken = useCreateTxnStore((s) =>
-    s.enabledTokens.get(enabledTokenId)
+    s.enabledTokens.get(token.lookupId)
   );
-  // const enabledAddrToken = getEnabledAddrToken(addr, token.id);
   const isEnabled = enabledAddrToken?.isEnabled;
 
   // event handler
   const onCheck = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEnabledAddrTokenStatus(addr, token, e.target.checked);
+    setEnabledAddrTokenStatus(token, e.target.checked);
   };
 
   return (
@@ -86,11 +81,7 @@ const SpendLimit: FC<{ addr: Address; token: AddrToken }> = ({
         flexWrap: "nowrap",
       }}
     >
-      <SpendLimitField
-        addr={addr}
-        token={token}
-        enabledAddrToken={enabledAddrToken}
-      />
+      <SpendLimitField token={token} enabledAddrToken={enabledAddrToken} />
       <Checkbox
         checked={isEnabled || false}
         onChange={onCheck}

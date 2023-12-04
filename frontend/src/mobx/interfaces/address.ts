@@ -4,65 +4,58 @@ import {
   BlockchainInfo,
   getBlockchainInfo,
 } from "../data/supportedBlockchains";
-import { TokenId, lookupTokenLabel, lookupTokenMktValue } from "../data/tokens";
+import { TokenId } from "../data/tokens";
+import { AddrToken, BaseAddrToken } from "./token";
 
-export class Address {
+export type IAddrTokens<T extends BaseAddrToken = BaseAddrToken> = {
+  [key in TokenId]?: T;
+};
+
+export abstract class BaseAddress<T extends BaseAddrToken> {
+  abstract totalMktValue: number;
+
   constructor(
     public value: string,
     public blockchainId: BlockchainId,
-    public label: string,
-    public tokens: AddrToken[]
+    public tokens: IAddrTokens<T>
   ) {}
 
+  get lookupId(): string {
+    return `${this.blockchainId}-${this.value}`;
+  }
   get blockchainInfo(): BlockchainInfo {
     return getBlockchainInfo(this.blockchainId);
   }
-  // @todo add totalMktValue to state
+  get totalMktValueFmt(): string {
+    return mktValueFmt(this.totalMktValue);
+  }
+}
+
+export class Address extends BaseAddress<AddrToken> {
+  constructor(
+    value: string,
+    blockchainId: BlockchainId,
+    tokens: IAddrTokens<AddrToken>,
+    public label: string
+  ) {
+    super(value, blockchainId, tokens);
+  }
+
   get totalMktValue(): number {
     let sum = 0;
-    this.tokens.forEach((t) => {
+
+    Object.values(this.tokens).forEach((t) => {
       sum += t.mktValue;
     });
 
     return sum;
   }
-  get totalMktValueFmt(): string {
-    return mktValueFmt(this.totalMktValue);
-  }
-  get lookupId(): string {
-    return `${this.blockchainId}-${this.value}`;
-  }
 }
 export const newAddress = (
-  addr: Pick<Address, "value" | "blockchainId" | "label"> &
-    Partial<Pick<Address, "tokens">>
+  value: string,
+  blockchainId: BlockchainId,
+  label: string = "",
+  tokens: IAddrTokens<AddrToken> = {} as IAddrTokens<AddrToken>
 ): Address => {
-  const tokens = addr.tokens || [];
-
-  return new Address(addr.value, addr.blockchainId, addr.label, tokens);
+  return new Address(value, blockchainId, tokens, label);
 };
-
-export class AddrToken {
-  constructor(
-    public id: TokenId,
-    public blockchainId: BlockchainId,
-    public amount: number,
-    public addrId: string
-  ) {}
-  get lookupId(): string {
-    return `${this.id}-${this.blockchainId}-${this.addrId}`;
-  }
-  get label(): string {
-    return lookupTokenLabel(this.id);
-  }
-  get mktValue(): number {
-    return lookupTokenMktValue(this.id) * this.amount;
-  }
-  get mktValueFmt(): string {
-    return mktValueFmt(this.mktValue);
-  }
-}
-export const newAddrToken = (
-  token: Pick<AddrToken, "id" | "blockchainId" | "amount">,
-  addrId: string
-) => new AddrToken(token.id, token.blockchainId, token.amount, addrId);

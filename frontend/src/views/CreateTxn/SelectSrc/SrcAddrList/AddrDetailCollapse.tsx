@@ -11,7 +11,8 @@ import ListItemText from "@mui/material/ListItemText";
 // components
 import SpendLimit from "./SpendLimit";
 // interfaces
-import { AddrToken, Address } from "../../../../mobx/interfaces/address";
+import { Address } from "../../../../mobx/interfaces/address";
+import { AddrToken } from "../../../../mobx/interfaces/token";
 
 const AddrTokenElem: FC<{
   addr: Address;
@@ -43,10 +44,8 @@ const AddrDetailCollapse: FC<{
   addr: Address;
   isOpen: boolean;
 }> = ({ addr, isOpen }) => {
-  const tokens = addr.tokens;
-
   // build
-  const tokenElems: JSX.Element[] = tokens.map((t) => (
+  const tokenElems: JSX.Element[] = Object.values(addr.tokens).map((t) => (
     <AddrTokenElem addr={addr} token={t} key={t.lookupId} />
   ));
 
