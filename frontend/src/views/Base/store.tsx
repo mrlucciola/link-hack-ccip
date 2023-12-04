@@ -2,8 +2,25 @@
 import { makeAutoObservable } from "mobx";
 import { StateStore } from "../../mobx/interfaces";
 import { RootStore } from "../../mobx/stores";
+// style
+import HomeIcon from "@mui/icons-material/Home";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
+import ContactPageIcon from "@mui/icons-material/ContactPage";
+import HistoryIcon from "@mui/icons-material/History";
+import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 // interfaces
-export type BaseViewType = "home" | "createTxn";
+export const baseViewsMap = Object.freeze({
+  home: { id: "home", label: "Home", icon: <HomeIcon /> },
+  portfolio: {
+    id: "portfolio",
+    label: "Portfolio",
+    icon: <AccountBalanceWalletIcon />,
+  },
+  createTxn: { id: "createTxn", label: "CreateTxn", icon: <AddCircleIcon /> },
+  activity: { id: "activity", label: "Activity", icon: <HistoryIcon /> },
+  contacts: { id: "contacts", label: "Contacts", icon: <ContactPageIcon /> },
+});
+export type BaseView = keyof typeof baseViewsMap;
 
 /** ## Base store
  */
@@ -16,7 +33,7 @@ export class BaseStore implements StateStore {
 
   /////////////////////////////////////////////////////////
   ////////////////////// OBSERVABLES //////////////////////
-  currentView: BaseViewType = "createTxn";
+  currentView: BaseView = "createTxn";
   ////////////////////// OBSERVABLES //////////////////////
   /////////////////////////////////////////////////////////
 
@@ -27,7 +44,7 @@ export class BaseStore implements StateStore {
 
   /////////////////////////////////////////////////////////
   //////////////////////// ACTIONS ////////////////////////
-  setCurrentView(newView: BaseViewType) {
+  setCurrentView(newView: BaseView) {
     this.currentView = newView;
   }
   //////////////////////// ACTIONS ////////////////////////

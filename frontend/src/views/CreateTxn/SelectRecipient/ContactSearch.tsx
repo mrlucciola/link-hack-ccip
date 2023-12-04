@@ -6,7 +6,7 @@ import Grid from "@mui/material/Unstable_Grid2/Grid2";
 import TextField from "@mui/material/TextField";
 import IconButton from "@mui/material/IconButton";
 import Collapse from "@mui/material/Collapse";
-import { MdArrowBack } from "react-icons/md";
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 
 const BackButton: FC<{ setIsContactsOpen: (input: boolean) => void }> = ({
   setIsContactsOpen,
@@ -16,7 +16,7 @@ const BackButton: FC<{ setIsContactsOpen: (input: boolean) => void }> = ({
       sx={{ borderRadius: 1 }}
       onClick={() => setIsContactsOpen(false)}
     >
-      <MdArrowBack />
+      <ArrowBackIosIcon />
     </IconButton>
   );
 };

@@ -22,6 +22,7 @@ const ContactSelector: FC<{
       justifyContent="flex-start"
       overflow="scroll"
       flexWrap="nowrap"
+      flex={1}
     >
       <ContactSearch
         isContactsOpen={isContactsOpen}

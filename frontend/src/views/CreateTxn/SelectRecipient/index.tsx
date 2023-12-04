@@ -48,13 +48,18 @@ const ContinueButton: FC<{ isContactsOpen: boolean }> = observer(
     const handleAdvanceView = () => setCurrentView("selectSrc");
 
     return (
-      <Collapse in={!isContactsOpen} timeout={{ enter: 250, exit: 250 }}>
+      <Collapse
+        in={!isContactsOpen}
+        timeout={{ enter: 250, exit: 250 }}
+        sx={{ px: 1 }}
+      >
         <Button
           variant="contained"
           component="div"
           sx={{ flexDirection: "column", textTransform: "none" }}
           disabled={!isValidForm}
           onClick={handleAdvanceView}
+          fullWidth
         >
           <Typography variant="body1" fontWeight={600}>
             Confirm
@@ -69,13 +74,12 @@ const ContinueButton: FC<{ isContactsOpen: boolean }> = observer(
 );
 
 /** ### Display: Recipient selector
- * - @todo Enter send amt
  */
 const SelectRecipient: FC = () => {
   const [isContactsOpen, setIsContactsOpen] = useState(false);
 
   return (
-    <BodyLayout justifyContent="flex-start" flex={1} overflow="scroll">
+    <BodyLayout justifyContent="flex-start" overflow="scroll">
       <Collapse in={!isContactsOpen} timeout={{ enter: 250, exit: 250 }}>
         <SendAmtField />
         <SendAddressField />
