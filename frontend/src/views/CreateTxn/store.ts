@@ -37,6 +37,8 @@ export class CreateTxnStore implements StateStore {
   totalSendAmt: number = 0;
   sendAddr: string = "";
   sendBlockchain: BlockchainId = "eth";
+  /** Local state variable that involved a lot of prop drilling. */
+  isContactsOpen: boolean = false;
   ////////////////////// OBSERVABLES //////////////////////
   /////////////////////////////////////////////////////////
 
@@ -159,6 +161,9 @@ export class CreateTxnStore implements StateStore {
   }
   setSendBlockchain(newSendBlockchain: BlockchainId) {
     this.sendBlockchain = newSendBlockchain;
+  }
+  setIsContactsOpen(isOpen: boolean) {
+    this.isContactsOpen = isOpen;
   }
   //////////////////////// ACTIONS ////////////////////////
   /////////////////////////////////////////////////////////
