@@ -9,6 +9,9 @@ import Select from "@mui/material/Select";
 import TextField from "@mui/material/TextField";
 import { SelectChangeEvent } from "@mui/material/Select";
 
+/**
+ * @todo add blockchain address lookup validation
+ */
 const AddressField: FC = () => {
   // @todo add validation
   const placeholderIsError = false;

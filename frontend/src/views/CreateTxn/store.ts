@@ -26,7 +26,7 @@ export class CreateTxnStore implements StateStore {
 
   /////////////////////////////////////////////////////////
   ////////////////////// OBSERVABLES //////////////////////
-  currentView: CreateTxnViewType = "selectSrc"; // default: selectRecipient
+  currentView: CreateTxnViewType = "selectRecipient"; // default: selectRecipient
   recipient: Recipient = {} as Recipient;
   enabledTokens: Map<string, EnabledAddrToken> = new Map<
     string,
@@ -142,9 +142,14 @@ export class CreateTxnStore implements StateStore {
         validatedSpendLimit,
         enabledToken.isEnabled
       );
-      // @todo refactor like above
       this.enabledTokens.set(token.lookupId, updatedToken);
     }
+  }
+  setSendAmt(sendAmtInput: string) {
+    // @todo add validation
+    const validatedSendAmt = Number(sendAmtInput) || 0;
+
+    this.totalSendAmt = validatedSendAmt;
   }
   //////////////////////// ACTIONS ////////////////////////
   /////////////////////////////////////////////////////////

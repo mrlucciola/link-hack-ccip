@@ -64,7 +64,6 @@ const MultiAddrModal: FC<{
   handleClose: () => void;
   contactInfo: Contact;
 }> = ({ isOpen, handleClose, contactInfo }) => {
-  const setCurrentView = useCreateTxnStore((s) => s.setCurrentView);
   const setRecipient = useCreateTxnStore((s) => s.setRecipient);
 
   // @todo
@@ -73,9 +72,9 @@ const MultiAddrModal: FC<{
     <ListItemButton
       onClick={() => {
         setRecipient(newRecipient(contactInfo, addr));
-        setCurrentView("selectSrc");
         handleClose();
       }}
+      key={addr.lookupId}
     >
       <ListItemText primary={addr.value} secondary={addr.label} />
       <ListItemSecondaryAction>
@@ -115,7 +114,6 @@ const MultiAddrModal: FC<{
  */
 const ContactElem: FC<{ contactInfo: Contact }> = ({ contactInfo }) => {
   const setRecipient = useCreateTxnStore((s) => s.setRecipient);
-  const setCurrentView = useCreateTxnStore((s) => s.setCurrentView);
   const [isOpen, setIsOpen] = useState(false);
   // format address text
   const addrs = contactInfo.addresses;
@@ -135,8 +133,6 @@ const ContactElem: FC<{ contactInfo: Contact }> = ({ contactInfo }) => {
             handleOpen();
           } else {
             setRecipient(newRecipient(contactInfo, addrs[0]));
-            // change view
-            setCurrentView("selectSrc");
           }
         }}
       >
@@ -151,6 +147,7 @@ const ContactElem: FC<{ contactInfo: Contact }> = ({ contactInfo }) => {
 
         <BlockchainElemGroup addrs={addrs} />
       </ListItemButton>
+
       <MultiAddrModal
         isOpen={isOpen}
         handleClose={handleClose}
