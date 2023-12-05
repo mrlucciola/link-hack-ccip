@@ -1,14 +1,49 @@
-import { FC } from "react";
+import React, { FC } from "react";
 // state
 import { observer } from "mobx-react-lite";
 // style
 import List from "@mui/material/List";
+import ListSubheader from "@mui/material/ListSubheader";
+import ListItemButton from "@mui/material/ListItemButton";
+import Collapse from "@mui/material/Collapse";
 // components
 import BodyLayout from "../../../layouts/BodyLayout";
 import RecipientOverview from "./RecipientOverview";
 import SendAddrsOverview from "./SendAddrsOverview";
 import FeesForm from "./FeesForm";
 import ConfirmSubmitButton from "./ConfirmSubmitButton";
+
+export const CollapseSubheader: FC<{
+  isOpen: boolean;
+  setIsOpen: (input: boolean) => void;
+  title: string;
+}> = ({ isOpen, setIsOpen, title }) => {
+  return (
+    <ListSubheader sx={{ px: 0 }} component="div">
+      <ListItemButton
+        dense
+        sx={{ py: 0, m: 0 }}
+        selected={isOpen}
+        onClick={() => setIsOpen(!isOpen)}
+      >
+        {title}
+      </ListItemButton>
+    </ListSubheader>
+  );
+};
+
+export const CollapseList: FC<{
+  isOpen: boolean;
+  children: React.ReactNode;
+}> = ({ isOpen, children }) => {
+  return (
+    <Collapse in={isOpen} timeout={250} sx={{ flex: 1 }}>
+      <List component="div" disablePadding>
+        {children}
+      </List>
+    </Collapse>
+  );
+};
 
 /** ### Display: Review Transaction
  *

@@ -1,49 +1,38 @@
 import { FC, useState } from "react";
 // state
 import { observer } from "mobx-react-lite";
+import { useCreateTxnStore } from "../../../../mobx/stores";
 // style
-import Collapse from "@mui/material/Collapse";
-import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
-import ListSubheader from "@mui/material/ListSubheader";
-import ListItemButton from "@mui/material/ListItemButton";
-// import ListItemText from "@mui/material/ListItemText";
 // components
+import { CollapseList, CollapseSubheader } from "..";
+
+const SendAddrItems: FC<{ isOpen: boolean }> = observer(({ isOpen }) => {
+  const sendAmt = useCreateTxnStore((s) => s.totalSendAmtFmt);
+  const sendAddr = useCreateTxnStore((s) => s.sendAddr);
+  const sendBlockchain = useCreateTxnStore((s) => s.sendBlockchain);
+
+  return (
+    <CollapseList isOpen={isOpen}>
+      <ListItem component="div">{sendBlockchain}</ListItem>
+      <ListItem component="div">{sendAddr}</ListItem>
+      <ListItem component="div">label</ListItem>
+      <ListItem component="div">{sendAmt}</ListItem>
+    </CollapseList>
+  );
+});
 
 const SendAddrsOverview: FC = () => {
   const [isOpen, setIsOpen] = useState(true);
-  const testElems = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((item) => (
-    <ListItem sx={{ py: 0, pr: 1, pt: 0.5 }} component={"div"}>
-      <Collapse
-        in={isOpen}
-        timeout={{ enter: 250, exit: 250 }}
-        sx={{ flex: 1 }}
-      >
-        <List component="div" disablePadding>
-          {/* {tokenElems} */}
-          {`hi: ${item}`}
-        </List>
-      </Collapse>
-    </ListItem>
-  ));
 
   return (
-    <li>
-      <ListSubheader sx={{ px: 0 }}>
-        <ListItemButton
-          dense
-          sx={{ py: 0, m: 0 }}
-          selected={isOpen}
-          onClick={() => setIsOpen(!isOpen)}
-        >
-          Send addresses
-        </ListItemButton>
-      </ListSubheader>
-      <Collapse in={isOpen} timeout={250} sx={{ flex: 1 }}>
-        <List component="div" disablePadding>
-          {testElems}
-        </List>
-      </Collapse>
+    <li key={`send-addrs-dropdown`}>
+      <CollapseSubheader
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+        title="Send addresses"
+      />
+      <SendAddrItems isOpen={isOpen} />
     </li>
   );
 };
