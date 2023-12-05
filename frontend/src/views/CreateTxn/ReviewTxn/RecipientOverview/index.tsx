@@ -17,11 +17,12 @@ const OverviewItems: FC<{ isOpen: boolean }> = observer(({ isOpen }) => {
 
   return (
     <CollapseList isOpen={isOpen}>
-      <ListItem>
+      <ListItem component="div" ContainerComponent="div">
         <ListItemText
           primary={sendAddr}
           secondary={sendBlockchain.toLocaleUpperCase()}
         />
+
         <ListItemSecondaryAction sx={{ maxWidth: "60%" }}>
           <TextField
             variant="standard"
@@ -59,9 +60,8 @@ const OverviewItems: FC<{ isOpen: boolean }> = observer(({ isOpen }) => {
  * - Amount to send (in usdc)
  */
 const RecipientOverview: FC = () => {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false); // @todo revert to true
   const contact = useReviewTxnStore((s) => s.contact);
-  console.log("contact:", contact.fullName);
 
   return (
     <li key={`recipients-dropdown`}>
