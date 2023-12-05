@@ -1,8 +1,8 @@
 // state
 import { makeAutoObservable } from "mobx";
-import { StateStore } from "../../../mobx/interfaces";
 import { RootStore } from "../../../mobx/stores";
 // interfaces
+import { Contact, StateStore } from "../../../mobx/interfaces";
 // utils
 
 /** ## ReviewTxn store
@@ -20,6 +20,20 @@ export class ReviewTxnStore implements StateStore {
 
   /////////////////////////////////////////////////////////
   /////////////////////// COMPUTEDS ///////////////////////
+  get contact(): Contact {
+    const recipientAddr = this.root.createTxn.sendAddr;
+    const recipientBlockchain = this.root.createTxn.sendBlockchain;
+
+    let returnContact = new Contact("", "New address", []);
+    this.root.user.contacts.forEach((c) => {
+      c.addresses.forEach((a) => {
+        if (a.value === recipientAddr && a.blockchainId === recipientBlockchain)
+          returnContact = c;
+      });
+    });
+
+    return returnContact;
+  }
   /////////////////////// COMPUTEDS ///////////////////////
   /////////////////////////////////////////////////////////
 

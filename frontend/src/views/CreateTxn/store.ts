@@ -37,9 +37,9 @@ export class CreateTxnStore implements StateStore {
   totalSendAmt: number = 38928.12;
   // totalSendAmt: number = 0;
   // @delete - testing
-  sendAddr: string = "0xodja8f03mvb89230x8c2nkj";
+  sendAddr: string = "0xd0xk3nf8ww";
   // sendAddr: string = "";
-  sendBlockchain: BlockchainId = "eth";
+  sendBlockchain: BlockchainId = "matic";
   /** Local state variable that involved a lot of prop drilling. */
   isContactsOpen: boolean = false;
   ////////////////////// OBSERVABLES //////////////////////
