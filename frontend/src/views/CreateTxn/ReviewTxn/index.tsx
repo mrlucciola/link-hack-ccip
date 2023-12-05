@@ -2,10 +2,13 @@ import React, { FC } from "react";
 // state
 import { observer } from "mobx-react-lite";
 // style
+import Collapse from "@mui/material/Collapse";
 import List from "@mui/material/List";
 import ListSubheader from "@mui/material/ListSubheader";
 import ListItemButton from "@mui/material/ListItemButton";
-import Collapse from "@mui/material/Collapse";
+import ListItemSecondaryAction from "@mui/material/ListItemSecondaryAction";
+import ExpandLess from "@mui/icons-material/ExpandLess";
+import ExpandMore from "@mui/icons-material/ExpandMore";
 // components
 import BodyLayout from "../../../layouts/BodyLayout";
 import RecipientOverview from "./RecipientOverview";
@@ -27,6 +30,9 @@ export const CollapseSubheader: FC<{
         onClick={() => setIsOpen(!isOpen)}
       >
         {title}
+        <ListItemSecondaryAction sx={{ display: "flex" }}>
+          {isOpen ? <ExpandLess /> : <ExpandMore />}
+        </ListItemSecondaryAction>
       </ListItemButton>
     </ListSubheader>
   );
