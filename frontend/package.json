@@ -26,6 +26,7 @@
     "@emotion/styled": "^11.11.0",
     "@mui/icons-material": "^5.14.19",
     "@mui/material": "^5.14.18",
+    "@mui/x-data-grid": "^6.18.3",
     "ethers": "^6.9.0",
     "mobx": "^6.11.0",
     "mobx-react-lite": "^4.0.5",
