@@ -834,6 +834,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@mui/icons-material@npm:^5.14.19":
+  version: 5.14.19
+  resolution: "@mui/icons-material@npm:5.14.19"
+  dependencies:
+    "@babel/runtime": ^7.23.4
+  peerDependencies:
+    "@mui/material": ^5.0.0
+    "@types/react": ^17.0.0 || ^18.0.0
+    react: ^17.0.0 || ^18.0.0
+  peerDependenciesMeta:
+    "@types/react":
+      optional: true
+  checksum: 31182d4c3416e76c868544d3f604b7d2ef32b59e0445e0b3a794118c55be1e62a24c2f7ed3ae6f46356bd21b913e01a5b0a46d23a897ea7646fb0ee36134dee0
+  languageName: node
+  linkType: hard
+
 "@mui/material@npm:^5.14.18":
   version: 5.14.19
   resolution: "@mui/material@npm:5.14.19"
@@ -2747,6 +2763,7 @@ __metadata:
     "@crxjs/vite-plugin": beta
     "@emotion/react": ^11.11.1
     "@emotion/styled": ^11.11.0
+    "@mui/icons-material": ^5.14.19
     "@mui/material": ^5.14.18
     "@types/chrome": ^0.0.253
     "@types/node": ^20.9.3
