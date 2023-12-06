@@ -11,7 +11,7 @@ import {
   Transaction,
 } from "../interfaces/transaction";
 // seed data
-import { seedContactsMap, seedAddressesMap } from "../data/seed-user";
+import { seedContactsMap, seedAddressesMap } from "../data/seed/seed-user";
 
 /** ## User store
  */
@@ -60,7 +60,7 @@ export class UserStore implements StateStore {
     this.addresses.set(addrToAddOrSet.value, addrToAddOrSet);
   }
   /** ### Set `addresses` state variable.
-   * ### Option: replace/keep the original set. */
+   * @param - if "true", replace the original set. */
   setAddresses(addrsToAddOrSet: Address[], replace: boolean = false) {
     if (replace) {
       const mapInitAddresses: [string, Address][] = addrsToAddOrSet.map((a) => {

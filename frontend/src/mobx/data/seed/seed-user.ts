@@ -1,6 +1,6 @@
-import { Contact } from "../interfaces";
-import { Address, newAddress } from "../interfaces/address";
-import { newAddrToken } from "../interfaces/token";
+import { Contact } from "../../interfaces";
+import { Address, newAddress } from "../../interfaces/address";
+import { newAddrToken } from "../../interfaces/token";
 
 const seedAddrs: Address[] = [
   newAddress("0xic939d0x98f02123", "matic", "", {
