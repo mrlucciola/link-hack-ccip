@@ -2,8 +2,15 @@
 import { makeAutoObservable } from "mobx";
 // stores
 import { RootStore } from ".";
+// interfaces
 import { Contact, StateStore } from "../interfaces";
 import { Address } from "../interfaces/address";
+import {
+  SignedTransaction,
+  newSignedTransaction,
+  Transaction,
+} from "../interfaces/transaction";
+// seed data
 import { seedContactsMap, seedAddressesMap } from "../data/seed-user";
 
 /** ## User store
@@ -40,6 +47,7 @@ export class UserStore implements StateStore {
     const mapInitContacts: [string, Contact][] = newContacts.map((c) => {
       return [c.id, c];
     });
+
     this.contacts = new Map<string, Contact>(mapInitContacts);
   }
   /** ### Remove single contact from `contacts` collection. */
@@ -72,6 +80,10 @@ export class UserStore implements StateStore {
 
   /////////////////////////////////////////////////////////
   //////////////////////// HELPERS ////////////////////////
+  /** @deprecated incomplete */
+  signTxn(address: Address, txn: Transaction): SignedTransaction {
+    return newSignedTransaction(address, txn);
+  }
   //////////////////////// HELPERS ////////////////////////
   /////////////////////////////////////////////////////////
 }
