@@ -1,17 +1,22 @@
 import { FC, useState } from "react";
 // state
 import { observer } from "mobx-react-lite";
-import { useUserStore } from "../../../../mobx/stores";
+import { useCreateTxnStore, useUserStore } from "../../../../mobx/stores";
 // style
 import ListItem from "@mui/material/ListItem";
+import Avatar from "@mui/material/Avatar";
+import Chip from "@mui/material/Chip";
+import ListItemText from "@mui/material/ListItemText";
+import Typography from "@mui/material/Typography";
 // components
 import { CollapseList, CollapseSubheader } from "..";
+// interfaces
 import { EnabledAddr, newEnabledAddrToken } from "../../interfaces";
-import { Avatar, Chip, ListItemText, Typography } from "@mui/material";
+// utils
 import { fmtCenterEllipsis } from "../../../../layouts/Text";
 
 // const sendAddrs = useCreateTxnStore((s) => s.enabledAddrs);
-const sendAddrs = new Map<string, EnabledAddr>([
+export const sendAddrs = new Map<string, EnabledAddr>([
   [
     "matic-0xic939d0x98f02123",
     new EnabledAddr("matic-0xic939d0x98f02123", "matic", {
@@ -104,17 +109,18 @@ const SendAddrItems: FC<{ isOpen: boolean }> = observer(({ isOpen }) => {
  *
  * - Address (string)
  * - Label (if set)
- * - Tokens
+ * - @todo Tokens
  */
 const SendAddrsOverview: FC = () => {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false); // @todo revert to true
+  const enabledAddrsCt = useCreateTxnStore((s) => s.enabledAddrsCt);
 
   return (
     <li key={`send-addrs-dropdown`}>
       <CollapseSubheader
         isOpen={isOpen}
         setIsOpen={setIsOpen}
-        title="Sender addresses used"
+        title={`Sender addresses used: ${enabledAddrsCt}`}
       />
       <SendAddrItems isOpen={isOpen} />
     </li>

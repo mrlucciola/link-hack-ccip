@@ -18,3 +18,16 @@ export const supportedBlockchains: { [key in BlockchainId]: BlockchainInfo } = {
 export const getBlockchainInfo = (bcId: BlockchainId) => {
   return supportedBlockchains[bcId];
 };
+
+export const fetchTxnCost = (blockchainId: BlockchainId) => {
+  // @todo replace with real fetch
+  const txnCostLookup: { [key in BlockchainId]: number } = {
+    eth: 21.8249,
+    op: 2.2843,
+    arb: 2.7891,
+    matic: 4.8986,
+    avax: 1.9237,
+  };
+
+  return txnCostLookup[blockchainId];
+};

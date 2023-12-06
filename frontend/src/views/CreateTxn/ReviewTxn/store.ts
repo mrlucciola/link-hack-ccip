@@ -3,6 +3,7 @@ import { makeAutoObservable } from "mobx";
 import { RootStore } from "../../../mobx/stores";
 // interfaces
 import { Contact, StateStore } from "../../../mobx/interfaces";
+import { mktValueFmt } from "../../../utils/fmt";
 // utils
 
 /** ## ReviewTxn store
@@ -34,11 +35,19 @@ export class ReviewTxnStore implements StateStore {
 
     return returnContact;
   }
+  // @note should be a getter
+  totalFees: number = 292;
+  get totalFeesFmt(): string {
+    return mktValueFmt(this.totalFees);
+  }
   /////////////////////// COMPUTEDS ///////////////////////
   /////////////////////////////////////////////////////////
 
   /////////////////////////////////////////////////////////
   //////////////////////// ACTIONS ////////////////////////
+  setTotalFees(newAmt: number) {
+    this.totalFees = newAmt;
+  }
   //////////////////////// ACTIONS ////////////////////////
   /////////////////////////////////////////////////////////
 
