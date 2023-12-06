@@ -1,5 +1,6 @@
 import { FC, useState } from "react";
 // state
+import { observer } from "mobx-react-lite";
 import { useCreateTxnStore } from "../../../mobx/stores";
 // style
 import Avatar from "@mui/material/Avatar";
@@ -17,6 +18,7 @@ import { Contact } from "../../../mobx/interfaces";
 import { Address } from "../../../mobx/interfaces/address";
 import { BlockchainId } from "../../../mobx/data/supportedBlockchains";
 // import { newRecipient } from "../interfaces";
+// utils
 import { fmtCenterEllipsis } from "../../../layouts/Text";
 
 // from https://mui.com/material-ui/react-avatar/
@@ -28,7 +30,7 @@ export const stringAvatar = (name: string) => {
   return { children: `${firstInit}${secondInit}` };
 };
 
-const BlockchainElemGroup: FC<{ addrs: Address[] }> = ({ addrs }) => {
+const BlockchainElemGroup: FC<{ addrs: Address[] }> = observer(({ addrs }) => {
   // build blockchain arr
   const bcIdSet = new Set(addrs.map((a) => a.blockchainId));
   const blockchainIds: BlockchainId[] = Array.from(bcIdSet);
@@ -53,7 +55,7 @@ const BlockchainElemGroup: FC<{ addrs: Address[] }> = ({ addrs }) => {
       </AvatarGroup>
     </ListItemSecondaryAction>
   );
-};
+});
 
 /**
  * Activates when user clicks on a contact with more than one address.
@@ -64,10 +66,10 @@ const MultiAddrModal: FC<{
   isOpen: boolean;
   handleClose: () => void;
   contactInfo: Contact;
-  setIsContactsOpen: (input: boolean) => void;
-}> = ({ isOpen, handleClose, contactInfo, setIsContactsOpen }) => {
+}> = observer(({ isOpen, handleClose, contactInfo }) => {
   // @todo replace with RecipientForm
   // const setRecipient = useCreateTxnStore((s) => s.setRecipient);
+  const setIsContactsOpen = useCreateTxnStore((s) => s.setIsContactsOpen);
   const setSendBlockchain = useCreateTxnStore((s) => s.setSendBlockchain);
   const setSendAddr = useCreateTxnStore((s) => s.setSendAddr);
 
@@ -114,15 +116,13 @@ const MultiAddrModal: FC<{
       </Box>
     </Modal>
   );
-};
+});
 
 /** ### Display: Contact info
  * @todo move to mobx state
  */
-const ContactElem: FC<{
-  contactInfo: Contact;
-  setIsContactsOpen: (input: boolean) => void;
-}> = ({ contactInfo, setIsContactsOpen }) => {
+const ContactElem: FC<{ contactInfo: Contact }> = ({ contactInfo }) => {
+  const setIsContactsOpen = useCreateTxnStore((s) => s.setIsContactsOpen);
   const setSendBlockchain = useCreateTxnStore((s) => s.setSendBlockchain);
   const setSendAddr = useCreateTxnStore((s) => s.setSendAddr);
   // const setRecipient = useCreateTxnStore((s) => s.setRecipient);
@@ -167,10 +167,9 @@ const ContactElem: FC<{
         isOpen={isOpen}
         handleClose={handleClose}
         contactInfo={contactInfo}
-        setIsContactsOpen={setIsContactsOpen}
       />
     </>
   );
 };
 
-export default ContactElem;
+export default observer(ContactElem);

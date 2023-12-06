@@ -7,35 +7,35 @@ import TextField from "@mui/material/TextField";
 import IconButton from "@mui/material/IconButton";
 import Collapse from "@mui/material/Collapse";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
+import { useCreateTxnStore } from "../../../mobx/stores";
 
-const BackButton: FC<{ setIsContactsOpen: (input: boolean) => void }> = ({
-  setIsContactsOpen,
-}) => {
+const BackButton: FC = observer(() => {
+  const isContactsOpen = useCreateTxnStore((s) => s.isContactsOpen);
+  const setIsContactsOpen = useCreateTxnStore((s) => s.setIsContactsOpen);
+
   return (
-    <IconButton
-      sx={{ borderRadius: 1 }}
-      onClick={() => setIsContactsOpen(false)}
+    <Collapse
+      in={isContactsOpen}
+      timeout={{ enter: 250, exit: 250 }}
+      orientation="horizontal"
     >
-      <ArrowBackIosIcon />
-    </IconButton>
+      <IconButton
+        sx={{ borderRadius: 1 }}
+        onClick={() => setIsContactsOpen(false)}
+      >
+        <ArrowBackIosIcon />
+      </IconButton>
+    </Collapse>
   );
-};
+});
 
-const ContactSearch: FC<{
-  isContactsOpen: boolean;
-  setIsContactsOpen: (input: boolean) => void;
-}> = ({ isContactsOpen, setIsContactsOpen }) => {
+const ContactSearch: FC = () => {
+  const setIsContactsOpen = useCreateTxnStore((s) => s.setIsContactsOpen);
   const handleFocus = () => setIsContactsOpen(true);
 
   return (
     <Grid container flexDirection="row" wrap="nowrap" p={1} flex={1}>
-      <Collapse
-        in={isContactsOpen}
-        timeout={{ enter: 250, exit: 250 }}
-        orientation="horizontal"
-      >
-        <BackButton setIsContactsOpen={setIsContactsOpen} />
-      </Collapse>
+      <BackButton />
       <TextField
         size="small"
         label="Search contacts"

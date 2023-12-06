@@ -1,4 +1,7 @@
 import { FC } from "react";
+// state
+import { observer } from "mobx-react-lite";
+import { useCreateTxnStore } from "../../../mobx/stores";
 // style
 import Grid from "@mui/material/Unstable_Grid2/Grid2";
 import Collapse from "@mui/material/Collapse";
@@ -11,10 +14,9 @@ import ContactList from "./ContactList";
  * @todo if click on contact w/ one addr, add to state and proceed
  * @todo if click on contact w/ mult addr, open modal/drawer to show the list of addrs
  */
-const ContactSelector: FC<{
-  isContactsOpen: boolean;
-  setIsContactsOpen: (input: boolean) => void;
-}> = ({ isContactsOpen, setIsContactsOpen }) => {
+const ContactSelector: FC = () => {
+  const isContactsOpen = useCreateTxnStore((s) => s.isContactsOpen);
+
   return (
     <Grid
       container
@@ -24,19 +26,16 @@ const ContactSelector: FC<{
       flexWrap="nowrap"
       flex={1}
     >
-      <ContactSearch
-        isContactsOpen={isContactsOpen}
-        setIsContactsOpen={setIsContactsOpen}
-      />
+      <ContactSearch />
       <Collapse
         unmountOnExit
         in={isContactsOpen}
         timeout={{ enter: 500, exit: 250 }}
       >
-        <ContactList setIsContactsOpen={setIsContactsOpen} />
+        <ContactList />
       </Collapse>
     </Grid>
   );
 };
 
-export default ContactSelector;
+export default observer(ContactSelector);

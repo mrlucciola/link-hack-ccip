@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC } from "react";
 // state
 import { observer } from "mobx-react-lite";
 import { useCreateTxnStore } from "../../../mobx/stores";
@@ -32,51 +32,48 @@ const validateBlockchain = (bc: BlockchainId) => {
   return Object.keys(supportedBlockchains).includes(bc);
 };
 
-const ContinueButton: FC<{ isContactsOpen: boolean }> = observer(
-  ({ isContactsOpen }) => {
-    const sendAddr = useCreateTxnStore((s) => s.sendAddr);
-    const sendBlockchain = useCreateTxnStore((s) => s.sendBlockchain);
-    const sendAmt = useCreateTxnStore((s) => s.totalSendAmt);
-    const setCurrentView = useCreateTxnStore((s) => s.setCurrentView);
+const ContinueButton: FC = observer(() => {
+  const isContactsOpen = useCreateTxnStore((s) => s.isContactsOpen);
+  const sendAddr = useCreateTxnStore((s) => s.sendAddr);
+  const sendBlockchain = useCreateTxnStore((s) => s.sendBlockchain);
+  const sendAmt = useCreateTxnStore((s) => s.totalSendAmt);
+  const setCurrentView = useCreateTxnStore((s) => s.setCurrentView);
 
-    const isValidForm =
-      sendAmt > 0 &&
-      validateAddr(sendAddr) &&
-      validateBlockchain(sendBlockchain);
+  const isValidForm =
+    sendAmt > 0 && validateAddr(sendAddr) && validateBlockchain(sendBlockchain);
 
-    // event handler
-    const handleAdvanceView = () => setCurrentView("selectSrc");
+  // event handler
+  const handleAdvanceView = () => setCurrentView("selectSrc");
 
-    return (
-      <Collapse
-        in={!isContactsOpen}
-        timeout={{ enter: 250, exit: 250 }}
-        sx={{ px: 1 }}
+  return (
+    <Collapse
+      in={!isContactsOpen}
+      timeout={{ enter: 250, exit: 250 }}
+      sx={{ px: 1 }}
+    >
+      <Button
+        variant="contained"
+        component="div"
+        sx={{ flexDirection: "column", textTransform: "none" }}
+        disabled={!isValidForm}
+        onClick={handleAdvanceView}
+        fullWidth
       >
-        <Button
-          variant="contained"
-          component="div"
-          sx={{ flexDirection: "column", textTransform: "none" }}
-          disabled={!isValidForm}
-          onClick={handleAdvanceView}
-          fullWidth
-        >
-          <Typography variant="body1" fontWeight={600}>
-            Confirm
-          </Typography>
-          <Typography variant="caption">
-            (Continue to send-account selection)
-          </Typography>
-        </Button>
-      </Collapse>
-    );
-  }
-);
+        <Typography variant="body1" fontWeight={600}>
+          Confirm
+        </Typography>
+        <Typography variant="caption">
+          (Continue to send-account selection)
+        </Typography>
+      </Button>
+    </Collapse>
+  );
+});
 
 /** ### Display: Recipient selector
  */
 const SelectRecipient: FC = () => {
-  const [isContactsOpen, setIsContactsOpen] = useState(false);
+  const isContactsOpen = useCreateTxnStore((s) => s.isContactsOpen);
 
   return (
     <BodyLayout justifyContent="flex-start" overflow="scroll">
@@ -85,14 +82,11 @@ const SelectRecipient: FC = () => {
         <SendAddressField />
       </Collapse>
 
-      <ContactSelector
-        isContactsOpen={isContactsOpen}
-        setIsContactsOpen={setIsContactsOpen}
-      />
+      <ContactSelector />
 
-      <ContinueButton isContactsOpen={isContactsOpen} />
+      <ContinueButton />
     </BodyLayout>
   );
 };
 
-export default SelectRecipient;
+export default observer(SelectRecipient);

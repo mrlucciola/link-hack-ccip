@@ -12,14 +12,13 @@ import {
   newEnabledAddr,
   newEnabledAddrToken,
 } from "./interfaces";
+import { BlockchainId } from "../../mobx/data/supportedBlockchains";
 // utils
 import { mktValueFmt } from "../../utils/fmt";
-import { BlockchainId } from "../../mobx/data/supportedBlockchains";
 
 /** ## CreateTxn store
  */
 export class CreateTxnStore implements StateStore {
-  // ctor
   constructor(public root: RootStore) {
     // init
     makeAutoObservable(this, {}, { autoBind: true });
@@ -27,21 +26,33 @@ export class CreateTxnStore implements StateStore {
 
   /////////////////////////////////////////////////////////
   ////////////////////// OBSERVABLES //////////////////////
-  currentView: CreateTxnViewType = "selectRecipient"; // default: selectRecipient
+  currentView: CreateTxnViewType = "reviewTxn"; // default: selectRecipient
   recipient: Recipient = {} as Recipient;
   enabledTokens: Map<string, EnabledAddrToken> = new Map<
     string,
     EnabledAddrToken
   >();
   // @todo (separate ticket) select tokens and amounts, currently defaults to usdc
-  totalSendAmt: number = 0;
-  sendAddr: string = "";
-  sendBlockchain: BlockchainId = "eth";
+  // @delete - testing
+  totalSendAmt: number = 38928.12;
+  // totalSendAmt: number = 0;
+  // @delete - testing
+  sendAddr: string = "0xd0xk3nf8ww";
+  // sendAddr: string = "";
+  sendBlockchain: BlockchainId = "matic";
+  /** Local state variable that involved a lot of prop drilling. */
+  isContactsOpen: boolean = false;
   ////////////////////// OBSERVABLES //////////////////////
   /////////////////////////////////////////////////////////
 
   /////////////////////////////////////////////////////////
   /////////////////////// COMPUTEDS ///////////////////////
+  /** @deprecated not configured */
+  get areAllFormsValid(): boolean {
+    // @delete - testing
+    return true;
+    // return false;
+  }
   get enabledAddrs(): Map<string, EnabledAddr> {
     const enabledAddrsMap = new Map<string, EnabledAddr>();
 
@@ -159,6 +170,9 @@ export class CreateTxnStore implements StateStore {
   }
   setSendBlockchain(newSendBlockchain: BlockchainId) {
     this.sendBlockchain = newSendBlockchain;
+  }
+  setIsContactsOpen(isOpen: boolean) {
+    this.isContactsOpen = isOpen;
   }
   //////////////////////// ACTIONS ////////////////////////
   /////////////////////////////////////////////////////////

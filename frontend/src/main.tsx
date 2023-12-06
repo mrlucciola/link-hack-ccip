@@ -1,4 +1,3 @@
-import React from "react";
 import ReactDOM from "react-dom/client";
 // mui
 import CssBaseline from "@mui/material/CssBaseline";
@@ -14,11 +13,11 @@ import "./index.css";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   // <React.StrictMode>
-    <StoreProvider>
-      <ThemeProvider theme={lightTheme}>
-        <CssBaseline />
-        <App />
-      </ThemeProvider>
-    </StoreProvider>
-  // </React.StrictMode> 
+  <StoreProvider>
+    <ThemeProvider theme={lightTheme}>
+      <CssBaseline />
+      <App />
+    </ThemeProvider>
+  </StoreProvider>
+  // </React.StrictMode>
 );
