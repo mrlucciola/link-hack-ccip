@@ -12,7 +12,8 @@
     "yarn": "^3.6.4"
   },
   "workspaces": [
-    "frontend"
+    "frontend",
+    "blockchain"
   ],
   "devDependencies": {
     "@types/node": "^20.9.0",
