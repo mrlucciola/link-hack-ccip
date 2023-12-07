@@ -1,7 +1,7 @@
 import { FC, useState } from "react";
 // state
 import { observer } from "mobx-react-lite";
-import { useCreateTxnStore, useReviewTxnStore } from "../../../../mobx/stores";
+import { useReviewTxnStore } from "../../../../mobx/stores";
 // style
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -11,6 +11,7 @@ import { CollapseList, CollapseSubheader } from "..";
 // interfaces
 import {
   BlockchainId,
+  TestnetId,
   fetchTxnCost,
 } from "../../../../mobx/data/supportedBlockchains";
 // utils
@@ -38,7 +39,7 @@ const FeesItems: FC<{ isOpen: boolean }> = observer(({ isOpen }) => {
   const enabledAddrs = sendAddrs;
 
   // @todo other txn specific info likeadd gas amt
-  const bcStore = new Map<BlockchainId, number>();
+  const bcStore = new Map<BlockchainId | TestnetId, number>();
   enabledAddrs.forEach((a) => {
     const newTxnCt = bcStore.get(a.blockchainId)
       ? bcStore.get(a.blockchainId)! + 1
@@ -49,9 +50,9 @@ const FeesItems: FC<{ isOpen: boolean }> = observer(({ isOpen }) => {
   // build
   let totalTxnCost = 0;
   const rows: { blockchain: string; txnCost: string }[] = [];
-  bcStore.forEach((txnCt, blockchain) => {
+  bcStore.forEach(async (txnCt, blockchain) => {
     // fee amt per txn
-    const txnCost = fetchTxnCost(blockchain);
+    const txnCost = await fetchTxnCost(blockchain);
     totalTxnCost += txnCost;
     rows.push({
       blockchain: blockchain.toLocaleUpperCase(),

@@ -1,8 +1,8 @@
 import { Contact } from "../../interfaces";
-import { Address, newAddress } from "../../interfaces/address";
+import { UserAddress, newAddress } from "../../interfaces/address";
 import { newAddrToken } from "../../interfaces/token";
 
-const seedAddrs: Address[] = [
+const seedAddrs: UserAddress[] = [
   newAddress("0xic939d0x98f02123", "matic", "", {
     usdc: newAddrToken("usdc", "matic", "0xic939d0x98f02123", 11111.1111),
   }),
@@ -21,7 +21,7 @@ const seedAddrs: Address[] = [
     mkr: newAddrToken("mkr", "eth", "0xabczoj29d8f02456", 0.0005),
   }),
 ];
-export const seedAddressesMap: Map<string, Address> = new Map<string, Address>(
+export const seedAddressesMap: Map<string, UserAddress> = new Map<string, UserAddress>(
   seedAddrs.map((a) => [a.value, a])
 );
 

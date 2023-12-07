@@ -11,7 +11,7 @@ import ListItemText from "@mui/material/ListItemText";
 // components
 import SpendLimit from "./SpendLimit";
 // interfaces
-import { Address } from "../../../../mobx/interfaces/address";
+import { UserAddress } from "../../../../mobx/interfaces/address";
 import { AddrToken } from "../../../../mobx/interfaces/token";
 
 const AddrTokenElem: FC<{ token: AddrToken }> = observer(({ token }) => {
@@ -38,7 +38,7 @@ const AddrTokenElem: FC<{ token: AddrToken }> = observer(({ token }) => {
  * @todo sticky title
  */
 const AddrDetailCollapse: FC<{
-  addr: Address;
+  addr: UserAddress;
   isOpen: boolean;
 }> = ({ addr, isOpen }) => {
   // build

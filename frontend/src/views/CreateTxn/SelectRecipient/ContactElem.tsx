@@ -15,7 +15,7 @@ import Modal from "@mui/material/Modal";
 import Typography from "@mui/material/Typography";
 // interfaces
 import { Contact } from "../../../mobx/interfaces";
-import { Address } from "../../../mobx/interfaces/address";
+import { UserAddress } from "../../../mobx/interfaces/address";
 import { BlockchainId } from "../../../mobx/data/supportedBlockchains";
 // import { newRecipient } from "../interfaces";
 // utils
@@ -30,7 +30,7 @@ export const stringAvatar = (name: string) => {
   return { children: `${firstInit}${secondInit}` };
 };
 
-const BlockchainElemGroup: FC<{ addrs: Address[] }> = observer(({ addrs }) => {
+const BlockchainElemGroup: FC<{ addrs: UserAddress[] }> = observer(({ addrs }) => {
   // build blockchain arr
   const bcIdSet = new Set(addrs.map((a) => a.blockchainId));
   const blockchainIds: BlockchainId[] = Array.from(bcIdSet);

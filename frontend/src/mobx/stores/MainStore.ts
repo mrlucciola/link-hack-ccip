@@ -1,8 +1,11 @@
+import { JsonRpcApiProvider } from "ethers";
 // state
 import { makeAutoObservable } from "mobx";
 // stores
 import { RootStore } from ".";
 import { StateStore } from "../interfaces";
+import { newProvider } from "../../utils/connection";
+import { TestnetId, BlockchainId } from "../data/supportedBlockchains";
 
 /** Main store
  */
@@ -15,6 +18,9 @@ export class MainStore implements StateStore {
 
   /////////////////////////////////////////////////////////
   ////////////////////// OBSERVABLES //////////////////////
+  providers: { [key in BlockchainId | TestnetId]: JsonRpcApiProvider } = {} as {
+    [key in BlockchainId | TestnetId]: JsonRpcApiProvider;
+  }; //newProvider()
   ////////////////////// OBSERVABLES //////////////////////
   /////////////////////////////////////////////////////////
 

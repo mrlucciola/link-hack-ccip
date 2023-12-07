@@ -1,46 +1,34 @@
-import { mktValueFmt } from "../../utils/fmt";
 import {
   BlockchainId,
   BlockchainInfo,
+  TestnetId,
   getBlockchainInfo,
 } from "../data/supportedBlockchains";
 import { TokenId } from "../data/tokens";
 import { AddrToken, BaseAddrToken } from "./token";
+import { mktValueFmt } from "../../utils/fmt";
 
 export type IAddrTokens<T extends BaseAddrToken = BaseAddrToken> = {
   [key in TokenId]?: T;
 };
 
-export abstract class BaseAddress<T extends BaseAddrToken> {
-  abstract totalMktValue: number;
+export abstract class BaseAddress {
+  constructor(public value: string, public blockchainId: TestnetId) {}
+}
 
+export abstract class BaseUserAddress<T extends BaseAddrToken> {
   constructor(
     public value: string,
-    public blockchainId: BlockchainId,
+    public blockchainId: BlockchainId | TestnetId,
     public tokens: IAddrTokens<T>
   ) {}
 
   get lookupId(): string {
     return `${this.blockchainId}-${this.value}`;
   }
-  get blockchainInfo(): BlockchainInfo {
+  get blockchainInfo(): BlockchainInfo<BlockchainId | TestnetId> {
     return getBlockchainInfo(this.blockchainId);
   }
-  get totalMktValueFmt(): string {
-    return mktValueFmt(this.totalMktValue);
-  }
-}
-
-export class Address extends BaseAddress<AddrToken> {
-  constructor(
-    value: string,
-    blockchainId: BlockchainId,
-    tokens: IAddrTokens<AddrToken>,
-    public label: string
-  ) {
-    super(value, blockchainId, tokens);
-  }
-
   get totalMktValue(): number {
     let sum = 0;
 
@@ -50,12 +38,26 @@ export class Address extends BaseAddress<AddrToken> {
 
     return sum;
   }
+  get totalMktValueFmt(): string {
+    return mktValueFmt(this.totalMktValue);
+  }
+}
+
+export class UserAddress extends BaseUserAddress<AddrToken> {
+  constructor(
+    value: string,
+    blockchainId: BlockchainId,
+    tokens: IAddrTokens<AddrToken>,
+    public label: string
+  ) {
+    super(value, blockchainId, tokens);
+  }
 }
 export const newAddress = (
   value: string,
   blockchainId: BlockchainId,
   label: string = "",
   tokens: IAddrTokens<AddrToken> = {} as IAddrTokens<AddrToken>
-): Address => {
-  return new Address(value, blockchainId, tokens, label);
+): UserAddress => {
+  return new UserAddress(value, blockchainId, tokens, label);
 };

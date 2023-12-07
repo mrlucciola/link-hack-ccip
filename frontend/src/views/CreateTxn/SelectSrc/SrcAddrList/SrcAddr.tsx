@@ -13,7 +13,7 @@ import { MdExpandLess, MdExpandMore } from "react-icons/md";
 // components
 import AddrDetailCollapse from "./AddrDetailCollapse";
 // interfaces
-import { Address } from "../../../../mobx/interfaces/address";
+import { UserAddress } from "../../../../mobx/interfaces/address";
 // utils
 import { fmtCenterEllipsis } from "../../../../layouts/Text";
 
@@ -21,7 +21,7 @@ import { fmtCenterEllipsis } from "../../../../layouts/Text";
  *
  * @todo add validation for spend limit
  */
-const SrcAddr: FC<{ addr: Address }> = ({ addr }) => {
+const SrcAddr: FC<{ addr: UserAddress }> = ({ addr }) => {
   const [isCollapseOpen, setIsCollapseOpen] = useState(false);
   const enabledAddr = useCreateTxnStore((s) =>
     s.enabledAddrs.get(addr.lookupId)
