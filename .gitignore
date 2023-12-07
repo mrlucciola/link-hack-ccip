@@ -11,6 +11,7 @@
 # Documentation here: https://yarnpkg.com/features/zero-installs
 # !.yarn/cache
 .pnp.*
+yarn.lock
 
 # logs
 logs
