@@ -10,7 +10,6 @@ import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { CollapseList, CollapseSubheader } from "..";
 // interfaces
 import {
-  BlockchainId,
   TestnetId,
   fetchTxnCost,
 } from "../../../../mobx/data/supportedBlockchains";
@@ -39,7 +38,7 @@ const FeesItems: FC<{ isOpen: boolean }> = observer(({ isOpen }) => {
   const enabledAddrs = sendAddrs;
 
   // @todo other txn specific info likeadd gas amt
-  const bcStore = new Map<BlockchainId | TestnetId, number>();
+  const bcStore = new Map<TestnetId, number>();
   enabledAddrs.forEach((a) => {
     const newTxnCt = bcStore.get(a.blockchainId)
       ? bcStore.get(a.blockchainId)! + 1

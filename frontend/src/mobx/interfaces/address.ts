@@ -1,5 +1,4 @@
 import {
-  BlockchainId,
   BlockchainInfo,
   TestnetId,
   getBlockchainInfo,
@@ -18,15 +17,17 @@ export abstract class BaseAddress {
 
 export abstract class BaseUserAddress<T extends BaseAddrToken> {
   constructor(
+    /** Public address, in string form */
     public value: string,
-    public blockchainId: BlockchainId | TestnetId,
+    /** State lookup ID for blockchain */
+    public blockchainId: TestnetId,
     public tokens: IAddrTokens<T>
   ) {}
 
   get lookupId(): string {
     return `${this.blockchainId}-${this.value}`;
   }
-  get blockchainInfo(): BlockchainInfo<BlockchainId | TestnetId> {
+  get blockchainInfo(): BlockchainInfo<TestnetId> {
     return getBlockchainInfo(this.blockchainId);
   }
   get totalMktValue(): number {
@@ -46,7 +47,7 @@ export abstract class BaseUserAddress<T extends BaseAddrToken> {
 export class UserAddress extends BaseUserAddress<AddrToken> {
   constructor(
     value: string,
-    blockchainId: BlockchainId,
+    blockchainId: TestnetId,
     tokens: IAddrTokens<AddrToken>,
     public label: string
   ) {
@@ -55,7 +56,7 @@ export class UserAddress extends BaseUserAddress<AddrToken> {
 }
 export const newAddress = (
   value: string,
-  blockchainId: BlockchainId,
+  blockchainId: TestnetId,
   label: string = "",
   tokens: IAddrTokens<AddrToken> = {} as IAddrTokens<AddrToken>
 ): UserAddress => {

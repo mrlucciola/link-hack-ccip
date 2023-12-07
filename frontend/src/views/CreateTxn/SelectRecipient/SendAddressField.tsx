@@ -9,8 +9,9 @@ import Select from "@mui/material/Select";
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Unstable_Grid2/Grid2";
 import { SelectChangeEvent } from "@mui/material/Select";
+// interfaces
 import {
-  BlockchainId,
+  TestnetId,
   supportedBlockchains,
 } from "../../../mobx/data/supportedBlockchains";
 
@@ -38,7 +39,7 @@ const SendAddressField: FC = () => {
   ) => setSendAddr(e.target.value);
 
   const handleBlockchainChange = (e: SelectChangeEvent) =>
-    setSendBlockchain(e.target.value as BlockchainId);
+    setSendBlockchain(e.target.value as TestnetId);
 
   return (
     <Grid container flexDirection="row" flex={1} px={1} mt={1} wrap="nowrap">

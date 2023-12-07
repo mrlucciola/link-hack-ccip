@@ -12,7 +12,7 @@ import {
   newEnabledAddr,
   newEnabledAddrToken,
 } from "./interfaces";
-import { BlockchainId, TestnetId } from "../../mobx/data/supportedBlockchains";
+import { TestnetId } from "../../mobx/data/supportedBlockchains";
 // utils
 import { mktValueFmt } from "../../utils/fmt";
 
@@ -39,7 +39,7 @@ export class CreateTxnStore implements StateStore {
   // @delete - testing
   sendAddr: string = "0xd0xk3nf8ww";
   // sendAddr: string = "";
-  sendBlockchain: BlockchainId | TestnetId = "matic";
+  sendBlockchain: TestnetId = "maticMumbai";
   /** Local state variable that involved a lot of prop drilling. */
   isContactsOpen: boolean = false;
   ////////////////////// OBSERVABLES //////////////////////
@@ -168,7 +168,7 @@ export class CreateTxnStore implements StateStore {
   setSendAddr(newSendAddr: string) {
     this.sendAddr = newSendAddr;
   }
-  setSendBlockchain(newSendBlockchain: BlockchainId | TestnetId) {
+  setSendBlockchain(newSendBlockchain: TestnetId) {
     this.sendBlockchain = newSendBlockchain;
   }
   setIsContactsOpen(isOpen: boolean) {

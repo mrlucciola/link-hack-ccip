@@ -1,6 +1,7 @@
-export interface BlockchainInfo<T extends BlockchainId | TestnetId> {
+export interface BlockchainInfo<T extends TestnetId> {
   id: T;
   label: string;
+  symbol: string;
   img?: { sm: string; md: string };
   contracts?: {
     walletSrc: {
@@ -10,11 +11,6 @@ export interface BlockchainInfo<T extends BlockchainId | TestnetId> {
     walletDst: {
       address: string;
     };
-    /** @deprecated unused */
-    ccipRouter: {
-      address: string;
-      chainSelector: string;
-    };
   };
   /** @deprecated unused */
   feeTokens?: {
@@ -22,36 +18,28 @@ export interface BlockchainInfo<T extends BlockchainId | TestnetId> {
   };
 }
 
-export const blockchainIds = ["eth", "op", "arb", "matic", "avax"] as const;
+/** transitioning to purely testnet for MVP, then re-integrating. */
+// export const blockchainIds = ["eth", "op", "arb", "matic", "avax"] as const;
+// export type BlockchainId = (typeof blockchainIds)[number];
 export const testnetIds = [
   "ethSepolia",
   "opGoerli",
   "maticMumbai",
   "avaxFuji",
 ] as const;
-export type BlockchainId = (typeof blockchainIds)[number];
 export type TestnetId = (typeof testnetIds)[number];
 
-// @todo combine with `supported-testnets` var
 export const supportedBlockchains: {
-  [key in BlockchainId | TestnetId]: BlockchainInfo<BlockchainId | TestnetId>;
+  [key in TestnetId]: BlockchainInfo<TestnetId>;
 } = {
-  eth: { id: "eth", label: "Ethereum", img: { sm: "", md: "" } },
-  op: { id: "op", label: "Optimism", img: { sm: "", md: "" } },
-  arb: { id: "arb", label: "Arbitrum", img: { sm: "", md: "" } },
-  matic: { id: "matic", label: "Polygon", img: { sm: "", md: "" } },
-  avax: { id: "avax", label: "Avalanche", img: { sm: "", md: "" } },
   ethSepolia: {
     id: "ethSepolia",
-    label: "Sepolia (Ethereum)",
+    label: "Ethereum (Sepolia)",
+    symbol: "eth",
     img: { sm: "", md: "" },
     contracts: {
       walletSrc: { address: "<walletSrc not set>" },
       walletDst: { address: "<walletDst not set>" },
-      ccipRouter: {
-        address: "0xd0daae2231e9cb96b94c8512223533293c3693bf",
-        chainSelector: "16015286601757825753",
-      },
     },
     feeTokens: {
       link: {
@@ -63,26 +51,15 @@ export const supportedBlockchains: {
         decimals: 18,
       },
     },
-    // ccipBnM: {
-    //   address: "0xFd57b4ddBf88a4e07fF4e34C487b99af2Fe82a05",
-    //   decimals: 18,
-    // },
-    // ccipLnM: {
-    //   address: "0x466D489b6d36E7E3b824ef491C225F5830E81cC1",
-    //   decimals: 18,
-    // },
   },
   opGoerli: {
     id: "opGoerli",
-    label: "Goerli (Optimism)",
+    label: "Optimism (Goerli)",
+    symbol: "op",
     img: { sm: "", md: "" },
     contracts: {
       walletSrc: { address: "<walletSrc not set>" },
       walletDst: { address: "<walletDst not set>" },
-      ccipRouter: {
-        address: "0xeb52e9ae4a9fb37172978642d4c141ef53876f26",
-        chainSelector: "2664363617261496610",
-      },
     },
     feeTokens: {
       link: {
@@ -97,15 +74,12 @@ export const supportedBlockchains: {
   },
   maticMumbai: {
     id: "maticMumbai",
-    label: "Mumbai (Polygon)",
+    label: "Polygon (Mumbai)",
+    symbol: "matic",
     img: { sm: "", md: "" },
     contracts: {
       walletSrc: { address: "<walletSrc not set>" },
       walletDst: { address: "<walletDst not set>" },
-      ccipRouter: {
-        address: "0x70499c328e1e2a3c41108bd3730f6670a44595d1",
-        chainSelector: "12532609583862916517",
-      },
     },
     feeTokens: {
       link: {
@@ -120,15 +94,12 @@ export const supportedBlockchains: {
   },
   avaxFuji: {
     id: "avaxFuji",
-    label: "Fuji (Avalanche)",
+    label: "Avalanche (Fuji)",
+    symbol: "avax",
     img: { sm: "", md: "" },
     contracts: {
       walletSrc: { address: "<walletSrc not set>" },
       walletDst: { address: "<walletDst not set>" },
-      ccipRouter: {
-        address: "0x0b9d5D9136855f6FEc3c0993feE6E9CE8a297846",
-        chainSelector: "14767482510784806043",
-      },
     },
     feeTokens: {
       link: {
@@ -143,7 +114,7 @@ export const supportedBlockchains: {
   },
 };
 
-export const getBlockchainInfo = (bcId: BlockchainId | TestnetId) => {
+export const getBlockchainInfo = (bcId: TestnetId) => {
   return supportedBlockchains[bcId];
 };
 
@@ -154,21 +125,14 @@ export const fetchGasAmount = () => {
   return 500000;
 };
 /** @deprecated replace with actual call */
-export const fetchGasPrice = async (
-  _blockchainId: BlockchainId | TestnetId
-) => {
+export const fetchGasPrice = async (_blockchainId: TestnetId) => {
   // @todo replace with real fetch
 
   return 2000000000;
 };
-export const fetchTxnCost = async (blockchainId: BlockchainId | TestnetId) => {
+export const fetchTxnCost = async (blockchainId: TestnetId) => {
   // @todo replace with real fetch
-  const txnCostLookup: { [key in BlockchainId | TestnetId]: number } = {
-    eth: 21.8249,
-    op: 2.2843,
-    arb: 2.7891,
-    matic: 4.8986,
-    avax: 1.9237,
+  const txnCostLookup: { [key in TestnetId]: number } = {
     ethSepolia: 1,
     opGoerli: 1,
     maticMumbai: 1,

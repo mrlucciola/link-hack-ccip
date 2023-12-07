@@ -1,5 +1,5 @@
 import { mktValueFmt } from "../../utils/fmt";
-import { BlockchainId, TestnetId } from "../data/supportedBlockchains";
+import { TestnetId } from "../data/supportedBlockchains";
 import { TokenId, lookupTokenLabel, lookupTokenMktValue } from "../data/tokens";
 
 // @todo fix - this is ad-hoc
@@ -8,7 +8,7 @@ export abstract class BaseAddrToken {
 
   constructor(
     public id: TokenId,
-    public blockchainId: BlockchainId | TestnetId,
+    public blockchainId: TestnetId,
     public addrId: string
   ) {}
 
@@ -29,7 +29,7 @@ export abstract class BaseAddrToken {
 export class AddrToken extends BaseAddrToken {
   constructor(
     id: TokenId,
-    blockchainId: BlockchainId | TestnetId,
+    blockchainId: TestnetId,
     addrId: string,
     public amount: number
   ) {
@@ -42,7 +42,7 @@ export class AddrToken extends BaseAddrToken {
 }
 export const newAddrToken = (
   id: TokenId,
-  blockchainId: BlockchainId | TestnetId,
+  blockchainId: TestnetId,
   addrId: string,
   amount: number
 ) => new AddrToken(id, blockchainId, addrId, amount);

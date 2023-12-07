@@ -1,4 +1,4 @@
-import { BlockchainId, TestnetId } from "../../mobx/data/supportedBlockchains";
+import { TestnetId } from "../../mobx/data/supportedBlockchains";
 import { TokenId, lookupTokenMktValue } from "../../mobx/data/tokens";
 import { Contact } from "../../mobx/interfaces";
 import {
@@ -17,7 +17,7 @@ export const newRecipient = (contact: Contact, address: UserAddress) =>
 export class EnabledAddr extends BaseUserAddress<EnabledAddrToken> {
   constructor(
     value: string,
-    blockchainId: BlockchainId | TestnetId,
+    blockchainId: TestnetId,
     public tokens: IAddrTokens<EnabledAddrToken>
   ) {
     super(value, blockchainId, tokens);
@@ -39,7 +39,7 @@ export class EnabledAddr extends BaseUserAddress<EnabledAddrToken> {
 }
 export const newEnabledAddr = (
   value: string,
-  blockchainId: BlockchainId | TestnetId,
+  blockchainId: TestnetId,
   tokens?: IAddrTokens<EnabledAddrToken>
 ): EnabledAddr => {
   return new EnabledAddr(
@@ -52,7 +52,7 @@ export const newEnabledAddr = (
 export class EnabledAddrToken extends BaseAddrToken {
   constructor(
     id: TokenId,
-    blockchainid: BlockchainId | TestnetId,
+    blockchainid: TestnetId,
     addrId: string,
     public spendLimit: number,
     public isEnabled: boolean
@@ -66,7 +66,7 @@ export class EnabledAddrToken extends BaseAddrToken {
 }
 export const newEnabledAddrToken = (
   id: TokenId,
-  blockchainId: BlockchainId | TestnetId,
+  blockchainId: TestnetId,
   addrId: string,
   spendLimit: number,
   isEnabled: boolean = false
