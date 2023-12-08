@@ -8,6 +8,7 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 import ContactPageIcon from "@mui/icons-material/ContactPage";
 import HistoryIcon from "@mui/icons-material/History";
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
+import { CreateTxnViewType } from "../CreateTxn";
 // interfaces
 export const baseViewsMap = Object.freeze({
   home: { id: "home", label: "Home", icon: <HomeIcon /> },
@@ -34,6 +35,11 @@ export class BaseStore implements StateStore {
   /////////////////////////////////////////////////////////
   ////////////////////// OBSERVABLES //////////////////////
   currentView: BaseView = "createTxn";
+  navBack?: {
+    baseView: BaseView;
+    subView: CreateTxnViewType; // @todo add other subview union types
+    navTo: () => void;
+  };
   ////////////////////// OBSERVABLES //////////////////////
   /////////////////////////////////////////////////////////
 
@@ -47,6 +53,14 @@ export class BaseStore implements StateStore {
   setCurrentView(newView: BaseView) {
     this.currentView = newView;
   }
+  setNavBack(newNavBack?: {
+    baseView: BaseView;
+    subView: CreateTxnViewType; // @todo add other subview union types
+    navTo: () => void;
+  }) {
+    this.navBack = newNavBack;
+  }
+
   //////////////////////// ACTIONS ////////////////////////
   /////////////////////////////////////////////////////////
 

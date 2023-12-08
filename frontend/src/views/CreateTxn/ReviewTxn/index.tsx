@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useEffect } from "react";
 // state
 import { observer } from "mobx-react-lite";
 // style
@@ -15,6 +15,7 @@ import RecipientOverview from "./RecipientOverview";
 import SendAddrsOverview from "./SendAddrsOverview";
 import FeesForm from "./FeesForm";
 import ConfirmSubmitButton from "./ConfirmSubmitButton";
+import { useBaseStore, useCreateTxnStore } from "../../../mobx/stores";
 
 export const CollapseSubheader: FC<{
   isOpen: boolean;
@@ -67,6 +68,17 @@ export const CollapseList: FC<{
  * - Each section should have a css-sticky title
  */
 const ReviewTxn: FC = () => {
+  const setNavBack = useBaseStore((s) => s.setNavBack);
+  const setCurrentView = useCreateTxnStore((s) => s.setCurrentView);
+
+  useEffect(() => {
+    setNavBack({
+      baseView: "createTxn",
+      subView: "selectSrc",
+      navTo: () => setCurrentView("selectSrc"),
+    });
+  }, []);
+
   return (
     <BodyLayout overflow="scroll">
       <List>
