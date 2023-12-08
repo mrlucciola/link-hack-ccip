@@ -16,9 +16,7 @@ const App: FC = () => {
       return <Onboarding />;
 
     default:
-      // @todo add `CrashView` component
-      // return <CrashView />
-      return <div>App crashed</div>;
+      return <Base />;
   }
 };
 

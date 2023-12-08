@@ -14,7 +14,7 @@ import SettingsIcon from "@mui/icons-material/Settings";
 
 const NavBackButton: FC = observer(() => {
   const navBack = useBaseStore((s) => s.navBack);
-  
+
   /** If not "", render the back-button, which navigates to specified view via the `navTo` action */
   return navBack ? (
     <IconButton sx={{ borderRadius: 1 }} onClick={navBack.navTo}>
@@ -68,11 +68,7 @@ const NavUtil: FC = observer(() => {
 
 const TopNav: FC = () => {
   return (
-    <TopNavLayout
-      justifyContent="space-between"
-      alignItems="center"
-      sx={{ background: "green" }}
-    >
+    <TopNavLayout justifyContent="space-between" alignItems="center" borderRadius={0}>
       <NavBackButton />
       <NavTitle />
       <NavUtil />
