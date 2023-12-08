@@ -1,7 +1,7 @@
-import { FC } from "react";
+import { FC, useEffect } from "react";
 // state
 import { observer } from "mobx-react-lite";
-import { useCreateTxnStore } from "../../../mobx/stores";
+import { useBaseStore, useCreateTxnStore } from "../../../mobx/stores";
 // style
 import Collapse from "@mui/material/Collapse";
 import Button from "@mui/material/Button";
@@ -74,6 +74,11 @@ const ContinueButton: FC = observer(() => {
  */
 const SelectRecipient: FC = () => {
   const isContactsOpen = useCreateTxnStore((s) => s.isContactsOpen);
+  const setNavBack = useBaseStore((s) => s.setNavBack);
+
+  useEffect(() => {
+    setNavBack(undefined);
+  }, []);
 
   return (
     <BodyLayout justifyContent="flex-start" overflow="scroll">

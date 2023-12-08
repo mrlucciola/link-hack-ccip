@@ -1,4 +1,7 @@
-import { FC } from "react";
+import { FC, useEffect } from "react";
+// state
+import { observer } from "mobx-react-lite";
+import { useBaseStore, useCreateTxnStore } from "../../../mobx/stores";
 // components
 import BodyLayout from "../../../layouts/BodyLayout";
 import SrcAddrList from "./SrcAddrList";
@@ -27,6 +30,17 @@ import ConfirmSrcButton from "./ConfirmSrcButton";
  * - @todo hideable overview that persists throughout all Create-Txn views
  */
 const SelectSrc: FC = () => {
+  const setCurrentView = useCreateTxnStore((s) => s.setCurrentView);
+  const setNavBack = useBaseStore((s) => s.setNavBack);
+
+  useEffect(() => {
+    setNavBack({
+      baseView: "createTxn",
+      subView: "reviewTxn",
+      navTo: () => setCurrentView("selectRecipient"),
+    });
+  }, []);
+
   return (
     <BodyLayout justifyContent="space-between" overflow="scroll" flex="1">
       <SrcAddrList />
@@ -35,4 +49,4 @@ const SelectSrc: FC = () => {
   );
 };
 
-export default SelectSrc;
+export default observer(SelectSrc);
