@@ -15,14 +15,16 @@ export const createTxnViewType = [
 ] as const;
 export type CreateTxnViewType = (typeof createTxnViewType)[number];
 const createTxnViewMap: { [key in CreateTxnViewType]: JSX.Element } = {
+  // one prop for each step in the flow
+  // each element in this object should be wrapped with <BodyLayout></BodyLayout>
   selectRecipient: <SelectRecipient />,
   selectSrc: <SelectSrc />,
   reviewTxn: <ReviewTxn />,
-  // one prop for each step in the flow
-  // each element in this object should be wrapped with <BodyLayout></BodyLayout>
 };
 
 /** ### View controller for CreateTxn
+ *
+ * CreateTxn view renders within the `Base` view.
  *
  * @todo hideable overview that persists throughout all Create-Txn views
  * @todo Move state provider to this scope (remove from global scope)
