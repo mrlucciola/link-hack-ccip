@@ -69,6 +69,7 @@ export const CollapseList: FC<{
  */
 const ReviewTxn: FC = () => {
   const setNavBack = useBaseStore((s) => s.setNavBack);
+  const setNavTitle = useBaseStore((s) => s.setNavTitle);
   const setCurrentView = useCreateTxnStore((s) => s.setCurrentView);
 
   useEffect(() => {
@@ -77,6 +78,7 @@ const ReviewTxn: FC = () => {
       subView: "selectSrc",
       navTo: () => setCurrentView("selectSrc"),
     });
+    setNavTitle("Review transaction")
   }, []);
 
   return (

@@ -36,10 +36,15 @@ export class BaseStore implements StateStore {
   ////////////////////// OBSERVABLES //////////////////////
   currentView: BaseView = "createTxn";
   navBack?: {
+    // @note So far this prop seems somewhat unnecessary. Will likely remove soon.
     baseView: BaseView;
+    // @note So far this prop seems somewhat unnecessary. Will likely remove soon.
     subView: CreateTxnViewType; // @todo add other subview union types
+    /** Nav-related state updates to make when back button is clicked. */
     navTo: () => void;
   };
+  navTitle: string = "";
+  navUtil: { id?: "info" | "options" | "settings"; action?: () => void } = {};
   ////////////////////// OBSERVABLES //////////////////////
   /////////////////////////////////////////////////////////
 
@@ -53,12 +58,24 @@ export class BaseStore implements StateStore {
   setCurrentView(newView: BaseView) {
     this.currentView = newView;
   }
+  /** Configure the back-navigation button in the navbar. */
   setNavBack(newNavBack?: {
     baseView: BaseView;
     subView: CreateTxnViewType; // @todo add other subview union types
     navTo: () => void;
   }) {
     this.navBack = newNavBack;
+  }
+  /** Set the title in the navbar. */
+  setNavTitle(newNavTitle: string) {
+    this.navTitle = newNavTitle;
+  }
+  /** Pass in an empty object `{}` to unset the nav-util icon */
+  setNavUtil(newNavUtil: {
+    id?: "info" | "options" | "settings";
+    action?: () => void;
+  }) {
+    this.navUtil = newNavUtil;
   }
 
   //////////////////////// ACTIONS ////////////////////////
