@@ -8,6 +8,7 @@ import {
 import { TestnetId } from "../mobx/data/supportedBlockchains";
 import { senderCcipAbi, senderCcipAddress } from "../mobx/data/contract";
 import { connectionInfo } from "../mobx/data/connection";
+import { AbstractProvider } from "ethers";
 
 /** ### Create a wallet with provider using a mnemonic/phrase
  * @todo improve validation
@@ -37,7 +38,7 @@ export const initWalletFromMnemonic = (
 
 export const newSenderContractInstance = (
   blockchainId: TestnetId, // @todo add address after deploying to testnet
-  provider: JsonRpcProvider
+  provider: AbstractProvider
 ): Contract => {
   const newContract = new Contract(
     senderCcipAddress[blockchainId],
@@ -62,7 +63,7 @@ export const newProvider = (
     ensNetwork?: number;
   },
   options?: JsonRpcApiProviderOptions
-): JsonRpcProvider => {
+): AbstractProvider => {
   // Validate inputs
   if (!rpcUrl.includes(protocol)) {
     throw new Error("Must use https");

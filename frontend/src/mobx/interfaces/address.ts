@@ -5,7 +5,7 @@ import {
 } from "../data/supportedBlockchains";
 import { TokenId } from "../data/tokens";
 import { AddrToken, BaseAddrToken } from "./token";
-import { mktValueFmt } from "../../utils/fmt";
+import { fmtMktValue } from "../../utils/fmt";
 
 export type IAddrTokens<T extends BaseAddrToken = BaseAddrToken> = {
   [key in TokenId]?: T;
@@ -40,7 +40,7 @@ export abstract class BaseUserAddress<T extends BaseAddrToken> {
     return sum;
   }
   get totalMktValueFmt(): string {
-    return mktValueFmt(this.totalMktValue);
+    return fmtMktValue(this.totalMktValue);
   }
 }
 

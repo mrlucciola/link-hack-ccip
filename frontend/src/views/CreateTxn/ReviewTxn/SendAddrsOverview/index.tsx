@@ -96,11 +96,11 @@ const SendAddrItems: FC<{ isOpen: boolean }> = observer(({ isOpen }) => {
   // const sendAddrs = useCreateTxnStore((s) => s.enabledAddrs);
   const addresses = useUserStore((s) => s.addresses);
 
-  // build
+  // build jsx list
   const sendAddrsElems: JSX.Element[] = [];
+  // For each enabled addr, look up info for display
   sendAddrs.forEach((a) => {
-    // @todo fix - the addr shouldnt have a hyphen in it
-    const addrOrig = addresses.get(a.value.split("-")[1])!;
+    const addrOrig = addresses.get(a.value)!;
     // format values
     const addrFmt = (
       <>
@@ -118,6 +118,7 @@ const SendAddrItems: FC<{ isOpen: boolean }> = observer(({ isOpen }) => {
       </>
     );
 
+    // If no label, show address
     const primaryText = addrOrig.label || addrFmt;
     const secondaryText = addrOrig.label ? addrFmt : undefined;
     sendAddrsElems.push(

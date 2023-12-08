@@ -1,4 +1,4 @@
-import { mktValueFmt } from "../../utils/fmt";
+import { fmtMktValue } from "../../utils/fmt";
 import { TestnetId } from "../data/supportedBlockchains";
 import { TokenId, lookupTokenLabel, lookupTokenMktValue } from "../data/tokens";
 
@@ -19,7 +19,7 @@ export abstract class BaseAddrToken {
     return lookupTokenLabel(this.id);
   }
   get mktValueFmt(): string {
-    return mktValueFmt(this.mktValue);
+    return fmtMktValue(this.mktValue);
   }
 }
 

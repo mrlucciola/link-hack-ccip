@@ -14,7 +14,7 @@ import {
 } from "./interfaces";
 import { TestnetId } from "../../mobx/data/supportedBlockchains";
 // utils
-import { mktValueFmt } from "../../utils/fmt";
+import { fmtMktValue } from "../../utils/fmt";
 
 /** ## CreateTxn store
  */
@@ -98,11 +98,11 @@ export class CreateTxnStore implements StateStore {
     return sum;
   }
   get totalSpendLimitFmt(): string {
-    return mktValueFmt(this.totalSpendLimit);
+    return fmtMktValue(this.totalSpendLimit);
   }
 
   get totalSendAmtFmt(): string {
-    return mktValueFmt(this.totalSendAmt);
+    return fmtMktValue(this.totalSendAmt);
   }
   get isSpendLimitGtSendAmt(): boolean {
     return this.totalSpendLimit > this.totalSendAmt;

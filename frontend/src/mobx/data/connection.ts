@@ -1,25 +1,16 @@
-import { Contract } from "ethers";
+import { AbstractProvider, Contract, JsonRpcProvider } from "ethers";
 import { TestnetId } from "./supportedBlockchains";
 import { newProvider, newSenderContractInstance } from "../../utils/connection";
-import { JsonRpcProvider } from "ethers";
 
-const providers: { [key in TestnetId]: JsonRpcProvider } = {
-  ethSepolia: newProvider("https://sepolia.infura.io/v3/", {
-    chainId: 11155111,
-  }),
-  avaxFuji: newProvider("", {
-    chainId: 43113,
-  }),
-  maticMumbai: newProvider("", {
-    chainId: 80001,
-  }),
-  opGoerli: newProvider("", {
-    chainId: 420,
-  }),
+const providers: { [key in TestnetId]: AbstractProvider } = {
+  ethSepolia: newProvider("https://rpc.bordel.wtf/sepolia"),
+  maticMumbai: newProvider("https://rpc-mumbai.maticvigil.com"),
+  avaxFuji: newProvider("https://api.avax-test.network/ext/bc/C/rpc"),
+  opGoerli: newProvider("https://endpoints.omniatech.io/v1/op/goerli/public"),
 };
 
 export const connectionInfo: {
-  [key in TestnetId]: { provider: JsonRpcProvider; contract: Contract };
+  [key in TestnetId]: { provider: AbstractProvider; contract: Contract };
 } = {
   ethSepolia: {
     provider: providers["ethSepolia"],
