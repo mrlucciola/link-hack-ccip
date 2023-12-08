@@ -10,6 +10,7 @@ import { OnboardingStore } from "../../views/Onboarding/store";
 import { SettingsStore } from "../../views/Settings/store";
 import { CreateTxnStore } from "../../views/CreateTxn/store";
 import { ReviewTxnStore } from "../../views/CreateTxn/ReviewTxn/store";
+import { HomeStore } from "../../views/Home/store";
 
 /** ## Contains all of the application states.
  * Using the ["Combining Multiple Stores"](https://mobx.js.org/defining-data-stores.html#combining-multiple-stores) pattern.
@@ -23,6 +24,7 @@ export class RootStore implements GenericStore {
   base: BaseStore;
   user: UserStore;
   reviewTxn: ReviewTxnStore;
+  home: HomeStore;
 
   constructor() {
     this.main = new MainStore(this);
@@ -33,6 +35,7 @@ export class RootStore implements GenericStore {
     this.base = new BaseStore(this);
     this.user = new UserStore(this);
     this.reviewTxn = new ReviewTxnStore(this);
+    this.home = new HomeStore(this);
   }
 }
 
@@ -45,3 +48,4 @@ export const useCreateTxnStore = createUseStateHook("createTxn");
 export const useBaseStore = createUseStateHook("base");
 export const useUserStore = createUseStateHook("user");
 export const useReviewTxnStore = createUseStateHook("reviewTxn");
+export const useHomeStore = createUseStateHook("home");

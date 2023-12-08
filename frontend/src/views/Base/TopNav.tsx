@@ -1,25 +1,79 @@
 import { FC } from "react";
+// state
+import { observer } from "mobx-react-lite";
+import { useBaseStore } from "../../mobx/stores";
+// components
+import TopNavLayout from "../../layouts/TopNavLayout";
 // style
-import Grid from "@mui/material/Unstable_Grid2";
-import GridPropsNamespace from "@mui/material/Unstable_Grid2/Grid2Props";
-import Paper from "@mui/material/Paper";
+import IconButton from "@mui/material/IconButton";
+import Typography from "@mui/material/Typography";
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
+import InfoIcon from "@mui/icons-material/Info";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import SettingsIcon from "@mui/icons-material/Settings";
 
-type GridProps = GridPropsNamespace.Grid2Props;
+const NavBackButton: FC = observer(() => {
+  const navBack = useBaseStore((s) => s.navBack);
 
-const TopNav: FC<GridProps> = ({ children, ...props }) => {
+  /** If not "", render the back-button, which navigates to specified view via the `navTo` action */
+  return navBack ? (
+    <IconButton sx={{ borderRadius: 1 }} onClick={navBack.navTo}>
+      <ArrowBackIosIcon />
+    </IconButton>
+  ) : (
+    <></>
+  );
+});
+const NavTitle: FC = observer(() => {
+  const navTitle = useBaseStore((s) => s.navTitle);
+
   return (
-    <Grid
-      container
-      direction="row"
-      component={Paper}
-      height={40}
-      minHeight={40}
-      maxHeight={40}
-      {...props}
+    <Typography variant="body1" fontWeight={800}>
+      {navTitle}
+    </Typography>
+  );
+});
+/** Adding a triple-dot/cogwheel button and associated logic */
+const NavUtil: FC = observer(() => {
+  const navUtil = useBaseStore((s) => s.navUtil);
+
+  // build elem logic
+  let icon: JSX.Element;
+  switch (navUtil.id) {
+    case "info":
+      icon = <InfoIcon />;
+      break;
+    case "options":
+      icon = <MoreVertIcon />;
+      break;
+    case "settings":
+      icon = <SettingsIcon />;
+      break;
+
+    default:
+      icon = <InfoIcon sx={{ fill: "transparent" }} />;
+      break;
+  }
+
+  return (
+    <IconButton
+      sx={{ borderRadius: 1 }}
+      disabled={!navUtil.id}
+      onClick={navUtil.action}
     >
-      {children}
-    </Grid>
+      {icon}
+    </IconButton>
+  );
+});
+
+const TopNav: FC = () => {
+  return (
+    <TopNavLayout justifyContent="space-between" alignItems="center" borderRadius={0}>
+      <NavBackButton />
+      <NavTitle />
+      <NavUtil />
+    </TopNavLayout>
   );
 };
 
-export default TopNav;
+export default observer(TopNav);

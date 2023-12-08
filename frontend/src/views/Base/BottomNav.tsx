@@ -9,11 +9,6 @@ import BottomNavigationAction from "@mui/material/BottomNavigationAction";
 // data
 import { BaseView, baseViewsMap } from "./store";
 
-// const Left: FC = observer(() => {
-//   const currentView = useBaseStore((s) => s.currentView);
-//   return;
-// });
-
 /** Bottom navigation panel
  * Contains items for switching sub-views within the `base` view:
  *
@@ -44,11 +39,6 @@ const BottomNav: FC = () => {
   ));
 
   return (
-    // <Grid
-    //   container
-    //   direction="row"
-    //   component={Paper}
-    // ></Grid>
     <BottomNavigation
       sx={{ height: 50, minHeight: 50, maxHeight: 50 }}
       value={currentView}
