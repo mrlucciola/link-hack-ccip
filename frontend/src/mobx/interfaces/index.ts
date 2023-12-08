@@ -1,5 +1,5 @@
 import { RootStore } from "../stores";
-import { Address } from "./address";
+import { UserAddress } from "./address";
 
 export interface GenericStore {}
 
@@ -14,6 +14,6 @@ export class Contact {
   constructor(
     public id: string,
     public fullName: string,
-    public addresses: Address[]
+    public addresses: UserAddress[]
   ) {}
 }

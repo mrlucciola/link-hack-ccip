@@ -15,8 +15,8 @@ import Modal from "@mui/material/Modal";
 import Typography from "@mui/material/Typography";
 // interfaces
 import { Contact } from "../../../mobx/interfaces";
-import { Address } from "../../../mobx/interfaces/address";
-import { BlockchainId } from "../../../mobx/data/supportedBlockchains";
+import { UserAddress } from "../../../mobx/interfaces/address";
+import { TestnetId } from "../../../mobx/data/supportedBlockchains";
 // import { newRecipient } from "../interfaces";
 // utils
 import { fmtCenterEllipsis } from "../../../layouts/Text";
@@ -30,32 +30,34 @@ export const stringAvatar = (name: string) => {
   return { children: `${firstInit}${secondInit}` };
 };
 
-const BlockchainElemGroup: FC<{ addrs: Address[] }> = observer(({ addrs }) => {
-  // build blockchain arr
-  const bcIdSet = new Set(addrs.map((a) => a.blockchainId));
-  const blockchainIds: BlockchainId[] = Array.from(bcIdSet);
+const BlockchainElemGroup: FC<{ addrs: UserAddress[] }> = observer(
+  ({ addrs }) => {
+    // build blockchain arr
+    const bcIdSet = new Set(addrs.map((a) => a.blockchainId));
+    const blockchainIds: TestnetId[] = Array.from(bcIdSet);
 
-  const blockchainElems = blockchainIds.map((bc, idx) => {
+    const blockchainElems = blockchainIds.map((bc, idx) => {
+      return (
+        <Avatar
+          sx={{ width: 25, height: 25, fontSize: "8pt" }}
+          key={`${bc}${idx}`}
+          // src={getBlockchainInfo(bc).img.sm}
+          // @todo add tooltip to show label
+        >
+          {bc}
+        </Avatar>
+      );
+    });
+
     return (
-      <Avatar
-        sx={{ width: 25, height: 25, fontSize: "8pt" }}
-        key={`${bc}${idx}`}
-        // src={getBlockchainInfo(bc).img.sm}
-        // @todo add tooltip to show label
-      >
-        {bc}
-      </Avatar>
+      <ListItemSecondaryAction>
+        <AvatarGroup spacing={10} max={4}>
+          {blockchainElems}
+        </AvatarGroup>
+      </ListItemSecondaryAction>
     );
-  });
-
-  return (
-    <ListItemSecondaryAction>
-      <AvatarGroup spacing={10} max={4}>
-        {blockchainElems}
-      </AvatarGroup>
-    </ListItemSecondaryAction>
-  );
-});
+  }
+);
 
 /**
  * Activates when user clicks on a contact with more than one address.

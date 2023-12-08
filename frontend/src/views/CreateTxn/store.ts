@@ -12,9 +12,9 @@ import {
   newEnabledAddr,
   newEnabledAddrToken,
 } from "./interfaces";
-import { BlockchainId } from "../../mobx/data/supportedBlockchains";
+import { TestnetId } from "../../mobx/data/supportedBlockchains";
 // utils
-import { mktValueFmt } from "../../utils/fmt";
+import { fmtMktValue } from "../../utils/fmt";
 
 /** ## CreateTxn store
  */
@@ -39,7 +39,7 @@ export class CreateTxnStore implements StateStore {
   // @delete - testing
   sendAddr: string = "0xd0xk3nf8ww";
   // sendAddr: string = "";
-  sendBlockchain: BlockchainId = "matic";
+  sendBlockchain: TestnetId = "maticMumbai";
   /** Local state variable that involved a lot of prop drilling. */
   isContactsOpen: boolean = false;
   ////////////////////// OBSERVABLES //////////////////////
@@ -98,11 +98,11 @@ export class CreateTxnStore implements StateStore {
     return sum;
   }
   get totalSpendLimitFmt(): string {
-    return mktValueFmt(this.totalSpendLimit);
+    return fmtMktValue(this.totalSpendLimit);
   }
 
   get totalSendAmtFmt(): string {
-    return mktValueFmt(this.totalSendAmt);
+    return fmtMktValue(this.totalSendAmt);
   }
   get isSpendLimitGtSendAmt(): boolean {
     return this.totalSpendLimit > this.totalSendAmt;
@@ -168,7 +168,7 @@ export class CreateTxnStore implements StateStore {
   setSendAddr(newSendAddr: string) {
     this.sendAddr = newSendAddr;
   }
-  setSendBlockchain(newSendBlockchain: BlockchainId) {
+  setSendBlockchain(newSendBlockchain: TestnetId) {
     this.sendBlockchain = newSendBlockchain;
   }
   setIsContactsOpen(isOpen: boolean) {

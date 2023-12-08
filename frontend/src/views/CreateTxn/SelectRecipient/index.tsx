@@ -13,7 +13,7 @@ import ContactSelector from "./ContactSelector";
 import Typography from "@mui/material/Typography";
 // data @todo move to state DataStore
 import {
-  BlockchainId,
+  TestnetId,
   supportedBlockchains,
 } from "../../../mobx/data/supportedBlockchains";
 
@@ -28,7 +28,7 @@ const validateAddr = (_addr: string) => {
  * @todo use ethers
  * @todo move to state
  */
-const validateBlockchain = (bc: BlockchainId) => {
+const validateBlockchain = (bc: TestnetId) => {
   return Object.keys(supportedBlockchains).includes(bc);
 };
 

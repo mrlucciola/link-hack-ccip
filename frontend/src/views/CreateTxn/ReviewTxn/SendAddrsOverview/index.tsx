@@ -16,39 +16,75 @@ import { EnabledAddr, newEnabledAddrToken } from "../../interfaces";
 import { fmtCenterEllipsis } from "../../../../layouts/Text";
 
 // const sendAddrs = useCreateTxnStore((s) => s.enabledAddrs);
+/** @deprecated placeholder seed data */
 export const sendAddrs = new Map<string, EnabledAddr>([
   [
-    "matic-0xic939d0x98f02123",
-    new EnabledAddr("matic-0xic939d0x98f02123", "matic", {
+    "maticMumbai-0xic939d0x98f02123",
+    new EnabledAddr("0xic939d0x98f02123", "maticMumbai", {
       usdc: newEnabledAddrToken(
         "usdc",
-        "matic",
+        "maticMumbai",
         "0xic939d0x98f02123",
         11111.1111
       ),
     }),
   ],
   [
-    "avax-0x8us93i09dlwpi09d",
-    new EnabledAddr("avax-0x8us93i09dlwpi09d", "avax", {
-      usdc: newEnabledAddrToken("usdc", "avax", "0x8us93i09dlwpi09d", 20000),
-      mkr: newEnabledAddrToken("mkr", "avax", "0x8us93i09dlwpi09d", 1.1),
-      aave: newEnabledAddrToken("aave", "avax", "0x8us93i09dlwpi09d", 123.9998),
+    "avaxFuji-0x8us93i09dlwpi09d",
+    new EnabledAddr("0x8us93i09dlwpi09d", "avaxFuji", {
+      usdc: newEnabledAddrToken(
+        "usdc",
+        "avaxFuji",
+        "0x8us93i09dlwpi09d",
+        20000
+      ),
+      link: newEnabledAddrToken("link", "avaxFuji", "0x8us93i09dlwpi09d", 1.1),
+      aave: newEnabledAddrToken(
+        "aave",
+        "avaxFuji",
+        "0x8us93i09dlwpi09d",
+        123.9998
+      ),
     }),
   ],
   [
-    "op-0xXyzzoj29d8f02098",
-    new EnabledAddr("op-0xXyzzoj29d8f02098", "op", {
-      usdc: newEnabledAddrToken("usdc", "op", "0xXyzzoj29d8f02098", 2993.9829),
-      aave: newEnabledAddrToken("aave", "op", "0xXyzzoj29d8f02098", 338.132),
+    "opGoerli-0xXyzzoj29d8f02098",
+    new EnabledAddr("0xXyzzoj29d8f02098", "opGoerli", {
+      usdc: newEnabledAddrToken(
+        "usdc",
+        "opGoerli",
+        "0xXyzzoj29d8f02098",
+        2993.9829
+      ),
+      aave: newEnabledAddrToken(
+        "aave",
+        "opGoerli",
+        "0xXyzzoj29d8f02098",
+        338.132
+      ),
     }),
   ],
   [
-    "eth-0xabczoj29d8f02456",
-    new EnabledAddr("eth-0xabczoj29d8f02456", "eth", {
-      usdc: newEnabledAddrToken("usdc", "eth", "0xabczoj29d8f02456", 22.4884),
-      aave: newEnabledAddrToken("aave", "eth", "0xabczoj29d8f02456", 0.25123),
-      mkr: newEnabledAddrToken("mkr", "eth", "0xabczoj29d8f02456", 0.0005),
+    "ethSepolia-0xabczoj29d8f02456",
+    new EnabledAddr("0xabczoj29d8f02456", "ethSepolia", {
+      usdc: newEnabledAddrToken(
+        "usdc",
+        "ethSepolia",
+        "0xabczoj29d8f02456",
+        22.4884
+      ),
+      aave: newEnabledAddrToken(
+        "aave",
+        "ethSepolia",
+        "0xabczoj29d8f02456",
+        0.25123
+      ),
+      link: newEnabledAddrToken(
+        "link",
+        "ethSepolia",
+        "0xabczoj29d8f02456",
+        0.0005
+      ),
     }),
   ],
 ]);
@@ -56,14 +92,15 @@ export const sendAddrs = new Map<string, EnabledAddr>([
 console.log(sendAddrs);
 
 const SendAddrItems: FC<{ isOpen: boolean }> = observer(({ isOpen }) => {
+  // @todo switch to this
   // const sendAddrs = useCreateTxnStore((s) => s.enabledAddrs);
   const addresses = useUserStore((s) => s.addresses);
 
-  // build
+  // build jsx list
   const sendAddrsElems: JSX.Element[] = [];
+  // For each enabled addr, look up info for display
   sendAddrs.forEach((a) => {
-    // @todo fix - the addr shouldnt have a hyphen in it
-    const addrOrig = addresses.get(a.value.split("-")[1])!;
+    const addrOrig = addresses.get(a.value)!;
     // format values
     const addrFmt = (
       <>
@@ -81,6 +118,7 @@ const SendAddrItems: FC<{ isOpen: boolean }> = observer(({ isOpen }) => {
       </>
     );
 
+    // If no label, show address
     const primaryText = addrOrig.label || addrFmt;
     const secondaryText = addrOrig.label ? addrFmt : undefined;
     sendAddrsElems.push(

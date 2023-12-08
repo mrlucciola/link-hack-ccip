@@ -4,14 +4,11 @@ import { makeAutoObservable } from "mobx";
 import { RootStore } from ".";
 // interfaces
 import { Contact, StateStore } from "../interfaces";
-import { Address } from "../interfaces/address";
-import {
-  SignedTransaction,
-  newSignedTransaction,
-  Transaction,
-} from "../interfaces/transaction";
-// seed data
-import { seedContactsMap, seedAddressesMap } from "../data/seed-user";
+import { UserAddress } from "../interfaces/address";
+// @delete seed data
+import { seedContactsMap, seedAddressesMap } from "../data/seed/seed-user";
+import { HDNodeWallet } from "ethers";
+import { UserWallet } from "../../views/Onboarding/interfaces";
 
 /** ## User store
  */
@@ -26,7 +23,7 @@ export class UserStore implements StateStore {
   ////////////////////// OBSERVABLES //////////////////////
   // @todo remove the seed data when done testing
   contacts: Map<string, Contact> = seedContactsMap;
-  addresses: Map<string, Address> = seedAddressesMap;
+  addresses: Map<string, UserAddress> = seedAddressesMap;
   ////////////////////// OBSERVABLES //////////////////////
   /////////////////////////////////////////////////////////
 
@@ -51,28 +48,30 @@ export class UserStore implements StateStore {
     this.contacts = new Map<string, Contact>(mapInitContacts);
   }
   /** ### Remove single contact from `contacts` collection. */
-  removeContact(contactToRemove: Address) {
+  removeContact(contactToRemove: UserAddress) {
     this.contacts.delete(contactToRemove.value);
   }
 
   /** ### Add/update single address to `addresses` collection. */
-  setAddress(addrToAddOrSet: Address) {
+  setAddress(addrToAddOrSet: UserAddress) {
     this.addresses.set(addrToAddOrSet.value, addrToAddOrSet);
   }
   /** ### Set `addresses` state variable.
-   * ### Option: replace/keep the original set. */
-  setAddresses(addrsToAddOrSet: Address[], replace: boolean = false) {
+   * @param - if "true", replace the original set. */
+  setAddresses(addrsToAddOrSet: UserAddress[], replace: boolean = false) {
     if (replace) {
-      const mapInitAddresses: [string, Address][] = addrsToAddOrSet.map((a) => {
-        return [a.value, a];
-      });
-      this.addresses = new Map<string, Address>(mapInitAddresses);
+      const mapInitAddresses: [string, UserAddress][] = addrsToAddOrSet.map(
+        (a) => {
+          return [a.value, a];
+        }
+      );
+      this.addresses = new Map<string, UserAddress>(mapInitAddresses);
     } else {
       addrsToAddOrSet.forEach((a) => this.addresses.set(a.value, a));
     }
   }
   /** ### Remove single address from `addresses` collection. */
-  removeAddress(addressToRemove: Address) {
+  removeAddress(addressToRemove: UserAddress) {
     this.addresses.delete(addressToRemove.value);
   }
   //////////////////////// ACTIONS ////////////////////////
@@ -80,9 +79,24 @@ export class UserStore implements StateStore {
 
   /////////////////////////////////////////////////////////
   //////////////////////// HELPERS ////////////////////////
-  /** @deprecated incomplete */
-  signTxn(address: Address, txn: Transaction): SignedTransaction {
-    return newSignedTransaction(address, txn);
+  getUserWallet(userAddress: string): HDNodeWallet {
+    const wallets = new Map<string, UserWallet>();
+    const walletAddressIdxMap = new Map<string, number>();
+    const walletAddrIdx = walletAddressIdxMap.get(userAddress);
+
+    if (!walletAddrIdx)
+      throw new Error(`No wallet idx found for addr: ${userAddress}`);
+
+    let foundWallet: HDNodeWallet | null = null;
+    wallets.forEach((w) => {
+      foundWallet = w.deriveChild(walletAddrIdx);
+      return;
+    });
+
+    if (foundWallet === null)
+      throw new Error(`No wallet found for addr: ${userAddress}`);
+
+    return foundWallet;
   }
   //////////////////////// HELPERS ////////////////////////
   /////////////////////////////////////////////////////////

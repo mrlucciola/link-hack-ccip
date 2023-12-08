@@ -3,7 +3,16 @@ import { makeAutoObservable } from "mobx";
 import { RootStore } from "../../../mobx/stores";
 // interfaces
 import { Contact, StateStore } from "../../../mobx/interfaces";
-import { mktValueFmt } from "../../../utils/fmt";
+import { fmtMktValue } from "../../../utils/fmt";
+import { buildAndSignTxn } from "./utils/transaction";
+import {
+  TestnetId,
+  fetchTxnCost,
+} from "../../../mobx/data/supportedBlockchains";
+import { Transaction } from "ethers";
+import { connectionInfo } from "../../../mobx/data/connection";
+import { EnabledAddr } from "../interfaces";
+import { sendAddrs } from "./SendAddrsOverview";
 // utils
 
 /** ## ReviewTxn store
@@ -38,21 +47,81 @@ export class ReviewTxnStore implements StateStore {
   // @note should be a getter
   totalFees: number = 292;
   get totalFeesFmt(): string {
-    return mktValueFmt(this.totalFees);
+    return fmtMktValue(this.totalFees);
   }
+  feeRowItems: { blockchain: string; txnCost: string }[] = [];
   /////////////////////// COMPUTEDS ///////////////////////
   /////////////////////////////////////////////////////////
 
   /////////////////////////////////////////////////////////
   //////////////////////// ACTIONS ////////////////////////
-  setTotalFees(newAmt: number) {
-    this.totalFees = newAmt;
+  /** @deprecated mock fxn with mock data */
+  async buildFeeRowItems() {
+    const enabledAddrs = sendAddrs; // @todo replace with: this.root.createTxn.enabledAddrs
+
+    const bcStore = new Map<TestnetId, number>();
+    enabledAddrs.forEach((a) => {
+      const newTxnCt = bcStore.get(a.blockchainId)
+        ? bcStore.get(a.blockchainId)! + 1
+        : 1;
+      bcStore.set(a.blockchainId, newTxnCt);
+    });
+
+    let totalTxnCost = 0;
+
+    // build data-grid row-items
+    const rows: { blockchain: string; txnCost: string }[] = [];
+    for (const item of bcStore.entries()) {
+      // Fee cost per txn
+      const txnCost = await fetchTxnCost(item[0]);
+      totalTxnCost += txnCost;
+      rows.push({
+        blockchain: item[0].toLocaleUpperCase(),
+        txnCost: fmtMktValue(txnCost * item[1]),
+      });
+    }
+
+    this.feeRowItems = rows;
+    this.totalFees = totalTxnCost;
   }
   //////////////////////// ACTIONS ////////////////////////
   /////////////////////////////////////////////////////////
 
   /////////////////////////////////////////////////////////
   //////////////////////// HELPERS ////////////////////////
+  buildAndSignTxn = buildAndSignTxn;
+
+  // @todo separate build and sign to give user preview of txn data before signature is added
+  async buildAndSignTxns(
+    optimizedAddrs: EnabledAddr[]
+  ): Promise<Transaction[]> {
+    let amtRemaining = this.root.createTxn.totalSendAmt;
+
+    const signedTxns: Transaction[] = [];
+    for (let idx = 0; idx < optimizedAddrs.length; idx++) {
+      const addr = optimizedAddrs[idx];
+
+      const sendAmtFromAddr = Math.min(addr.totalMktValue, amtRemaining);
+
+      if (sendAmtFromAddr <= 0) break;
+
+      const txn = await this.buildAndSignTxn(
+        connectionInfo[addr.blockchainId as TestnetId].contract,
+        sendAmtFromAddr,
+        addr,
+        {
+          value: this.root.createTxn.sendAddr,
+          blockchainId: this.root.createTxn.sendBlockchain as TestnetId,
+        }
+      );
+
+      signedTxns.push(txn);
+
+      amtRemaining -= sendAmtFromAddr;
+    }
+
+    return signedTxns;
+  }
   //////////////////////// HELPERS ////////////////////////
   /////////////////////////////////////////////////////////
 }

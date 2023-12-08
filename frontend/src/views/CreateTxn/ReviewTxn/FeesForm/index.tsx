@@ -1,22 +1,13 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 // state
 import { observer } from "mobx-react-lite";
-import { useCreateTxnStore, useReviewTxnStore } from "../../../../mobx/stores";
+import { useReviewTxnStore } from "../../../../mobx/stores";
 // style
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 // components
 import { CollapseList, CollapseSubheader } from "..";
-// interfaces
-import {
-  BlockchainId,
-  fetchTxnCost,
-} from "../../../../mobx/data/supportedBlockchains";
-// utils
-import { mktValueFmt } from "../../../../utils/fmt";
-// @delete
-import { sendAddrs } from "../SendAddrsOverview";
 
 const FooterSum: FC = observer(() => {
   const totalFeesFmt = useReviewTxnStore((s) => s.totalFeesFmt);
@@ -31,41 +22,19 @@ const FooterSum: FC = observer(() => {
 const columns: GridColDef[] = [{ field: "blockchain" }, { field: "txnCost" }];
 
 const FeesItems: FC<{ isOpen: boolean }> = observer(({ isOpen }) => {
-  const setTotalFees = useReviewTxnStore((s) => s.setTotalFees);
+  const buildFeeRowItems = useReviewTxnStore((s) => s.buildFeeRowItems);
+  const feeRowItems = useReviewTxnStore((s) => s.feeRowItems);
+  const totalFees = useReviewTxnStore((s) => s.totalFees);
 
-  // @todo replace
-  // const enabledAddrs = useCreateTxnStore((s) => s.enabledAddrs);
-  const enabledAddrs = sendAddrs;
-
-  // @todo other txn specific info likeadd gas amt
-  const bcStore = new Map<BlockchainId, number>();
-  enabledAddrs.forEach((a) => {
-    const newTxnCt = bcStore.get(a.blockchainId)
-      ? bcStore.get(a.blockchainId)! + 1
-      : 1;
-    bcStore.set(a.blockchainId, newTxnCt);
-  });
-
-  // build
-  let totalTxnCost = 0;
-  const rows: { blockchain: string; txnCost: string }[] = [];
-  bcStore.forEach((txnCt, blockchain) => {
-    // fee amt per txn
-    const txnCost = fetchTxnCost(blockchain);
-    totalTxnCost += txnCost;
-    rows.push({
-      blockchain: blockchain.toLocaleUpperCase(),
-      txnCost: mktValueFmt(txnCost * txnCt),
-    });
-  });
-  // @note there should be a better way to do this, possibly move to state
-  setTotalFees(totalTxnCost);
+  useEffect(() => {
+    buildFeeRowItems();
+  }, []);
 
   return (
     <CollapseList isOpen={isOpen}>
       <Box sx={{ width: "100%" }}>
         <DataGrid
-          rows={rows}
+          rows={feeRowItems}
           columns={columns}
           disableRowSelectionOnClick
           getRowId={(row) => row?.blockchain}
@@ -74,7 +43,7 @@ const FeesItems: FC<{ isOpen: boolean }> = observer(({ isOpen }) => {
           hideFooterPagination
           hideFooterSelectedRowCount
           slots={{ footer: FooterSum }}
-          slotProps={{ footer: { slot: `${totalTxnCost}` } }}
+          slotProps={{ footer: { slot: `${totalFees}` } }}
         />
       </Box>
     </CollapseList>

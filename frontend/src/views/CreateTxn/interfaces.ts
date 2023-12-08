@@ -1,28 +1,29 @@
-import { BlockchainId } from "../../mobx/data/supportedBlockchains";
+import { TestnetId } from "../../mobx/data/supportedBlockchains";
 import { TokenId, lookupTokenMktValue } from "../../mobx/data/tokens";
 import { Contact } from "../../mobx/interfaces";
 import {
-  Address,
-  BaseAddress,
+  UserAddress,
+  BaseUserAddress,
   IAddrTokens,
 } from "../../mobx/interfaces/address";
 import { BaseAddrToken } from "../../mobx/interfaces/token";
 
 export class Recipient {
-  constructor(public contact: Contact, public address: Address) {}
+  constructor(public contact: Contact, public address: UserAddress) {}
 }
-export const newRecipient = (contact: Contact, address: Address) =>
+export const newRecipient = (contact: Contact, address: UserAddress) =>
   new Recipient(contact, address);
 
-export class EnabledAddr extends BaseAddress<EnabledAddrToken> {
+export class EnabledAddr extends BaseUserAddress<EnabledAddrToken> {
   constructor(
     value: string,
-    blockchainId: BlockchainId,
+    blockchainId: TestnetId,
     public tokens: IAddrTokens<EnabledAddrToken>
   ) {
     super(value, blockchainId, tokens);
   }
 
+  /** Enabled amount, not holdings */
   get totalMktValue(): number {
     let sum = 0;
 
@@ -38,7 +39,7 @@ export class EnabledAddr extends BaseAddress<EnabledAddrToken> {
 }
 export const newEnabledAddr = (
   value: string,
-  blockchainId: BlockchainId,
+  blockchainId: TestnetId,
   tokens?: IAddrTokens<EnabledAddrToken>
 ): EnabledAddr => {
   return new EnabledAddr(
@@ -51,7 +52,7 @@ export const newEnabledAddr = (
 export class EnabledAddrToken extends BaseAddrToken {
   constructor(
     id: TokenId,
-    blockchainid: BlockchainId,
+    blockchainid: TestnetId,
     addrId: string,
     public spendLimit: number,
     public isEnabled: boolean
@@ -65,7 +66,7 @@ export class EnabledAddrToken extends BaseAddrToken {
 }
 export const newEnabledAddrToken = (
   id: TokenId,
-  blockchainId: BlockchainId,
+  blockchainId: TestnetId,
   addrId: string,
   spendLimit: number,
   isEnabled: boolean = false
