@@ -2,6 +2,7 @@
   "name": "blockchain",
   "packageManager": "yarn@3.6.4",
   "devDependencies": {
+    "@chainlink/env-enc": "^1.0.5",
     "@nomicfoundation/hardhat-chai-matchers": "^2.0.2",
     "@nomicfoundation/hardhat-ethers": "^3.0.5",
     "@nomicfoundation/hardhat-network-helpers": "^1.0.10",
