@@ -1,17 +1,7 @@
 import { config } from "@chainlink/env-enc";
+import { SupportedNetwork } from "../types";
 
-type NetworkType =
-  | "ethereumMainnet"
-  | "ethereumSepolia"
-  | "optimismMainnet"
-  | "optimismGoerli"
-  | "arbitrumTestnet"
-  | "avalancheMainnet"
-  | "avalancheFuji"
-  | "polygonMainnet"
-  | "polygonMumbai";
-
-const getProviderRpcUrl = (network: NetworkType): string => {
+const getProviderRpcUrl = (network: SupportedNetwork): string => {
   config();
   let rpcUrl: string | undefined;
 

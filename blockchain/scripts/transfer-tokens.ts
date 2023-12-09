@@ -9,6 +9,8 @@ import routerAbi from "../abi/Router.json";
 import offRampAbi from "../abi/OffRamp.json";
 import erc20Abi from "../abi/IERC20Metadata.json";
 
+import { SupportedNetwork } from "./types/index";
+
 // Arguments handling function
 interface HandleArgumentsReturn {
   sourceChain: string;
@@ -18,30 +20,6 @@ interface HandleArgumentsReturn {
   amount: BigNumberish;
   feeTokenAddress?: string;
 }
-
-type NetworkType =
-  | "ethereumMainnet"
-  | "ethereumSepolia"
-  | "optimismMainnet"
-  | "optimismGoerli"
-  | "arbitrumTestnet"
-  | "avalancheMainnet"
-  | "avalancheFuji"
-  | "polygonMainnet"
-  | "polygonMumbai";
-
-type SupportedNetwork =
-  | "ethereumMainnet"
-  | "ethereumSepolia"
-  | "optimismMainnet"
-  | "optimismGoerli"
-  | "arbitrumTestnet"
-  | "avalancheMainnet"
-  | "avalancheFuji"
-  | "polygonMainnet"
-  | "polygonMumbai";
-// Command: node src/transfer-tokens.js sourceChain destinationChain destinationAccount tokenAddress amount feeTokenAddress(optional)
-// Examples(sepolia):
 
 // pay fees with native token: node src/transfer-tokens.js ethereumSepolia avalancheFuji 0x9d087fC03ae39b088326b67fA3C788236645b717 0xFd57b4ddBf88a4e07fF4e34C487b99af2Fe82a05 100
 // pay fees with transferToken: node src/transfer-tokens.js ethereumSepolia avalancheFuji 0x9d087fC03ae39b088326b67fA3C788236645b717 0xFd57b4ddBf88a4e07fF4e34C487b99af2Fe82a05 100 0x779877A7B0D9E8603169DdbD7836e478b4624789
@@ -91,7 +69,7 @@ const transferTokens = async (): Promise<void> => {
   */
 
   // Get the RPC URL for the chain from the config
-  const rpcUrl = getProviderRpcUrl(sourceChain as NetworkType);
+  const rpcUrl = getProviderRpcUrl(sourceChain as SupportedNetwork);
   // fetch the signer privateKey
   const privateKey = getPrivateKey();
   // Initialize a provider using the obtained RPC URL
@@ -260,13 +238,12 @@ const transferTokens = async (): Promise<void> => {
   };
 
   // Simulate a contract call with the transaction data at the block before the transaction
-  // const messageId = await provider.call(call, receipt.blockNumber - 1); // v6 seems dont support anymore second argument
-  const getMessageId = async () => {
-    await provider.waitForBlock(receipt.blockNumber - 1); // return not implemented yet ?? check how to migrate properly to ethers v6
-    return await provider.call(call);
+  const callWithBlockTag = {
+    ...call, // reprend toutes les propriétés de call
+    blockTag: receipt.blockNumber - 1,
   };
 
-  const messageId = await getMessageId();
+  const messageId = await provider.call(callWithBlockTag);
 
   console.log(
     `\n✅ ${amount} of Tokens(${tokenAddress}) Sent to account ${destinationAccount} on destination chain ${destinationChain} using CCIP. Transaction hash ${sendTx.hash} -  Message id is ${messageId}`
@@ -282,7 +259,9 @@ const transferTokens = async (): Promise<void> => {
   */
 
   // Fetch status on destination chain
-  const destinationRpcUrl = getProviderRpcUrl(destinationChain as NetworkType);
+  const destinationRpcUrl = getProviderRpcUrl(
+    destinationChain as SupportedNetwork
+  );
 
   // Initialize providers for interacting with the blockchains
   const destinationProvider = new ethers.JsonRpcProvider(destinationRpcUrl);

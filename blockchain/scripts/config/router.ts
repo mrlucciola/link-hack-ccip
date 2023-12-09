@@ -1,20 +1,10 @@
+import { SupportedNetwork } from "../types";
+
 // Define the type for network configuration objects
 type NetworkConfig = {
   address: string;
   chainSelector: string;
 };
-
-// Enum or Union type for supported networks
-type SupportedNetwork =
-  | "ethereumMainnet"
-  | "ethereumSepolia"
-  | "optimismMainnet"
-  | "optimismGoerli"
-  | "arbitrumTestnet"
-  | "avalancheMainnet"
-  | "avalancheFuji"
-  | "polygonMainnet"
-  | "polygonMumbai";
 
 const ethereumMainnet: NetworkConfig = {
   address: "0xE561d5E02207fb5eB32cca20a699E0d8919a1476",
