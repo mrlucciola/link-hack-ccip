@@ -5,13 +5,13 @@ import { useBaseStore, useCreateTxnStore } from "../../../mobx/stores";
 // style
 import Collapse from "@mui/material/Collapse";
 import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
 // components
 import BodyLayout from "../../../layouts/BodyLayout";
 import SendAmtField from "./SendAmtField";
 import SendAddressField from "./SendAddressField";
 import ContactSelector from "./ContactSelector";
-import Typography from "@mui/material/Typography";
-// data @todo move to state DataStore
+// data - @todo move to state DataStore
 import {
   TestnetId,
   supportedBlockchains,
@@ -89,9 +89,9 @@ const SelectRecipient: FC = () => {
         <SendAddressField />
       </Collapse>
 
-      {/* <ContactSelector /> */}
+      <ContactSelector />
 
-      {/* <ContinueButton /> */}
+      <ContinueButton />
     </BodyLayout>
   );
 };

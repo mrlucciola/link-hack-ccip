@@ -7,7 +7,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 // components
-import { CollapseList, CollapseSubheader } from "..";
+import { CollapseList, CollapseSubheader } from "../utils/components";
 
 const FooterSum: FC = observer(() => {
   const totalFeesFmt = useReviewTxnStore((s) => s.totalFeesFmt);
