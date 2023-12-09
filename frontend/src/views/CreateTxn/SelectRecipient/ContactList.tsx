@@ -21,7 +21,6 @@ const ContactList: FC = () => {
       flexWrap="nowrap"
       direction="column"
       justifyContent="flex-start"
-      // overflow="hidden"
       width="100%"
       maxWidth="100%"
       px={1}

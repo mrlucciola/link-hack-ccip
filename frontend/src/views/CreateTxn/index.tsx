@@ -1,11 +1,12 @@
-import { FC } from "react";
+import { FC, useEffect } from "react";
 // state
 import { observer } from "mobx-react-lite";
-import { useCreateTxnStore } from "../../mobx/stores";
+import { useCreateTxnStore, useUserStore } from "../../mobx/stores";
 // components
 import SelectRecipient from "./SelectRecipient";
 import SelectSrc from "./SelectSrc";
 import ReviewTxn from "./ReviewTxn";
+import { userAddrsToEnable } from "../../mobx/data/seed/enabledAddrs";
 
 // This is becoming a bit convoluted. However, I don't want to use a big routing library just yet.
 export const createTxnViewType = [
@@ -31,6 +32,27 @@ const createTxnViewMap: { [key in CreateTxnViewType]: JSX.Element } = {
  */
 const CreateTxn: FC = () => {
   const currentView = useCreateTxnStore((s) => s.currentView);
+  /** @deprecated @delete */
+  const addresses = useUserStore((s) => s.addresses);
+  /** @deprecated @delete */
+  const setEnabledAddrTokenStatus = useCreateTxnStore(
+    (s) => s.setEnabledAddrTokenStatus
+  );
+  /** @deprecated @delete */
+  const setEnabledAddrTokenSpendLimit = useCreateTxnStore(
+    (s) => s.setEnabledAddrTokenSpendLimit
+  );
+
+  // @todo @delete
+  useEffect(() => {
+    userAddrsToEnable.forEach(({ addr, tokenId, amt }) => {
+      const userAddr = addresses.get(addr)!;
+      const tokenToEnable = userAddr.tokens[tokenId]!;
+      setEnabledAddrTokenStatus(tokenToEnable, true);
+      setEnabledAddrTokenSpendLimit(tokenToEnable, `${amt}`);
+      console.log("added:", tokenToEnable.lookupId, amt);
+    });
+  }, []);
 
   return createTxnViewMap[currentView];
 };

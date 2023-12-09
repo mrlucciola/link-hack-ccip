@@ -1,6 +1,7 @@
 import React, { FC, useEffect } from "react";
 // state
 import { observer } from "mobx-react-lite";
+import { useBaseStore, useCreateTxnStore } from "../../../mobx/stores";
 // style
 import Collapse from "@mui/material/Collapse";
 import List from "@mui/material/List";
@@ -15,7 +16,6 @@ import RecipientOverview from "./RecipientOverview";
 import SendAddrsOverview from "./SendAddrsOverview";
 import FeesForm from "./FeesForm";
 import ConfirmSubmitButton from "./ConfirmSubmitButton";
-import { useBaseStore, useCreateTxnStore } from "../../../mobx/stores";
 
 export const CollapseSubheader: FC<{
   isOpen: boolean;
