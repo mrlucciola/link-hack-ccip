@@ -10,7 +10,7 @@ import Home from "../Home";
 
 // This is becoming a bit convoluted. However, I don't want to use a big routing library just yet.
 const bodyViewMap: { [key in BaseView]: JSX.Element } = {
-  home: <Home />, // <Home />,
+  home: <Home />,
   portfolio: <BodyLayout>portfolio</BodyLayout>,
   createTxn: <CreateTxn />,
   activity: <BodyLayout>activity</BodyLayout>,

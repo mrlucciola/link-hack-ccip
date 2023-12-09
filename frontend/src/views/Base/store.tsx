@@ -8,8 +8,9 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 import ContactPageIcon from "@mui/icons-material/ContactPage";
 import HistoryIcon from "@mui/icons-material/History";
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
-import { CreateTxnViewType } from "../CreateTxn";
 // interfaces
+import { CreateTxnViewType } from "../CreateTxn";
+
 export const baseViewsMap = Object.freeze({
   home: { id: "home", label: "Home", icon: <HomeIcon /> },
   portfolio: {
@@ -23,6 +24,19 @@ export const baseViewsMap = Object.freeze({
 });
 export type BaseView = keyof typeof baseViewsMap;
 
+/**  */
+export const navUtilOptions = [
+  "info",
+  "options",
+  "settings",
+  "notifications",
+] as const;
+export type NavUtilOption = (typeof navUtilOptions)[number];
+export interface INavUtil {
+  id: NavUtilOption;
+  action: () => void;
+}
+
 /** ## Base store
  */
 export class BaseStore implements StateStore {
@@ -34,7 +48,7 @@ export class BaseStore implements StateStore {
 
   /////////////////////////////////////////////////////////
   ////////////////////// OBSERVABLES //////////////////////
-  currentView: BaseView = "createTxn";
+  currentView: BaseView = "home";
   navBack?: {
     // @note So far this prop seems somewhat unnecessary. Will likely remove soon.
     baseView: BaseView;
@@ -44,7 +58,7 @@ export class BaseStore implements StateStore {
     navTo: () => void;
   };
   navTitle: string = "";
-  navUtil: { id?: "info" | "options" | "settings"; action?: () => void } = {};
+  navUtils: INavUtil[] = [];
   ////////////////////// OBSERVABLES //////////////////////
   /////////////////////////////////////////////////////////
 
@@ -70,12 +84,9 @@ export class BaseStore implements StateStore {
   setNavTitle(newNavTitle: string) {
     this.navTitle = newNavTitle;
   }
-  /** Pass in an empty object `{}` to unset the nav-util icon */
-  setNavUtil(newNavUtil: {
-    id?: "info" | "options" | "settings";
-    action?: () => void;
-  }) {
-    this.navUtil = newNavUtil;
+  /** Pass in an empty array `[]` to unset the nav-util icon */
+  setNavUtils(newNavUtil: INavUtil[]) {
+    this.navUtils = newNavUtil;
   }
 
   //////////////////////// ACTIONS ////////////////////////

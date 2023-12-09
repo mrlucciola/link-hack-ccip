@@ -5,70 +5,131 @@ import { useBaseStore } from "../../mobx/stores";
 // components
 import TopNavLayout from "../../layouts/TopNavLayout";
 // style
-import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
+import GridPropsNamespace from "@mui/material/Unstable_Grid2/Grid2Props";
+import { PaperProps } from "@mui/material/Paper";
+import { SxProps } from "@mui/material";
 import InfoIcon from "@mui/icons-material/Info";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import SettingsIcon from "@mui/icons-material/Settings";
+import NotificationsIcon from "@mui/icons-material/Notifications";
+// components
+import NavIconButton from "../../layouts/NavIconButton";
+
+type GridProps = GridPropsNamespace.Grid2Props;
 
 const NavBackButton: FC = observer(() => {
   const navBack = useBaseStore((s) => s.navBack);
 
-  /** If not "", render the back-button, which navigates to specified view via the `navTo` action */
+  /** If not `{}/undefined`, render the back-button, which navigates to specified view via the `navTo` action */
   return navBack ? (
-    <IconButton sx={{ borderRadius: 1 }} onClick={navBack.navTo}>
-      <ArrowBackIosIcon />
-    </IconButton>
+    <>
+      <NavIconButton onClick={navBack.navTo}>
+        <ArrowBackIosIcon
+          sx={{ "& path": { transform: "translate(0.5rem, 0px)" } }}
+        />
+      </NavIconButton>
+      <NavIconButton isEmpty />
+    </>
   ) : (
-    <></>
+    <>
+      <NavIconButton isEmpty />
+      <NavIconButton isEmpty />
+    </>
   );
 });
+
 const NavTitle: FC = observer(() => {
   const navTitle = useBaseStore((s) => s.navTitle);
 
   return (
-    <Typography variant="body1" fontWeight={800}>
+    <Typography
+      variant="body1"
+      fontWeight={800}
+      noWrap
+      flex={1}
+      textAlign="center"
+    >
       {navTitle}
     </Typography>
   );
 });
-/** Adding a triple-dot/cogwheel button and associated logic */
+
+/** ### Controller for rendering buttons on the right side of the nav bar */
 const NavUtil: FC = observer(() => {
-  const navUtil = useBaseStore((s) => s.navUtil);
+  const navUtils = useBaseStore((s) => s.navUtils);
 
   // build elem logic
-  let icon: JSX.Element;
-  switch (navUtil.id) {
-    case "info":
-      icon = <InfoIcon />;
-      break;
-    case "options":
-      icon = <MoreVertIcon />;
-      break;
-    case "settings":
-      icon = <SettingsIcon />;
-      break;
+  const utilIcons = navUtils.map((u) => {
+    switch (u.id) {
+      case "info":
+        return (
+          <NavIconButton onClick={u.action}>
+            <InfoIcon />
+          </NavIconButton>
+        );
 
+      case "options":
+        return (
+          <NavIconButton onClick={u.action}>
+            <MoreVertIcon />
+          </NavIconButton>
+        );
+
+      case "settings":
+        return (
+          <NavIconButton onClick={u.action}>
+            <SettingsIcon />
+          </NavIconButton>
+        );
+
+      case "notifications":
+        return (
+          <NavIconButton onClick={u.action}>
+            <NotificationsIcon />
+          </NavIconButton>
+        );
+    }
+  });
+
+  return utilIcons.length === 0 ? (
+    // @note Empty icons to set spacing without needing to manually apply css
+    <>
+      <NavIconButton isEmpty />
+      <NavIconButton isEmpty />
+    </>
+  ) : (
+    utilIcons
+  );
+});
+
+const styleWaves: SxProps = {
+  backgroundColor: "#60a4db",
+  opacity: 1,
+  backgroundImage:
+    "repeating-radial-gradient( circle at 0 0, transparent 0, #60a4db 8px ), repeating-linear-gradient( #b4bec755, #b4bec7 )",
+};
+
+const TopNav: FC = () => {
+  const currentView = useBaseStore((s) => s.currentView);
+
+  // Customize navbar props based on current view
+  const overrideProps: GridProps & PaperProps = {};
+  switch (currentView) {
+    case "home":
+      overrideProps.elevation = 0;
+      overrideProps.height = "100px";
+      overrideProps.minHeight = "100px";
+      overrideProps.maxHeight = "100px";
+      overrideProps.sx = styleWaves;
+      break;
     default:
-      icon = <InfoIcon sx={{ fill: "transparent" }} />;
       break;
   }
 
   return (
-    <IconButton
-      sx={{ borderRadius: 1 }}
-      disabled={!navUtil.id}
-      onClick={navUtil.action}
-    >
-      {icon}
-    </IconButton>
-  );
-});
-
-const TopNav: FC = () => {
-  return (
-    <TopNavLayout justifyContent="space-between" alignItems="center" borderRadius={0}>
+    <TopNavLayout justifyContent="unset" {...overrideProps}>
       <NavBackButton />
       <NavTitle />
       <NavUtil />
