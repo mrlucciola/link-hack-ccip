@@ -26,7 +26,7 @@ const ListModal: FC<
           ...boxStyle,
         }}
         flexWrap="nowrap"
-        overflow="scroll"
+        overflow="hidden scroll"
         component={List}
         {...boxProps}
       >

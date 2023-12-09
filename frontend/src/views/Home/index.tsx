@@ -1,12 +1,14 @@
 import { FC, useEffect } from "react";
 // state
 import { observer } from "mobx-react-lite";
-import { useBaseStore, useHomeStore } from "../../mobx/stores";
+import { useBaseStore } from "../../mobx/stores";
 // style
 import Button, { ButtonProps } from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
 // import { SxProps } from "@mui/material";
 // components
 import BodyLayout from "../../layouts/BodyLayout";
+import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
 
 // const styleWaves: SxProps = {
 //   backgroundColor: "#60a4db",
@@ -29,7 +31,7 @@ import BodyLayout from "../../layouts/BodyLayout";
 //   backgroundPosition: "0 0, 0 0, 9px 16px, 9px 16px, 0 0, 9px 16px",
 // };
 
-/** Styling component */
+/** ### Styling component for individual menu items */
 const MenuButton: FC<ButtonProps> = ({ children, ...props }) => {
   return (
     <Button
@@ -55,27 +57,54 @@ const MenuButton: FC<ButtonProps> = ({ children, ...props }) => {
  * @todo add high-level data to buttons
  */
 const Home: FC = () => {
-  const currentView = useHomeStore((s) => s);
   const setCurrentView = useBaseStore((s) => s.setCurrentView);
   const setNavBack = useBaseStore((s) => s.setNavBack);
   const setNavTitle = useBaseStore((s) => s.setNavTitle);
-  console.log(currentView);
+  const setNavUtils = useBaseStore((s) => s.setNavUtils);
+
   useEffect(() => {
     setNavBack();
     setNavTitle("");
+    setNavTitle("");
+    setNavUtils([
+      // @todo add notification modal
+      {
+        id: "notifications",
+        action: () => {},
+      },
+      {
+        id: "options",
+        action: () => {},
+      },
+    ]);
+
+    return () => {
+      setNavUtils([]);
+    };
   }, []);
 
   return (
-    <BodyLayout>
-      <MenuButton onClick={() => setCurrentView("portfolio")}>
-        Portfolio
-      </MenuButton>
-      <MenuButton onClick={() => setCurrentView("activity")}>
-        Activity & History
-      </MenuButton>
-      <MenuButton onClick={() => setCurrentView("contacts")}>
-        Contacts
-      </MenuButton>
+    <BodyLayout overflow="hidden scroll">
+      <Grid2 container direction="column" pt={1} pl={1} pr={2}>
+        <MenuButton onClick={() => setCurrentView("portfolio")}>
+          <Typography>Portfolio</Typography>
+        </MenuButton>
+        <MenuButton onClick={() => setCurrentView("activity")}>
+          <Typography>Activity & History</Typography>
+        </MenuButton>
+        <MenuButton onClick={() => setCurrentView("contacts")}>
+          <Typography>Contacts</Typography>
+        </MenuButton>
+        <MenuButton
+          disabled
+          onClick={
+            // @todo set up receive view
+            () => null // setCurrentView("receive")
+          }
+        >
+          <Typography>Receive tokens</Typography>
+        </MenuButton>
+      </Grid2>
     </BodyLayout>
   );
 };

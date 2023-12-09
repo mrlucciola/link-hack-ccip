@@ -75,13 +75,15 @@ const ContinueButton: FC = observer(() => {
 const SelectRecipient: FC = () => {
   const isContactsOpen = useCreateTxnStore((s) => s.isContactsOpen);
   const setNavBack = useBaseStore((s) => s.setNavBack);
+  const setNavTitle = useBaseStore((s) => s.setNavTitle);
 
   useEffect(() => {
     setNavBack(undefined);
+    setNavTitle("Select recipient");
   }, []);
 
   return (
-    <BodyLayout justifyContent="flex-start" overflow="scroll">
+    <BodyLayout justifyContent="start">
       <Collapse in={!isContactsOpen} timeout={{ enter: 250, exit: 250 }}>
         <SendAmtField />
         <SendAddressField />

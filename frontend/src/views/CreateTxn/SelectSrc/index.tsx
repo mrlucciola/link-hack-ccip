@@ -42,7 +42,7 @@ const SelectSrc: FC = () => {
   }, []);
 
   return (
-    <BodyLayout justifyContent="space-between" overflow="scroll" flex="1">
+    <BodyLayout justifyContent="space-between" flex={1}>
       <SrcAddrList />
       <ConfirmSrcButton />
     </BodyLayout>

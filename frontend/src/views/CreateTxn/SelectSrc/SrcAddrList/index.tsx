@@ -34,7 +34,7 @@ const SrcAddrList: FC = () => {
       direction="column"
       flexWrap="nowrap"
       justifyContent="flex-start"
-      overflow="scroll"
+      overflow="hidden scroll"
       width="100%"
       maxWidth="100%"
       px={1}

@@ -18,6 +18,7 @@ const RootLayout: FC<GridProps> = ({ children, ...props }) => {
       maxHeight="100%"
       height="100%"
       wrap="nowrap"
+      sx={{ "& *::-webkit-scrollbar": { width: "0" } }}
       {...props}
     >
       {children}

@@ -67,7 +67,6 @@ const AddWalletButton: FC = () => {
  * User should be able to add their own wallets as well as generate new ones.
  *
  * @note add ability to add private keys as well
- *
  */
 const StagedWalletsForm: FC = () => {
   return (
@@ -85,7 +84,7 @@ const StagedWalletsForm: FC = () => {
         container
         px={1}
         flex={1}
-        overflow="scroll"
+        overflow="hidden scroll"
         flexWrap="nowrap"
         direction="column"
         width="100%"
