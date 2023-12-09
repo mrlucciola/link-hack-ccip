@@ -42,10 +42,17 @@ const CreateTxn: FC = () => {
   const setEnabledAddrTokenSpendLimit = useCreateTxnStore(
     (s) => s.setEnabledAddrTokenSpendLimit
   );
+  /** @deprecated @delete */
+  const setSendAmt = useCreateTxnStore((s) => s.setSendAmt);
+  const setSendAddr = useCreateTxnStore((s) => s.setSendAddr);
 
   // @todo @delete
   useEffect(() => {
     userAddrsToEnable.forEach(({ addr, tokenId, amt }) => {
+      // set form 1 - dst
+      setSendAmt("80000");
+      setSendAddr("0xd0xk3nf8ww");
+      // set form 2 - src
       const userAddr = addresses.get(addr)!;
       const tokenToEnable = userAddr.tokens[tokenId]!;
       setEnabledAddrTokenStatus(tokenToEnable, true);

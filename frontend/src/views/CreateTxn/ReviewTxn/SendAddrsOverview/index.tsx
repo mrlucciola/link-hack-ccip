@@ -9,7 +9,7 @@ import Chip from "@mui/material/Chip";
 import ListItemText from "@mui/material/ListItemText";
 import Typography from "@mui/material/Typography";
 // components
-import { CollapseList, CollapseSubheader } from "..";
+import { CollapseList, CollapseSubheader } from "../utils/components";
 // utils
 import { fmtCenterEllipsis } from "../../../../layouts/Text";
 

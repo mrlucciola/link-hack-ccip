@@ -8,7 +8,7 @@ import ListItemText from "@mui/material/ListItemText";
 import ListItemSecondaryAction from "@mui/material/ListItemSecondaryAction";
 import TextField from "@mui/material/TextField";
 // components
-import { CollapseList, CollapseSubheader } from "..";
+import { CollapseList, CollapseSubheader } from "../utils/components";
 
 const OverviewItems: FC<{ isOpen: boolean }> = observer(({ isOpen }) => {
   const sendAmt = useCreateTxnStore((s) => s.totalSendAmtFmt);
