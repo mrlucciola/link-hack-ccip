@@ -14,8 +14,6 @@ import {
 } from "../../../mobx/data/supportedBlockchains";
 // data
 import { connectionInfo } from "../../../mobx/data/connection";
-// seed
-import { sendAddrs } from "./SendAddrsOverview";
 
 /** ## ReviewTxn store
  */
@@ -59,7 +57,7 @@ export class ReviewTxnStore implements StateStore {
   //////////////////////// ACTIONS ////////////////////////
   /** @deprecated mock fxn with mock data */
   async buildFeeRowItems() {
-    const enabledAddrs = sendAddrs; // @todo replace with: this.root.createTxn.enabledAddrs
+    const enabledAddrs = this.root.createTxn.enabledAddrs;
 
     const bcStore = new Map<TestnetId, number>();
     enabledAddrs.forEach((a) => {

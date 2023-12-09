@@ -26,16 +26,14 @@ export class CreateTxnStore implements StateStore {
 
   /////////////////////////////////////////////////////////
   ////////////////////// OBSERVABLES //////////////////////
-  currentView: CreateTxnViewType = "reviewTxn"; // default: selectRecipient
+  currentView: CreateTxnViewType = "selectRecipient";
   recipient: Recipient = {} as Recipient;
   enabledTokens: Map<string, EnabledAddrToken> = new Map<
     string,
     EnabledAddrToken
   >();
   // @todo (separate ticket) select tokens and amounts, currently defaults to usdc
-  // @delete - testing
-  totalSendAmt: number = 38928.12;
-  // totalSendAmt: number = 0;
+  totalSendAmt: number = 0;
   // @delete - testing
   sendAddr: string = "0xd0xk3nf8ww";
   // sendAddr: string = "";

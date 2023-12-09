@@ -89,9 +89,9 @@ const SelectRecipient: FC = () => {
         <SendAddressField />
       </Collapse>
 
-      <ContactSelector />
+      {/* <ContactSelector /> */}
 
-      <ContinueButton />
+      {/* <ContinueButton /> */}
     </BodyLayout>
   );
 };

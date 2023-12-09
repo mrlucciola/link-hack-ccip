@@ -6,7 +6,7 @@ import { RootStore } from ".";
 import { Contact, StateStore } from "../interfaces";
 import { UserAddress } from "../interfaces/address";
 // @delete seed data
-import { seedContactsMap, seedAddressesMap } from "../data/seed/seed-user";
+import { seedContactsMap, seedAddressesMap } from "../data/seed/seedUser";
 import { HDNodeWallet } from "ethers";
 import { UserWallet } from "../../views/Onboarding/interfaces";
 
