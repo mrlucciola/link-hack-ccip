@@ -10,7 +10,6 @@ import ContactSearch from "./ContactSearch";
 import ContactList from "./ContactList";
 
 /**
- *
  * @todo if click on contact w/ one addr, add to state and proceed
  * @todo if click on contact w/ mult addr, open modal/drawer to show the list of addrs
  */
@@ -22,7 +21,7 @@ const ContactSelector: FC = () => {
       container
       direction="column"
       justifyContent="flex-start"
-      overflow="scroll"
+      overflow="hidden"
       flexWrap="nowrap"
       flex={1}
     >
@@ -31,6 +30,7 @@ const ContactSelector: FC = () => {
         unmountOnExit
         in={isContactsOpen}
         timeout={{ enter: 500, exit: 250 }}
+        sx={{ overflow: "hidden scroll" }}
       >
         <ContactList />
       </Collapse>

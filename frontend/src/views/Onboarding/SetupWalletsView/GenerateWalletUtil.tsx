@@ -108,7 +108,7 @@ const GenerateWalletUtil: FC = () => {
             maxHeight: "300px",
           }}
           flexWrap="nowrap"
-          overflow="scroll"
+          overflow="hidden scroll"
         >
           <Typography variant="h6" component="h2">
             Your new wallet

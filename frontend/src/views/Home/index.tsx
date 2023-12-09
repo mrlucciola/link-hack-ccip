@@ -8,6 +8,7 @@ import Typography from "@mui/material/Typography";
 // import { SxProps } from "@mui/material";
 // components
 import BodyLayout from "../../layouts/BodyLayout";
+import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
 
 // const styleWaves: SxProps = {
 //   backgroundColor: "#60a4db",
@@ -66,6 +67,7 @@ const Home: FC = () => {
     setNavTitle("");
     setNavTitle("");
     setNavUtils([
+      // @todo add notification modal
       {
         id: "notifications",
         action: () => {},
@@ -82,25 +84,27 @@ const Home: FC = () => {
   }, []);
 
   return (
-    <BodyLayout overflow="hidden scroll" pl={1} pr={2}>
-      <MenuButton onClick={() => setCurrentView("portfolio")}>
-        <Typography>Portfolio</Typography>
-      </MenuButton>
-      <MenuButton onClick={() => setCurrentView("activity")}>
-        <Typography>Activity & History</Typography>
-      </MenuButton>
-      <MenuButton onClick={() => setCurrentView("contacts")}>
-        <Typography>Contacts</Typography>
-      </MenuButton>
-      <MenuButton
-        disabled
-        onClick={
-          // @todo set up receive view
-          () => null // setCurrentView("receive")
-        }
-      >
-        <Typography>Receive tokens</Typography>
-      </MenuButton>
+    <BodyLayout overflow="hidden scroll">
+      <Grid2 container direction="column" pt={1} pl={1} pr={2}>
+        <MenuButton onClick={() => setCurrentView("portfolio")}>
+          <Typography>Portfolio</Typography>
+        </MenuButton>
+        <MenuButton onClick={() => setCurrentView("activity")}>
+          <Typography>Activity & History</Typography>
+        </MenuButton>
+        <MenuButton onClick={() => setCurrentView("contacts")}>
+          <Typography>Contacts</Typography>
+        </MenuButton>
+        <MenuButton
+          disabled
+          onClick={
+            // @todo set up receive view
+            () => null // setCurrentView("receive")
+          }
+        >
+          <Typography>Receive tokens</Typography>
+        </MenuButton>
+      </Grid2>
     </BodyLayout>
   );
 };

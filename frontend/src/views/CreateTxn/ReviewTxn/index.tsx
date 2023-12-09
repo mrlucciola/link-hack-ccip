@@ -78,11 +78,11 @@ const ReviewTxn: FC = () => {
       subView: "selectSrc",
       navTo: () => setCurrentView("selectSrc"),
     });
-    setNavTitle("Review transaction")
+    setNavTitle("Review transaction");
   }, []);
 
   return (
-    <BodyLayout overflow="scroll">
+    <BodyLayout overflow="hidden scroll">
       <List>
         <RecipientOverview />
         <SendAddrsOverview />

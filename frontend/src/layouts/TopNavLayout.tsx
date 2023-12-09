@@ -6,6 +6,7 @@ import Paper, { PaperProps } from "@mui/material/Paper";
 
 type GridProps = GridPropsNamespace.Grid2Props;
 
+/** To be used for adjusting positioning for topnav elements as well as their contained elements */
 export const defaultNavHeight = 40;
 
 const TopNavLayout: FC<GridProps & PaperProps> = ({ children, ...props }) => {

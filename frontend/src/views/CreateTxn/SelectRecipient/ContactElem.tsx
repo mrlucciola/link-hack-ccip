@@ -100,6 +100,7 @@ const MultiAddrModal: FC<{
   return (
     <Modal open={isOpen} onClose={handleClose}>
       <Box
+        component={List}
         sx={{
           top: "50%",
           left: "50%",
@@ -109,10 +110,10 @@ const MultiAddrModal: FC<{
           borderRadius: 3,
           maxHeight: "60%",
           width: "90%",
+          "&::-webkit-scrollbar": { width: 0 },
         }}
         flexWrap="nowrap"
-        overflow="scroll"
-        component={List}
+        overflow="hidden scroll"
       >
         {addrElems}
       </Box>

@@ -129,10 +129,26 @@ const TopNav: FC = () => {
   }
 
   return (
-    <TopNavLayout justifyContent="unset" {...overrideProps}>
-      <NavBackButton />
-      <NavTitle />
-      <NavUtil />
+    <TopNavLayout {...overrideProps}>
+      <TopNavLayout
+        flex="1"
+        px={0.5}
+        {...{
+          ...overrideProps,
+          sx: {
+            background: `linear-gradient(
+              to top,
+              rgba(255, 255, 255, 1) 0%,
+              rgba(0, 0, 0, 0) 125%
+            )
+          `,
+          },
+        }}
+      >
+        <NavBackButton />
+        <NavTitle />
+        <NavUtil />
+      </TopNavLayout>
     </TopNavLayout>
   );
 };
