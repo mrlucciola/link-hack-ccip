@@ -1,14 +1,14 @@
 import { FC, useState } from "react";
 // state
 import { observer } from "mobx-react-lite";
-import { useCreateTxnStore, useReviewTxnStore } from "../../../../mobx/stores";
+import { useCreateTxnStore, useReviewTxnStore } from "../../../mobx/stores";
 // style
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import ListItemSecondaryAction from "@mui/material/ListItemSecondaryAction";
 import TextField from "@mui/material/TextField";
 // components
-import { CollapseList, CollapseSubheader } from "../utils/components";
+import { CollapseList, CollapseSubheader } from "./utils/components";
 
 const OverviewItems: FC<{ isOpen: boolean }> = observer(({ isOpen }) => {
   const sendAmt = useCreateTxnStore((s) => s.totalSendAmtFmt);

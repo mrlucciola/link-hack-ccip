@@ -7,7 +7,7 @@ import {
   fetchGasAmount,
   fetchGasPrice,
 } from "../../../../mobx/data/supportedBlockchains";
-import { ReviewTxnStore } from "../store";
+import { ReviewTxnStore } from "../../../../mobx/stores/ReviewTxnStore";
 import { StagedAddrToken } from "../../interfaces";
 
 /** @deprecated incomplete */

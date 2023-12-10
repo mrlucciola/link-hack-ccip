@@ -2,7 +2,7 @@ import { FC } from "react";
 // state
 import { observer } from "mobx-react-lite";
 import { useBaseStore } from "../../mobx/stores";
-import { BaseView } from "./store";
+import { BaseView } from "../../mobx/stores/store";
 // components
 import BodyLayout from "../../layouts/BodyLayout";
 import CreateTxn from "../CreateTxn";

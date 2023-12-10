@@ -1,7 +1,7 @@
 import { FC } from "react";
 // state
 import { observer } from "mobx-react-lite";
-import { useCreateTxnStore, useReviewTxnStore } from "../../../../mobx/stores";
+import { useCreateTxnStore, useReviewTxnStore } from "../../../mobx/stores";
 // style
 import Button from "@mui/material/Button";
 // interfaces

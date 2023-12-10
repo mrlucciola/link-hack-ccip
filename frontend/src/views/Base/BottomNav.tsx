@@ -7,7 +7,7 @@ import Grid from "@mui/material/Unstable_Grid2/Grid2";
 import BottomNavigation from "@mui/material/BottomNavigation";
 import BottomNavigationAction from "@mui/material/BottomNavigationAction";
 // data
-import { BaseView, baseViewsMap } from "./store";
+import { BaseView, baseViewsMap } from "../../mobx/stores/store";
 
 /** Bottom navigation panel
  * Contains items for switching sub-views within the `base` view:

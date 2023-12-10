@@ -5,7 +5,7 @@ import { useCreateTxnStore, useUserStore } from "../../mobx/stores";
 // components
 import SelectRecipient from "./SelectRecipient";
 import SelectSrc from "./SelectSrc";
-import ReviewTxn from "./ReviewTxn";
+import ReviewTxn from "./ReviewTxn/ConfirmSubmitButton";
 // seed - @todo @delete
 import { userAddrsToEnable } from "../../mobx/data/seed/enabledAddrs";
 

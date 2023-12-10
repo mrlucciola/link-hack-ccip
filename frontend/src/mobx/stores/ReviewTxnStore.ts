@@ -1,19 +1,19 @@
 import { Transaction } from "ethers";
 // state
 import { makeAutoObservable } from "mobx";
-import { RootStore } from "../../../mobx/stores";
+import { RootStore } from ".";
 // interfaces
-import { Contact, StateStore } from "../../../mobx/interfaces";
-import { StagedAddrToken } from "../interfaces";
+import { Contact, StateStore } from "../interfaces";
+import { StagedAddrToken } from "../../views/CreateTxn/interfaces";
 // utils
-import { fmtMktValue } from "../../../utils/fmt";
-import { buildAndSignTxn } from "./utils/transaction";
+import { fmtMktValue } from "../../utils/fmt";
+import { buildAndSignTxn } from "../../views/CreateTxn/ReviewTxn/utils/transaction";
 import {
   TestnetId,
   fetchTxnCost,
-} from "../../../mobx/data/supportedBlockchains";
+} from "../data/supportedBlockchains";
 // data
-import { connectionInfo } from "../../../mobx/data/connection";
+import { connectionInfo } from "../data/connection";
 
 /** ## ReviewTxn store
  */

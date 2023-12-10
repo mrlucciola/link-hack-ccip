@@ -1,21 +1,21 @@
 // state
 import { makeAutoObservable } from "mobx";
-import { StateStore } from "../../mobx/interfaces";
-import { RootStore } from "../../mobx/stores";
+import { StateStore } from "../interfaces";
+import { RootStore } from ".";
 // interfaces
-import { CreateTxnViewType } from ".";
-import { AddrToken, TokenLookupId } from "../../mobx/interfaces/token";
+import { CreateTxnViewType } from "../../views/CreateTxn";
+import { AddrToken, TokenLookupId } from "../interfaces/token";
 import {
   EnabledAddr,
   EnabledAddrToken,
   Recipient,
   newEnabledAddr,
   newEnabledAddrToken,
-} from "./interfaces";
-import { TestnetId } from "../../mobx/data/supportedBlockchains";
+} from "../../views/CreateTxn/interfaces";
+import { TestnetId } from "../data/supportedBlockchains";
 // utils
 import { fmtMktValue } from "../../utils/fmt";
-import { AddressLookupId } from "../../mobx/interfaces/address";
+import { AddressLookupId } from "../interfaces/address";
 
 /** ## CreateTxn store
  */
