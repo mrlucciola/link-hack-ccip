@@ -1,37 +1,36 @@
-import { config } from "@chainlink/env-enc";
 import { SupportedNetwork } from "../types";
 
 const getProviderRpcUrl = (network: SupportedNetwork): string => {
-  config();
+  //config();
   let rpcUrl: string | undefined;
 
   switch (network) {
     case "ethereumMainnet":
-      rpcUrl = process.env.ETHEREUM_MAINNET_RPC_URL;
+      rpcUrl = import.meta.env.VITE_ETHEREUM_MAINNET_RPC_URL;
       break;
     case "ethereumSepolia":
-      rpcUrl = process.env.ETHEREUM_SEPOLIA_RPC_URL;
+      rpcUrl = import.meta.env.VITE_ETHEREUM_SEPOLIA_RPC_URL;
       break;
     case "optimismMainnet":
-      rpcUrl = process.env.OPTIMISM_MAINNET_RPC_URL;
+      rpcUrl = import.meta.env.VITE_OPTIMISM_MAINNET_RPC_URL;
       break;
     case "optimismGoerli":
-      rpcUrl = process.env.OPTIMISM_GOERLI_RPC_URL;
+      rpcUrl = import.meta.env.VITE_OPTIMISM_GOERLI_RPC_URL;
       break;
     case "arbitrumTestnet":
-      rpcUrl = process.env.ARBITRUM_TESTNET_RPC_URL;
+      rpcUrl = import.meta.env.VITE_ARBITRUM_TESTNET_RPC_URL;
       break;
     case "avalancheMainnet":
-      rpcUrl = process.env.AVALANCHE_MAINNET_RPC_URL;
+      rpcUrl = import.meta.env.VITE_AVALANCHE_MAINNET_RPC_URL;
       break;
     case "avalancheFuji":
-      rpcUrl = process.env.AVALANCHE_FUJI_RPC_URL;
+      rpcUrl = import.meta.env.VITE_AVALANCHE_FUJI_RPC_URL;
       break;
     case "polygonMainnet":
-      rpcUrl = process.env.POLYGON_MAINNET_RPC_URL;
+      rpcUrl = import.meta.env.VITE_POLYGON_MAINNET_RPC_URL;
       break;
     case "polygonMumbai":
-      rpcUrl = process.env.POLYGON_MUMBAI_RPC_URL;
+      rpcUrl = import.meta.env.VITE_POLYGON_MUMBAI_RPC_URL;
       break;
     default:
       throw new Error("Unknown network: " + network);
@@ -45,8 +44,8 @@ const getProviderRpcUrl = (network: SupportedNetwork): string => {
 };
 
 const getPrivateKey = (): string => {
-  config();
-  const privateKey = process.env.PRIVATE_KEY;
+  //config();
+  const privateKey = import.meta.env.VITE_PRIVATE_KEY;
   if (!privateKey)
     throw new Error(
       "private key not provided - check your environment variables"

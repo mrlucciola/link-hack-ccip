@@ -6,6 +6,18 @@ type NetworkConfig = {
   chainSelector: string;
 };
 
+const supportedNetworks = [
+  "ethereumMainnet",
+  "ethereumSepolia",
+  "optimismMainnet",
+  "optimismGoerli",
+  "arbitrumTestnet",
+  "avalancheMainnet",
+  "avalancheFuji",
+  "polygonMainnet",
+  "polygonMumbai",
+];
+
 const ethereumMainnet: NetworkConfig = {
   address: "0xE561d5E02207fb5eB32cca20a699E0d8919a1476",
   chainSelector: "5009297550715157269",
@@ -76,4 +88,4 @@ const getRouterConfig = (network: SupportedNetwork): NetworkConfig => {
   }
 };
 
-export { getRouterConfig, SupportedNetwork };
+export { getRouterConfig, supportedNetworks };

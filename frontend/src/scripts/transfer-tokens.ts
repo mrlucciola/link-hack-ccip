@@ -11,52 +11,18 @@ import erc20Abi from "../abi/IERC20Metadata.json";
 
 import { SupportedNetwork } from "./types/index";
 
-// Arguments handling function
-interface HandleArgumentsReturn {
-  sourceChain: string;
-  destinationChain: string;
-  destinationAccount: string;
-  tokenAddress: string;
-  amount: BigNumberish;
-  feeTokenAddress?: string;
-}
-
 // pay fees with native token: node src/transfer-tokens.js ethereumSepolia avalancheFuji 0x9d087fC03ae39b088326b67fA3C788236645b717 0xFd57b4ddBf88a4e07fF4e34C487b99af2Fe82a05 100
 // pay fees with transferToken: node src/transfer-tokens.js ethereumSepolia avalancheFuji 0x9d087fC03ae39b088326b67fA3C788236645b717 0xFd57b4ddBf88a4e07fF4e34C487b99af2Fe82a05 100 0x779877A7B0D9E8603169DdbD7836e478b4624789
 // pay fees with a wrapped native token: node src/transfer-tokens.js ethereumSepolia avalancheFuji 0x9d087fC03ae39b088326b67fA3C788236645b717 0xFd57b4ddBf88a4e07fF4e34C487b99af2Fe82a05 100 0x097D90c9d3E0B50Ca60e1ae45F6A81010f9FB534
-const handleArguments = (): HandleArgumentsReturn => {
-  if (process.argv.length !== 7 && process.argv.length !== 8) {
-    // feeTokenAddress is optional
-    throw new Error("Wrong number of arguments");
-  }
 
-  const sourceChain = process.argv[2];
-  const destinationChain = process.argv[3];
-  const destinationAccount = process.argv[4];
-  const tokenAddress = process.argv[5];
-  const amount = BigInt(process.argv[6]);
-  const feeTokenAddress = process.argv[7];
-
-  return {
-    sourceChain,
-    destinationChain,
-    destinationAccount,
-    tokenAddress,
-    amount,
-    feeTokenAddress,
-  };
-};
-
-const transferTokens = async (): Promise<void> => {
-  const {
-    sourceChain,
-    destinationChain,
-    destinationAccount,
-    tokenAddress,
-    amount,
-    feeTokenAddress,
-  } = handleArguments();
-
+const transferTokens = async (
+  sourceChain: string,
+  destinationChain: string,
+  destinationAccount: string,
+  tokenAddress: string,
+  amount: BigNumberish,
+  feeTokenAddress?: string
+): Promise<void> => {
   /* 
   ==================================================
       Section: INITIALIZATION
@@ -340,7 +306,4 @@ const transferTokens = async (): Promise<void> => {
   }, TIMEOUT);
 };
 
-transferTokens().catch((e: Error) => {
-  console.error(e);
-  process.exit(1);
-});
+export default transferTokens;
