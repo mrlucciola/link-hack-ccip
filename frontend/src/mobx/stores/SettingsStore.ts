@@ -1,9 +1,9 @@
 // state
 import { makeAutoObservable } from "mobx";
-import { StateStore } from "../../mobx/interfaces";
-import { RootStore } from "../../mobx/stores";
+import { StateStore } from "../interfaces";
+import { RootStore } from ".";
 // interfaces
-import { SettingsViewType } from "./interfaces";
+import { SettingsViewType } from "../../views/Settings/interfaces";
 
 /** ## Settings store
  */

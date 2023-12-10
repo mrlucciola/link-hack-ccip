@@ -1,7 +1,7 @@
 import { FC, useState } from "react";
 // state
 import { observer } from "mobx-react-lite";
-import { useCreateTxnStore, useUserStore } from "../../../../mobx/stores";
+import { useCreateTxnStore, useUserStore } from "../../../mobx/stores";
 // style
 import ListItem from "@mui/material/ListItem";
 import Avatar from "@mui/material/Avatar";
@@ -9,9 +9,9 @@ import Chip from "@mui/material/Chip";
 import ListItemText from "@mui/material/ListItemText";
 import Typography from "@mui/material/Typography";
 // components
-import { CollapseList, CollapseSubheader } from "../utils/components";
+import { CollapseList, CollapseSubheader } from "./utils/components";
 // utils
-import { fmtCenterEllipsis } from "../../../../layouts/Text";
+import { fmtCenterEllipsis } from "../../../layouts/Text";
 
 const SendAddrItems: FC<{ isOpen: boolean }> = observer(({ isOpen }) => {
   // @todo switch to this
