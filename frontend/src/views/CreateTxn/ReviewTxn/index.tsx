@@ -1,7 +1,11 @@
 import { FC, useEffect } from "react";
 // state
 import { observer } from "mobx-react-lite";
-import { useBaseStore, useCreateTxnStore } from "../../../mobx/stores";
+import {
+  useBaseStore,
+  useCreateTxnStore,
+  useReviewTxnStore,
+} from "../../../mobx/stores";
 // style
 import List from "@mui/material/List";
 // components
@@ -30,14 +34,21 @@ const ReviewTxn: FC = () => {
   const setNavBack = useBaseStore((s) => s.setNavBack);
   const setNavTitle = useBaseStore((s) => s.setNavTitle);
   const setCurrentView = useCreateTxnStore((s) => s.setCurrentView);
+  const optimizeTokens = useReviewTxnStore((s) => s.optimizeTokens);
 
   useEffect(() => {
+    // Update the view state
     setNavBack({
       baseView: "createTxn",
       subView: "selectSrc",
       navTo: () => setCurrentView("selectSrc"),
     });
     setNavTitle("Review transaction");
+
+    // Calculate optimal set of addresses to send from
+    console.log("(pre) optimizing");
+    optimizeTokens();
+    console.log("(post) optimized");
   }, []);
 
   return (

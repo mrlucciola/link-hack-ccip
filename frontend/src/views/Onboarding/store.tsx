@@ -1,10 +1,10 @@
 // state
 import { makeAutoObservable } from "mobx";
+import { OnboardingViewType } from "./interfaces";
 import {
-  OnboardingViewType,
   UserWallet,
   newWalletFromMnemonic,
-} from "./interfaces";
+} from "../../mobx/interfaces/wallet";
 
 /** ## Onboarding store
  */

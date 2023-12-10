@@ -22,7 +22,7 @@ const SendAddrItems: FC<{ isOpen: boolean }> = observer(({ isOpen }) => {
   const sendAddrsElems: JSX.Element[] = [];
   // For each enabled addr, look up info for display
   enabledAddrs.forEach((a) => {
-    const addrOrig = addresses.get(a.value)!;
+    const addrOrig = addresses.get(a.lookupId)!;
     // format values
     const addrFmt = (
       <>

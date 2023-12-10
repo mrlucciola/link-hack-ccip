@@ -1,3 +1,4 @@
+import { HDNodeWallet } from "ethers";
 import { TestnetId } from "../../mobx/data/supportedBlockchains";
 import { TokenId, lookupTokenMktValue } from "../../mobx/data/tokens";
 import { Contact } from "../../mobx/interfaces";
@@ -18,9 +19,10 @@ export class EnabledAddr extends BaseUserAddress<EnabledAddrToken> {
   constructor(
     value: string,
     blockchainId: TestnetId,
-    public tokens: IAddrTokens<EnabledAddrToken>
+    wallet: HDNodeWallet,
+    tokens: IAddrTokens<EnabledAddrToken>
   ) {
-    super(value, blockchainId, tokens);
+    super(value, blockchainId, wallet, tokens);
   }
 
   /** Enabled amount, not holdings */
@@ -40,11 +42,13 @@ export class EnabledAddr extends BaseUserAddress<EnabledAddrToken> {
 export const newEnabledAddr = (
   value: string,
   blockchainId: TestnetId,
+  wallet: HDNodeWallet,
   tokens?: IAddrTokens<EnabledAddrToken>
 ): EnabledAddr => {
   return new EnabledAddr(
     value,
     blockchainId,
+    wallet,
     tokens || ({} as IAddrTokens<EnabledAddrToken>)
   );
 };
@@ -73,3 +77,7 @@ export const newEnabledAddrToken = (
 ): EnabledAddrToken => {
   return new EnabledAddrToken(id, blockchainId, addrId, spendLimit, isEnabled);
 };
+
+export interface StagedAddrToken extends Omit<EnabledAddrToken, "isEnabled"> {
+  fee: number;
+}

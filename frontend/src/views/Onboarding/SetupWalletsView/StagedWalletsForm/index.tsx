@@ -8,8 +8,8 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 // components
 import WalletInputForm from "./WalletInputForm";
+import { UserWallet } from "../../../../mobx/interfaces/wallet";
 // interfaces
-import { UserWallet } from "../../interfaces";
 
 const newBlankWallet = (): UserWallet => {
   return {

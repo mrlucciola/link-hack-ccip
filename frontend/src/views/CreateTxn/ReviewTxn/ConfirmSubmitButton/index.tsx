@@ -5,11 +5,11 @@ import { useCreateTxnStore, useReviewTxnStore } from "../../../../mobx/stores";
 // style
 import Button from "@mui/material/Button";
 // interfaces
-import { EnabledAddr } from "../../interfaces";
 
 const ConfirmSubmitButton: FC = () => {
   const areAllFormsValid = useCreateTxnStore((s) => s.areAllFormsValid);
   const buildAndSignTxns = useReviewTxnStore((s) => s.buildAndSignTxns);
+  const stagedTokens = useReviewTxnStore((s) => s.stagedTokens);
 
   /**
    * 1. @todo Optimize addresses to use
@@ -17,9 +17,7 @@ const ConfirmSubmitButton: FC = () => {
    * 1. @todo Submit transactions to their respective RPC nodes
    */
   const handleClickSubmit = async () => {
-    const optimizedAddrs: EnabledAddr[] = [];
-
-    const signedTxns = await buildAndSignTxns(optimizedAddrs);
+    const signedTxns = await buildAndSignTxns(stagedTokens);
 
     signedTxns.forEach((st) => {
       console.log("sending signed transaction:", st);
