@@ -6,6 +6,7 @@ import { useCreateTxnStore, useReviewTxnStore } from "../../../../mobx/stores";
 import Button from "@mui/material/Button";
 // interfaces
 import { EnabledAddr } from "../../interfaces";
+import transferTokens from "../../../../scripts/transfer-tokens";
 
 const ConfirmSubmitButton: FC = () => {
   const areAllFormsValid = useCreateTxnStore((s) => s.areAllFormsValid);
@@ -17,13 +18,22 @@ const ConfirmSubmitButton: FC = () => {
    * 1. @todo Submit transactions to their respective RPC nodes
    */
   const handleClickSubmit = async () => {
-    const optimizedAddrs: EnabledAddr[] = [];
+    // const optimizedAddrs: EnabledAddr[] = [];
 
-    const signedTxns = await buildAndSignTxns(optimizedAddrs);
+    // const signedTxns = await buildAndSignTxns(optimizedAddrs);
 
-    signedTxns.forEach((st) => {
-      console.log("sending signed transaction:", st);
-    });
+    // signedTxns.forEach((st) => {
+    //   console.log("sending signed transaction:", st);
+    // });
+    transferTokens(
+      "ethereumSepolia",
+      "polygonMumbai",
+      "0xcb6A4EA723faAbFdc3ac528fCb4c4b52767505a1",
+      "0xFd57b4ddBf88a4e07fF4e34C487b99af2Fe82a05",
+      1000000000000000,
+      "0x779877A7B0D9E8603169DdbD7836e478b4624789"
+    );
+    console.log("called in btx comp");
   };
 
   return (
