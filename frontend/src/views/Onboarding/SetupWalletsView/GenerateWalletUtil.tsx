@@ -13,7 +13,7 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import { FaCopy } from "react-icons/fa";
 // interfaces
-import { UserWallet, newUserWallet } from "../interfaces";
+import { UserWallet, newUserWallet } from "../../../mobx/interfaces/wallet";
 
 const textInfoStyle = {
   "& .MuiInputBase-input": {

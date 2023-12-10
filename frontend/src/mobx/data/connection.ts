@@ -1,4 +1,4 @@
-import { AbstractProvider, Contract, JsonRpcProvider } from "ethers";
+import { AbstractProvider, Contract } from "ethers";
 import { TestnetId } from "./supportedBlockchains";
 import { newProvider, newSenderContractInstance } from "../../utils/connection";
 
