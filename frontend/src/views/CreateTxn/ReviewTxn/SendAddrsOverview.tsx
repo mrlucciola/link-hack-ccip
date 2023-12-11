@@ -4,9 +4,9 @@ import { observer } from "mobx-react-lite";
 import { useCreateTxnStore, useUserStore } from "../../../mobx/stores";
 // style
 import ListItem from "@mui/material/ListItem";
-import Avatar from "@mui/material/Avatar";
-import Chip from "@mui/material/Chip";
 import ListItemText from "@mui/material/ListItemText";
+import ListItemSecondaryAction from "@mui/material/ListItemSecondaryAction";
+import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
 // components
 import { CollapseList, CollapseSubheader } from "./utils/components";
@@ -23,41 +23,50 @@ const SendAddrItems: FC<{ isOpen: boolean }> = observer(({ isOpen }) => {
   // For each enabled addr, look up info for display
   enabledAddrs.forEach((a) => {
     const addrOrig = addresses.get(a.lookupId)!;
-    // format values
-    const addrFmt = (
-      <>
-        {fmtCenterEllipsis(addrOrig.value)}
-        {addrOrig.blockchainInfo.img?.sm ? (
-          <Avatar src={addrOrig.blockchainInfo.img?.sm} />
-        ) : (
-          <Chip
-            label={addrOrig.blockchainInfo.id.toLocaleUpperCase()}
-            size="small"
-            sx={{ mt: -0.4, mx: 1, fontWeight: "500" }}
-            component="span"
-          />
-        )}
-      </>
-    );
 
     // If no label, show address
-    const primaryText = addrOrig.label || addrFmt;
-    const secondaryText = addrOrig.label ? addrFmt : undefined;
+    const primary = addrOrig.label || fmtCenterEllipsis(addrOrig.value);
+    const secondary = addrOrig.label
+      ? fmtCenterEllipsis(addrOrig.value, 7)
+      : "";
+
     sendAddrsElems.push(
-      <ListItem key={`${a.lookupId}`} component="div">
+      <ListItem key={a.lookupId} component="div" ContainerComponent="div">
         <ListItemText
-          primaryTypographyProps={{ fontWeight: 900 }}
-          primary={primaryText}
-          secondary={
-            <>
-              {secondaryText}
-              {secondaryText && <br />}
-              <Typography variant="caption">
-                {addrOrig.totalMktValueFmt}
-              </Typography>
-            </>
-          }
+          primary={primary}
+          secondary={secondary}
+          sx={{ overflow: "hidden", maxWidth: "80%" }}
+          primaryTypographyProps={{
+            textOverflow: "ellipsis",
+            noWrap: true,
+            flexWrap: "nowrap",
+          }}
+          secondaryTypographyProps={{
+            textOverflow: "ellipsis",
+            noWrap: true,
+            flexWrap: "nowrap",
+          }}
         />
+
+        <ListItemSecondaryAction
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Typography variant="caption" mr={1}>
+            {a.blockchainInfo.symbol.toLocaleUpperCase()}
+          </Typography>
+          <Avatar
+            src={a.blockchainInfo.img?.sm}
+            sx={{ width: "25px", height: "25px" }}
+          >
+            <Typography>
+              {a.blockchainInfo.symbol.toLocaleUpperCase()}
+            </Typography>
+          </Avatar>
+        </ListItemSecondaryAction>
       </ListItem>
     );
   });

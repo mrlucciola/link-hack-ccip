@@ -32,6 +32,7 @@ import ConfirmSrcButton from "./ConfirmSrcButton";
 const SelectSrc: FC = () => {
   const setCurrentView = useCreateTxnStore((s) => s.setCurrentView);
   const setNavBack = useBaseStore((s) => s.setNavBack);
+  const setNavTitle = useBaseStore((s) => s.setNavTitle);
 
   useEffect(() => {
     setNavBack({
@@ -39,7 +40,7 @@ const SelectSrc: FC = () => {
       subView: "selectRecipient",
       navTo: () => setCurrentView("selectRecipient"),
     });
-    
+    setNavTitle("Select send-addresses");
   }, []);
 
   return (

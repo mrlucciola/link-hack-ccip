@@ -20,6 +20,10 @@ export abstract class BaseAddress {
     /** State lookup ID for blockchain */
     public blockchainId: TestnetId
   ) {}
+
+  get blockchainInfo(): BlockchainInfo<TestnetId> {
+    return getBlockchainInfo(this.blockchainId);
+  }
 }
 
 // @todo add wallet to lookup id: `${string]-${TestnetId}-${string}`
@@ -45,9 +49,7 @@ export abstract class BaseUserAddress<
   get lookupId(): AddressLookupId {
     return `${this.blockchainId}-${this.value}`;
   }
-  get blockchainInfo(): BlockchainInfo<TestnetId> {
-    return getBlockchainInfo(this.blockchainId);
-  }
+
   get totalMktValue(): number {
     let sum = 0;
 

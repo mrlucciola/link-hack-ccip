@@ -8,7 +8,11 @@ import { StagedAddrToken } from "../../views/CreateTxn/interfaces";
 // utils
 import { fmtMktValue } from "../../utils/fmt";
 import { buildAndSignTxn } from "../../views/CreateTxn/ReviewTxn/utils/transaction";
-import { TestnetId, fetchTxnCost } from "../data/supportedBlockchains";
+import {
+  TestnetId,
+  fetchTxnCost,
+  getBlockchainInfo,
+} from "../data/supportedBlockchains";
 // data
 import { connectionInfo } from "../data/connection";
 
@@ -45,46 +49,49 @@ export class ReviewTxnStore implements StateStore {
 
     return returnContact;
   }
-  // @note should be a getter
-  totalFees: number = 292;
   get totalFeesFmt(): string {
     return fmtMktValue(this.totalFees);
   }
-  feeRowItems: { blockchain: string; txnCost: string }[] = [];
+  get feeRowItems() {
+    // Get list of unique blockchains to be used in transaction
+    const bcStore = new Map<TestnetId, { txnCt: number; fee: number }>();
+    this.stagedTokens.forEach((token) => {
+      const newTxnCt = bcStore.get(token.blockchainId)
+        ? bcStore.get(token.blockchainId)!.txnCt + 1
+        : 1;
+      bcStore.set(token.blockchainId, { txnCt: newTxnCt, fee: token.fee });
+    });
+
+    let totalTxnFees = 0;
+
+    // build data-grid row-items
+    const rows: { blockchain: string; txnCost: number; txnCostFmt: string }[] =
+      [];
+    bcStore.forEach((bc, bcId) => {
+      // Fee cost per txn
+      totalTxnFees += bc.fee;
+
+      rows.push({
+        blockchain: getBlockchainInfo(bcId).symbol,
+        txnCost: bc.fee * bc.txnCt,
+        txnCostFmt: fmtMktValue(bc.fee * bc.txnCt),
+      });
+    });
+
+    return rows;
+  }
+  get totalFees() {
+    let sum = 0;
+    this.feeRowItems.forEach((feeItem) => {
+      sum += feeItem.txnCost;
+    });
+    return sum;
+  }
   /////////////////////// COMPUTEDS ///////////////////////
   /////////////////////////////////////////////////////////
 
   /////////////////////////////////////////////////////////
   //////////////////////// ACTIONS ////////////////////////
-  /** @deprecated mock fxn with mock data */
-  async buildFeeRowItems() {
-    const enabledAddrs = this.root.createTxn.enabledAddrs;
-
-    const bcStore = new Map<TestnetId, number>();
-    enabledAddrs.forEach((a) => {
-      const newTxnCt = bcStore.get(a.blockchainId)
-        ? bcStore.get(a.blockchainId)! + 1
-        : 1;
-      bcStore.set(a.blockchainId, newTxnCt);
-    });
-
-    let totalTxnCost = 0;
-
-    // build data-grid row-items
-    const rows: { blockchain: string; txnCost: string }[] = [];
-    for (const item of bcStore.entries()) {
-      // Fee cost per txn
-      const txnCost = await fetchTxnCost(item[0]);
-      totalTxnCost += txnCost;
-      rows.push({
-        blockchain: item[0].toLocaleUpperCase(),
-        txnCost: fmtMktValue(txnCost * item[1]),
-      });
-    }
-
-    this.feeRowItems = rows;
-    this.totalFees = totalTxnCost;
-  }
   /** Stage tokens for sending
    * 1. Sort tokens by `balance / txn cost` in descending order;
    * 1.  Iter thru tokens from `enabled-tokens` state prop,  */
@@ -100,9 +107,10 @@ export class ReviewTxnStore implements StateStore {
         addrLookupId: t.addrLookupId,
         mktValue: t.mktValue,
         mktValueFmt: t.mktValueFmt,
+        tokenInfo: t.tokenInfo,
         fee: await fetchTxnCost(t.blockchainId),
+        sendAmt: 0,
       };
-      // console.log("ET - WithFee:", enabledTokenWithFee);
       enabledTokensWithFee.push(enabledTokenWithFee);
     });
 
@@ -115,7 +123,34 @@ export class ReviewTxnStore implements StateStore {
       return 0;
     });
 
-    this.stagedTokens = enabledTokensWithFee;
+    // Run optimization
+    const targetAmt = this.root.createTxn.totalSendAmt;
+    let remainingAmt = targetAmt;
+    const stagedTokens: StagedAddrToken[] = [];
+
+    for (let idx = 0; idx < enabledTokensWithFee.length; idx++) {
+      const token = enabledTokensWithFee[idx];
+      console.log(
+        token.tokenInfo.label,
+        token.spendLimit,
+        remainingAmt,
+        ` - fee ${token.fee} - `,
+        token.spendLimit > remainingAmt + token.fee
+      );
+      // Check if this token's spend-limit is greater than the remaining send-amount
+      if (token.spendLimit > remainingAmt + token.fee) {
+        // If true, add the remaining send-amount
+        token.sendAmt = remainingAmt;
+        stagedTokens.push(token);
+        break;
+      } else {
+        // Else, add the full spend-limit of the token
+        token.sendAmt = token.spendLimit;
+        stagedTokens.push(token);
+      }
+    }
+
+    this.stagedTokens = stagedTokens;
   }
   //////////////////////// ACTIONS ////////////////////////
   /////////////////////////////////////////////////////////

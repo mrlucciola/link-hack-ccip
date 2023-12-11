@@ -15,6 +15,7 @@ import { UserWallet, WalletLookupId } from "../../mobx/interfaces/wallet";
 import { BaseAddrToken } from "../interfaces/token";
 // @delete seed data
 import { seedContactsMap } from "../data/seed/seedUser";
+import { fmtMktValue } from "../../utils/fmt";
 
 /** ## User store
  */
@@ -43,6 +44,15 @@ export class UserStore implements StateStore {
 
   /////////////////////////////////////////////////////////
   /////////////////////// COMPUTEDS ///////////////////////
+  get portfolioMktValue(): number {
+    let sum = 0;
+    this.addresses.forEach((a) => (sum += a.totalMktValue));
+
+    return sum;
+  }
+  get portfolioMktValueFmt(): string {
+    return fmtMktValue(this.portfolioMktValue);
+  }
   /////////////////////// COMPUTEDS ///////////////////////
   /////////////////////////////////////////////////////////
 

@@ -34,9 +34,9 @@ export class CreateTxnStore implements StateStore {
     EnabledAddrToken
   >();
   // @todo (separate ticket) select tokens and amounts, currently defaults to usdc
-  totalSendAmt: number = 0;
+  totalSendAmt: number = 0; // 800
   // @delete - testing
-  sendAddr: string = "0xd0xk3nf8ww";
+  sendAddr: string = ""; // 0x4Ee318c930C1284D2379965D45015Ff17B96950A
   // sendAddr: string = "";
   sendBlockchain: TestnetId = "maticMumbai";
   /** Local state variable that involved a lot of prop drilling. */
@@ -105,7 +105,6 @@ export class CreateTxnStore implements StateStore {
   get totalSpendLimitFmt(): string {
     return fmtMktValue(this.totalSpendLimit);
   }
-
   get totalSendAmtFmt(): string {
     return fmtMktValue(this.totalSendAmt);
   }
