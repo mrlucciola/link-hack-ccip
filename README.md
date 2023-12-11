@@ -19,23 +19,23 @@ Follow these steps to set up and use the FLIP Wallet on your system:
    git clone https://github.com/mrlucciola/link-hack-ccip.git
    ```
 2. **Navigate to the Directory**: Once cloning is complete, navigate to the created directory:
-     ```bash
-    cd link-hack-ccip
-     ```
-3.**Install Dependencies**: Install all the necessary dependencies for the project using Yarn:
-    ```bash
-    yarn
-    ```
+   ```bash
+   cd link-hack-ccip
+   ```
+3. **Install Dependencies**: Install all the necessary dependencies for the project using Yarn:
+   ```bash
+   yarn
+   ```
 4. **Go to the Frontend Folder**: Change to the frontend directory:
-    ```bash
-    cd  /frontend
-    ```
+   ```bash
+   cd  /frontend
+   ```
 5. **Create an `.env.local` file**: Create a `.env.local` file in the frontend directory. Use the `.env.example` file as a template for setting up your environment variables.
 
 6. **Start the Development Server**: Run the development server using Yarn:
-    ```bash
-    yarn dev
-    ```
+   ```bash
+   yarn dev
+   ```
 7. **Load the Extension in Chrome**: Open Chrome and navigate to the Extensions management page. You can usually find this by clicking the menu in the top right corner, then selecting `More tools > Extensions`.
 
 8. **Load Unpacked Extension**: In the Extensions page, enable `Developer mode`, then click on `Load unpacked`. Navigate to the `/dist` folder located at `/link-hack-ccip/frontend/dist` and select it.
