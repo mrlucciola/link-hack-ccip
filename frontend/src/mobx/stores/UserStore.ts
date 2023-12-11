@@ -91,6 +91,15 @@ export class UserStore implements StateStore {
       walletsToAddOrSet.forEach((w) => this.rootWallets.set(w.lookupId, w));
     }
   }
+  setWalletAlias(walletLookupId: WalletLookupId, newAlias: string) {
+    const wallet = this.rootWallets.get(walletLookupId);
+
+    if (!wallet) throw new Error(`No wallet for lookupId: ${walletLookupId}`);
+
+    wallet.alias = newAlias;
+
+    this.rootWallets.set(walletLookupId, wallet);
+  }
   //////////////////////// ACTIONS ////////////////////////
   /////////////////////////////////////////////////////////
 

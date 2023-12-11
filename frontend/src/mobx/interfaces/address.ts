@@ -1,3 +1,4 @@
+import { HDNodeWallet } from "ethers";
 import {
   BlockchainInfo,
   TestnetId,
@@ -6,8 +7,6 @@ import {
 import { TokenId } from "../data/tokens";
 import { AddrToken, BaseAddrToken } from "./token";
 import { fmtMktValue } from "../../utils/fmt";
-import { WalletLookupId } from "./wallet";
-import { HDNodeWallet } from "ethers";
 
 export type IAddrTokens<T extends BaseAddrToken = BaseAddrToken> = {
   [key in TokenId]?: T;
@@ -41,10 +40,6 @@ export abstract class BaseUserAddress<
     super(value, blockchainId);
   }
 
-  /** @deprecated @todo implement */
-  get rootWalletLookupId(): WalletLookupId {
-    return "0-asdf";
-  }
   get lookupId(): AddressLookupId {
     return `${this.blockchainId}-${this.value}`;
   }
