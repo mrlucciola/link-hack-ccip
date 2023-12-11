@@ -7,6 +7,7 @@ import {
 import { TokenId } from "../data/tokens";
 import { AddrToken, BaseAddrToken } from "./token";
 import { fmtMktValue } from "../../utils/fmt";
+import { WalletLookupId } from "./wallet";
 
 export type IAddrTokens<T extends BaseAddrToken = BaseAddrToken> = {
   [key in TokenId]?: T;
@@ -35,6 +36,7 @@ export abstract class BaseUserAddress<
     /** The signer instance for this address.
      * Holds a private key, derived from its root wallet. */
     public wallet: HDNodeWallet,
+    public rootWalletLookupId: WalletLookupId,
     public tokens: IAddrTokens<T>
   ) {
     super(value, blockchainId);
@@ -65,19 +67,27 @@ export class UserAddress extends BaseUserAddress<AddrToken> {
     value: string,
     blockchainId: TestnetId,
     wallet: HDNodeWallet,
+    rootWalletLookupId: WalletLookupId,
     tokens: IAddrTokens<AddrToken>,
     public label: string
   ) {
-    super(value, blockchainId, wallet, tokens);
+    super(value, blockchainId, wallet, rootWalletLookupId, tokens);
   }
 }
 export const newAddress = (
   value: string,
   blockchainId: TestnetId,
   wallet: HDNodeWallet,
-  rootWalletLookupId: string,
+  rootWalletLookupId: WalletLookupId,
   label: string = "",
   tokens: IAddrTokens<AddrToken> = {} as IAddrTokens<AddrToken>
 ): UserAddress => {
-  return new UserAddress(value, blockchainId, wallet, tokens, label);
+  return new UserAddress(
+    value,
+    blockchainId,
+    wallet,
+    rootWalletLookupId,
+    tokens,
+    label
+  );
 };

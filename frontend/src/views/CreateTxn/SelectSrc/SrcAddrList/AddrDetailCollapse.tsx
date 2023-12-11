@@ -14,12 +14,19 @@ import SpendLimit from "./SpendLimit";
 // interfaces
 import { UserAddress } from "../../../../mobx/interfaces/address";
 import { AddrToken } from "../../../../mobx/interfaces/token";
+import Paper from "@mui/material/Paper";
 
 const AddrTokenElem: FC<{ token: AddrToken }> = observer(({ token }) => {
   const currentRootView = useBaseStore((s) => s.currentView);
 
   return (
-    <ListItem divider dense component="div" ContainerComponent="div">
+    <ListItem
+      divider
+      dense
+      component={Paper}
+      ContainerComponent="div"
+      sx={{ backgroundColor: "#f4f6fb" }}
+    >
       <ListItemAvatar>
         <Avatar sx={{ fontSize: "0.7em", fontWeight: 900 }}>
           {token.label}

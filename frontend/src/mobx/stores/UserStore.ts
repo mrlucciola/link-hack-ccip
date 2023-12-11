@@ -7,6 +7,7 @@ import { RootStore } from ".";
 import { Contact, StateStore } from "../interfaces";
 import {
   AddressLookupId,
+  BaseUserAddress,
   UserAddress,
   newAddress,
 } from "../interfaces/address";
@@ -147,7 +148,7 @@ export class UserStore implements StateStore {
    * 1. An instance of the BaseUserAddress type;
    * 1. An instance of the UserToken type;
    */
-  getWallet(
+  getAddrWallet(
     inputWithAddrLookupId: AddressLookupId | BaseAddrToken
   ): HDNodeWallet {
     let addrLookupId: AddressLookupId;
@@ -165,6 +166,25 @@ export class UserStore implements StateStore {
       throw new Error(`No wallet found for lookupId: ${inputWithAddrLookupId}`);
 
     return addr.wallet;
+  }
+  getRootWallet(
+    inputWithRootWalletLookupId: WalletLookupId | UserAddress
+  ): UserWallet {
+    let rootWalletLookupId: WalletLookupId;
+    if (inputWithRootWalletLookupId instanceof BaseUserAddress) {
+      rootWalletLookupId = inputWithRootWalletLookupId.rootWalletLookupId;
+    } else rootWalletLookupId = inputWithRootWalletLookupId;
+
+    const rootWallet = this.rootWallets.get(rootWalletLookupId);
+
+    if (!rootWallet) {
+      console.log(JSON.stringify(inputWithRootWalletLookupId));
+      throw new Error(
+        `No wallet found for lookupId: ${inputWithRootWalletLookupId}`
+      );
+    }
+
+    return rootWallet;
   }
   //////////////////////// HELPERS ////////////////////////
   /////////////////////////////////////////////////////////
