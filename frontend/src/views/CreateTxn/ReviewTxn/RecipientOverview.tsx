@@ -7,20 +7,39 @@ import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import ListItemSecondaryAction from "@mui/material/ListItemSecondaryAction";
 import TextField from "@mui/material/TextField";
+import { Avatar } from "@mui/material";
+import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
 // components
 import { CollapseList, CollapseSubheader } from "./utils/components";
+// utils
+import { fmtCenterEllipsis } from "../../../layouts/Text";
+import { getBlockchainInfo } from "../../../mobx/data/supportedBlockchains";
 
 const OverviewItems: FC<{ isOpen: boolean }> = observer(({ isOpen }) => {
   const sendAmt = useCreateTxnStore((s) => s.totalSendAmtFmt);
   const sendAddr = useCreateTxnStore((s) => s.sendAddr);
   const sendBlockchain = useCreateTxnStore((s) => s.sendBlockchain);
+  const sendBcInfo = getBlockchainInfo(sendBlockchain);
+
+  const primary = fmtCenterEllipsis(sendAddr, 6);
+  const secondary = (
+    <Grid2 container component="span">
+      {sendBcInfo.symbol.toLocaleUpperCase()}
+      <Avatar
+        src={sendBcInfo.img?.sm}
+        sx={{ width: "20px", height: "20px", ml: 1 }}
+        component="span"
+      />
+    </Grid2>
+  );
 
   return (
     <CollapseList isOpen={isOpen}>
-      <ListItem component="div" ContainerComponent="div">
+      <ListItem component="span" ContainerComponent="span">
         <ListItemText
-          primary={sendAddr}
-          secondary={sendBlockchain.toLocaleUpperCase()}
+          primary={primary}
+          secondary={secondary}
+          primaryTypographyProps={{ fontWeight: 800 }}
         />
 
         <ListItemSecondaryAction sx={{ maxWidth: "60%" }}>

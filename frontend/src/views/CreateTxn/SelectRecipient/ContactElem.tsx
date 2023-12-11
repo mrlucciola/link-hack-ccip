@@ -16,8 +16,6 @@ import Typography from "@mui/material/Typography";
 // interfaces
 import { Contact } from "../../../mobx/interfaces";
 import { UserAddress } from "../../../mobx/interfaces/address";
-import { TestnetId } from "../../../mobx/data/supportedBlockchains";
-// import { newRecipient } from "../interfaces";
 // utils
 import { fmtCenterEllipsis } from "../../../layouts/Text";
 
@@ -33,18 +31,18 @@ export const stringAvatar = (name: string) => {
 const BlockchainElemGroup: FC<{ addrs: UserAddress[] }> = observer(
   ({ addrs }) => {
     // build blockchain arr
-    const bcIdSet = new Set(addrs.map((a) => a.blockchainId));
-    const blockchainIds: TestnetId[] = Array.from(bcIdSet);
+    const bcIdSet = new Set(addrs.map((a) => a.blockchainInfo));
+    const blockchainIds = Array.from(bcIdSet);
 
     const blockchainElems = blockchainIds.map((bc, idx) => {
       return (
         <Avatar
           sx={{ width: 25, height: 25, fontSize: "8pt" }}
           key={`${bc}${idx}`}
-          // src={getBlockchainInfo(bc).img.sm}
+          src={bc.img?.sm}
           // @todo add tooltip to show label
         >
-          {bc}
+          {bc.symbol.toLocaleUpperCase()}
         </Avatar>
       );
     });
@@ -58,6 +56,43 @@ const BlockchainElemGroup: FC<{ addrs: UserAddress[] }> = observer(
     );
   }
 );
+
+const ContactElemLayout: FC<{
+  isMultAddr: boolean;
+  handleOpen: () => void;
+  contactInfo: Contact;
+}> = observer(({ isMultAddr, handleOpen, contactInfo }) => {
+  const setIsContactsOpen = useCreateTxnStore((s) => s.setIsContactsOpen);
+  const setSendBlockchain = useCreateTxnStore((s) => s.setSendBlockchain);
+  const setSendAddr = useCreateTxnStore((s) => s.setSendAddr);
+  const addrs = contactInfo.addresses;
+  const addrOrAddrAmt = isMultAddr
+    ? `${addrs.length} addresses`
+    : fmtCenterEllipsis(addrs[0].value);
+
+  return (
+    <ListItemButton
+      onClick={() => {
+        if (isMultAddr) {
+          handleOpen();
+        } else {
+          // set recipient addr and blockchain
+          setSendBlockchain(contactInfo.addresses[0].blockchainId);
+          setSendAddr(contactInfo.addresses[0].value);
+          setIsContactsOpen(false);
+        }
+      }}
+    >
+      <ListItemAvatar>
+        <Avatar {...stringAvatar(contactInfo.fullName)} />
+      </ListItemAvatar>
+
+      <ListItemText primary={contactInfo.fullName} secondary={addrOrAddrAmt} />
+
+      <BlockchainElemGroup addrs={addrs} />
+    </ListItemButton>
+  );
+});
 
 /**
  * Activates when user clicks on a contact with more than one address.
@@ -77,25 +112,48 @@ const MultiAddrModal: FC<{
 
   // @todo
   // build list of addrs
-  const addrElems = contactInfo.addresses.map((addr) => (
-    <ListItemButton
-      onClick={() => {
-        // set recipient addr and blockchain
-        setSendBlockchain(addr.blockchainId);
-        setSendAddr(addr.value);
-        // @todo replace with RecipientForm
-        setIsContactsOpen(false);
-      }}
-      key={addr.lookupId}
-    >
-      <ListItemText primary={addr.value} secondary={addr.label} />
-      <ListItemSecondaryAction>
-        <Avatar src={addr.blockchainInfo.img?.sm}>
-          <Typography>{addr.blockchainInfo.id.toLocaleUpperCase()}</Typography>
-        </Avatar>
-      </ListItemSecondaryAction>
-    </ListItemButton>
-  ));
+  const addrElems = contactInfo.addresses.map((addr) => {
+    // Use the formatted address if no label
+    // const primary = addr.label || fmtCenterEllipsis(addr.value);
+    const primary = addr.label || fmtCenterEllipsis(addr.value);
+    const secondary = addr.label ? fmtCenterEllipsis(addr.value, 7) : "";
+
+    return (
+      <ListItemButton
+        onClick={() => {
+          // set recipient addr and blockchain
+          setSendBlockchain(addr.blockchainId);
+          setSendAddr(addr.value);
+          setIsContactsOpen(false);
+        }}
+        key={addr.lookupId}
+      >
+        <ListItemText
+          primary={primary}
+          secondary={secondary}
+          sx={{ overflow: "hidden", maxWidth: "80%" }}
+          primaryTypographyProps={{
+            textOverflow: "ellipsis",
+            noWrap: true,
+            flexWrap: "nowrap",
+          }}
+          secondaryTypographyProps={{
+            textOverflow: "ellipsis",
+            noWrap: true,
+            flexWrap: "nowrap",
+          }}
+        />
+
+        <ListItemSecondaryAction>
+          <Avatar src={addr.blockchainInfo.img?.sm}>
+            <Typography>
+              {addr.blockchainInfo.symbol.toLocaleUpperCase()}
+            </Typography>
+          </Avatar>
+        </ListItemSecondaryAction>
+      </ListItemButton>
+    );
+  });
 
   return (
     <Modal open={isOpen} onClose={handleClose}>
@@ -125,46 +183,22 @@ const MultiAddrModal: FC<{
  * @todo move to mobx state
  */
 const ContactElem: FC<{ contactInfo: Contact }> = ({ contactInfo }) => {
-  const setIsContactsOpen = useCreateTxnStore((s) => s.setIsContactsOpen);
-  const setSendBlockchain = useCreateTxnStore((s) => s.setSendBlockchain);
-  const setSendAddr = useCreateTxnStore((s) => s.setSendAddr);
   // const setRecipient = useCreateTxnStore((s) => s.setRecipient);
   const [isOpen, setIsOpen] = useState(false);
   // format address text
   const addrs = contactInfo.addresses;
   const isMultAddr = addrs.length > 1;
-  const addrOrAddrAmt = isMultAddr
-    ? `${addrs.length} addresses`
-    : fmtCenterEllipsis(addrs[0].value);
   // modal event handlers
   const handleOpen = () => setIsOpen(true);
   const handleClose = () => setIsOpen(false);
 
   return (
     <>
-      <ListItemButton
-        onClick={() => {
-          if (isMultAddr) {
-            handleOpen();
-          } else {
-            // set recipient addr and blockchain
-            setSendBlockchain(contactInfo.addresses[0].blockchainId);
-            setSendAddr(contactInfo.addresses[0].value);
-            setIsContactsOpen(false);
-          }
-        }}
-      >
-        <ListItemAvatar>
-          <Avatar {...stringAvatar(contactInfo.fullName)} />
-        </ListItemAvatar>
-
-        <ListItemText
-          primary={contactInfo.fullName}
-          secondary={addrOrAddrAmt}
-        />
-
-        <BlockchainElemGroup addrs={addrs} />
-      </ListItemButton>
+      <ContactElemLayout
+        isMultAddr={isMultAddr}
+        handleOpen={handleOpen}
+        contactInfo={contactInfo}
+      />
 
       <MultiAddrModal
         isOpen={isOpen}

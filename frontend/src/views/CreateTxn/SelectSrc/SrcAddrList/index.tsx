@@ -1,11 +1,7 @@
-import { FC, useEffect } from "react";
+import { FC } from "react";
 // state
 import { observer } from "mobx-react-lite";
-import {
-  useBaseStore,
-  useCreateTxnStore,
-  useUserStore,
-} from "../../../../mobx/stores";
+import { useCreateTxnStore, useUserStore } from "../../../../mobx/stores";
 // style
 import Grid from "@mui/material/Unstable_Grid2/Grid2";
 import List from "@mui/material/List";
@@ -26,17 +22,10 @@ const SrcValueEnabledDisplay: FC = observer(() => {
  */
 const SrcAddrList: FC = () => {
   const addrs = useUserStore((s) => s.addresses);
-  const setNavBack = useBaseStore((s) => s.setNavBack);
-  const setNavTitle = useBaseStore((s) => s.setNavTitle);
 
   // build
   const srcAddrElems: JSX.Element[] = [];
   addrs.forEach((a) => srcAddrElems.push(<SrcAddr addr={a} key={a.value} />));
-
-  useEffect(() => {
-    setNavBack();
-    setNavTitle("Select send-addresses");
-  }, []);
 
   return (
     <List

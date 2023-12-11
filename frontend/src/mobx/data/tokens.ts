@@ -6,7 +6,8 @@ export class TokenData {
     public label: string,
     public fullName: string,
     public mktValue: number,
-    public blockchains: TestnetId[]
+    public blockchains: TestnetId[],
+    public img?: string
   ) {}
   get variants(): string[] {
     return this.blockchains.map((bc) => `${bc}-${this.id}`);
@@ -18,13 +19,15 @@ export const newTokenData = ({
   fullName,
   mktValue,
   blockchains,
+  img,
 }: Omit<TokenData, "variants">) => {
   return new TokenData(
     id,
     label,
     fullName,
     mktValue,
-    Array.from(new Set(blockchains)) // remove dups
+    Array.from(new Set(blockchains)), // remove dups
+    img
   );
 };
 
@@ -38,6 +41,7 @@ export const tokensData: { [key in TokenId]: TokenData } = {
     fullName: "USD Coin",
     mktValue: 0.9989,
     blockchains: ["ethSepolia", "avaxFuji", "maticMumbai", "opGoerli"],
+    img: "https://s2.coinmarketcap.com/static/img/coins/64x64/3408.png",
   }),
   aave: newTokenData({
     id: "aave",
@@ -45,6 +49,7 @@ export const tokensData: { [key in TokenId]: TokenData } = {
     fullName: "AAVE Token",
     mktValue: 99.9876,
     blockchains: ["ethSepolia", "avaxFuji", "maticMumbai"],
+    img: "https://s2.coinmarketcap.com/static/img/coins/64x64/7278.png",
   }),
   link: newTokenData({
     id: "link",
@@ -52,6 +57,7 @@ export const tokensData: { [key in TokenId]: TokenData } = {
     fullName: "Chainlink Token",
     mktValue: 20.3918,
     blockchains: ["ethSepolia", "avaxFuji", "maticMumbai", "opGoerli"],
+    img: "https://s2.coinmarketcap.com/static/img/coins/64x64/1975.png",
   }),
   // usdc: newTokenData({
   //   id: "usdc",
@@ -76,7 +82,7 @@ export const tokensData: { [key in TokenId]: TokenData } = {
   // }),
 };
 
-export const lookupTokenLabel = (tokenId: TokenId): string =>
-  tokensData[tokenId].label;
 export const lookupTokenMktValue = (tokenId: TokenId): number =>
   tokensData[tokenId].mktValue;
+export const getTokenInfo = (tokenId: TokenId): TokenData =>
+  tokensData[tokenId];

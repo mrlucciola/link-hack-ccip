@@ -17,6 +17,7 @@ import AddrDetailCollapse from "./AddrDetailCollapse";
 import { UserAddress } from "../../../../mobx/interfaces/address";
 // utils
 import { fmtCenterEllipsis } from "../../../../layouts/Text";
+import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
 
 /** ### Shows controls and info about User's address
  *
@@ -33,19 +34,17 @@ const SrcAddr: FC<{ addr: UserAddress }> = ({ addr }) => {
   const toggleCollapse = () => setIsCollapseOpen(!isCollapseOpen);
   // format values
   const addrFmt = (
-    <>
+    <Grid2 container direction="row" wrap="nowrap" component="span">
       {fmtCenterEllipsis(addr.value)}
-      {addr.blockchainInfo.img?.sm ? (
-        <Avatar src={addr.blockchainInfo.img?.sm} />
-      ) : (
-        <Chip
-          label={addr.blockchainInfo.id.toLocaleUpperCase()}
-          size="small"
-          sx={{ mt: -0.4, mx: 1, fontWeight: "500" }}
-          component="span"
-        />
-      )}
-    </>
+
+      <Avatar
+        src={addr.blockchainInfo.img?.sm}
+        sx={{ ml: 1, width: "20px", height: "20px", fontSize: "0.75em" }}
+        component="span"
+      >
+        {addr.blockchainInfo.symbol.toLocaleUpperCase()}
+      </Avatar>
+    </Grid2>
   );
   const primaryText = addr.label || addrFmt;
   const secondaryText = addr.label ? addrFmt : undefined;
@@ -64,7 +63,6 @@ const SrcAddr: FC<{ addr: UserAddress }> = ({ addr }) => {
           secondary={
             <>
               {secondaryText}
-              {secondaryText && <br />}
               <Typography variant="caption">{addr.totalMktValueFmt}</Typography>
             </>
           }

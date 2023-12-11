@@ -1,22 +1,18 @@
 import { FC, useState } from "react";
 // state
 import { observer } from "mobx-react-lite";
-import { useCreateTxnStore } from "../../../mobx/stores";
+import { useCreateTxnStore, useUserStore } from "../../../mobx/stores";
 // style
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Unstable_Grid2/Grid2";
 
-// @todo add to state
-export const validationSendAmt = {};
-
-/**
- * @todo hide/de-render when contact search is open
- */
+/** @todo add validation */
 const SendAmtField: FC = () => {
   const sendAmt = useCreateTxnStore((s) => s.totalSendAmt);
   const setSendAmt = useCreateTxnStore((s) => s.setSendAmt);
+  const portfolioMktValueFmt = useUserStore((s) => s.portfolioMktValueFmt);
   const [sendAmtInput, setSendAmtInput] = useState(`${sendAmt}` || `0`);
-  const portfolioValueUsdc = 1829021.23;
+
   const [helpText, _setHelpText] = useState("");
   // event handlers
   const handleChange = (
@@ -31,8 +27,9 @@ const SendAmtField: FC = () => {
     <Grid container direction="row" flex={1} sx={{ mt: 1, mx: 1 }}>
       <TextField
         fullWidth
+        autoComplete="off"
         size="small"
-        label={`Send amount - Portfolio: ${portfolioValueUsdc} USDC`}
+        label={`Send amount - Portfolio: ${portfolioMktValueFmt}`}
         // input
         onChange={handleChange}
         value={sendAmtInput}
