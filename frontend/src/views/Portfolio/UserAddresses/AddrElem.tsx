@@ -1,36 +1,26 @@
 import { FC, useState } from "react";
 // state
 import { observer } from "mobx-react-lite";
-import { useCreateTxnStore } from "../../../../mobx/stores";
 // style
+import Typography from "@mui/material/Typography";
+import ListItemText from "@mui/material/ListItemText";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import Avatar from "@mui/material/Avatar";
 import Chip from "@mui/material/Chip";
 import ListItemButton from "@mui/material/ListItemButton";
-import ListItemText from "@mui/material/ListItemText";
 import Paper from "@mui/material/Paper";
-import Typography from "@mui/material/Typography";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 // components
-import AddrDetailCollapse from "./AddrDetailCollapse";
+import AddrDetailCollapse from "../../CreateTxn/SelectSrc/SrcAddrList/AddrDetailCollapse";
 // interfaces
-import { UserAddress } from "../../../../mobx/interfaces/address";
-// utils
-import { fmtCenterEllipsis } from "../../../../layouts/Text";
+import { UserAddress } from "../../../mobx/interfaces/address";
+import { fmtCenterEllipsis } from "../../../layouts/Text";
 
-/** ### Shows controls and info about User's address
- *
- * @todo add validation for spend limit
- */
-const SrcAddr: FC<{ addr: UserAddress }> = ({ addr }) => {
-  const [isCollapseOpen, setIsCollapseOpen] = useState(false);
-  const enabledAddr = useCreateTxnStore((s) =>
-    s.enabledAddrs.get(addr.lookupId)
-  );
-  const isEnabled = enabledAddr?.isEnabled;
+const AddrElem: FC<{ addr: UserAddress }> = ({ addr }) => {
+  const [isOpen, setIsOpen] = useState(false);
 
   // event handlers
-  const toggleCollapse = () => setIsCollapseOpen(!isCollapseOpen);
+  const toggleCollapse = () => setIsOpen(!isOpen);
   // format values
   const addrFmt = (
     <>
@@ -47,17 +37,13 @@ const SrcAddr: FC<{ addr: UserAddress }> = ({ addr }) => {
       )}
     </>
   );
+
   const primaryText = addr.label || addrFmt;
   const secondaryText = addr.label ? addrFmt : undefined;
 
   return (
     <>
-      <ListItemButton
-        component={Paper}
-        selected={isEnabled}
-        dense
-        onClick={toggleCollapse}
-      >
+      <ListItemButton component={Paper} dense onClick={toggleCollapse}>
         <ListItemText
           primaryTypographyProps={{ fontWeight: 900 }}
           primary={primaryText}
@@ -70,12 +56,12 @@ const SrcAddr: FC<{ addr: UserAddress }> = ({ addr }) => {
           }
         />
 
-        {isCollapseOpen ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+        {isOpen ? <ExpandLessIcon /> : <ExpandMoreIcon />}
       </ListItemButton>
 
-      <AddrDetailCollapse addr={addr} isOpen={isCollapseOpen} />
+      <AddrDetailCollapse addr={addr} isOpen={isOpen} />
     </>
   );
 };
 
-export default observer(SrcAddr);
+export default observer(AddrElem);
