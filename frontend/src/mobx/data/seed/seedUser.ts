@@ -20,15 +20,16 @@ export const seedRootWallets: UserWallet[] = [
   newWalletFromMnemonic(testSeedPhrase2, "my other wallet"),
 ];
 
-let addrCt = 0;
-const initAddress = (
+export const initAddress = (
   label: string,
   rootWallet: UserWallet,
-  idx: number,
   blockchainId: TestnetId,
   partialTokens: { [key in TokenId]?: Pick<AddrToken, "id" | "amount"> }
 ) => {
-  const derivWallet = rootWallet.deriveChild(1);
+  console.log("init", rootWallet.derivedKeyIdxs.length);
+  const derivWallet = rootWallet.deriveChild(rootWallet.derivedKeyIdxs.length);
+  rootWallet.derivedKeyIdxs.push(rootWallet.derivedKeyIdxs.length);
+  console.log("after", rootWallet.derivedKeyIdxs.length);
 
   const tokens = {} as { [key in TokenId]: AddrToken };
 
@@ -43,8 +44,6 @@ const initAddress = (
     tokens[id] = newToken;
   });
 
-  idx++;
-
   return new UserAddress(
     derivWallet.address,
     blockchainId,
@@ -56,32 +55,31 @@ const initAddress = (
 
 /** @deprecated delete seed data */
 export const seedAddrs: UserAddress[] = [
-  initAddress("", seedRootWallets[0], addrCt, "maticMumbai", {
+  initAddress("", seedRootWallets[0], "maticMumbai", {
     usdc: { id: "usdc", amount: 11111.1111 },
   }),
-  initAddress("Personal (Avalanche)", seedRootWallets[0], addrCt, "avaxFuji", {
+  initAddress("Personal (Avalanche)", seedRootWallets[0], "avaxFuji", {
     usdc: { id: "usdc", amount: 20000 },
     aave: { id: "aave", amount: 123.9998 },
     link: { id: "link", amount: 1.1 },
   }),
-  initAddress("Personal (Optimism)", seedRootWallets[0], addrCt, "opGoerli", {
+  initAddress("Personal (Optimism)", seedRootWallets[0], "opGoerli", {
     usdc: { id: "usdc", amount: 2993.9829 },
     aave: { id: "aave", amount: 338.132 },
   }),
-  initAddress("NFT Drops", seedRootWallets[0], addrCt, "ethSepolia", {
+  initAddress("NFT Drops", seedRootWallets[0], "ethSepolia", {
     usdc: { id: "usdc", amount: 22.4884 },
     aave: { id: "aave", amount: 0.25123 },
     link: { id: "link", amount: 0.0005 },
   }),
 ];
 
-let addrCt3 = 0;
 const seedContacts: Contact[] = [
   {
     id: "jdoe",
     fullName: "John Doe",
     addresses: [
-      initAddress("Primary address", anonWallet, addrCt3, "maticMumbai", {
+      initAddress("Primary address", anonWallet, "maticMumbai", {
         usdc: { id: "usdc", amount: 84.3 },
         aave: { id: "aave", amount: 789.52194 },
         link: { id: "link", amount: 30.42341 },
@@ -92,11 +90,11 @@ const seedContacts: Contact[] = [
     id: "franksinatra",
     fullName: "Frank Sinatra",
     addresses: [
-      initAddress("NFT address", anonWallet, addrCt3, "avaxFuji", {
+      initAddress("NFT address", anonWallet, "avaxFuji", {
         usdc: { id: "usdc", amount: 492 },
         aave: { id: "aave", amount: 456 },
       }),
-      initAddress("Dropbox", anonWallet, addrCt3, "ethSepolia", {
+      initAddress("Dropbox", anonWallet, "ethSepolia", {
         link: { id: "link", amount: 20.2 },
       }),
     ],
@@ -105,11 +103,11 @@ const seedContacts: Contact[] = [
     id: "cdeli",
     fullName: "Corner Deli",
     addresses: [
-      initAddress("Dropbox: vendors", anonWallet, addrCt3, "avaxFuji", {}),
+      initAddress("Dropbox: vendors", anonWallet, "avaxFuji", {}),
       initAddress(
         "Dropbox: customers (Arbitrum)",
         anonWallet,
-        addrCt3,
+
         "avaxFuji",
         {
           usdc: { id: "usdc", amount: 29481.32 },
@@ -118,13 +116,13 @@ const seedContacts: Contact[] = [
       initAddress(
         "Dropbox: customers (Optimism)",
         anonWallet,
-        addrCt3,
+
         "opGoerli",
         {
           usdc: { id: "usdc", amount: 59209.11 },
         }
       ),
-      initAddress("Treasury", anonWallet, addrCt3, "maticMumbai", {
+      initAddress("Treasury", anonWallet, "maticMumbai", {
         link: { id: "link", amount: 6.251 },
       }),
     ],
@@ -132,12 +130,12 @@ const seedContacts: Contact[] = [
   {
     id: "alice",
     fullName: "Alice",
-    addresses: [initAddress("Main", anonWallet, addrCt3, "maticMumbai", {})],
+    addresses: [initAddress("Main", anonWallet, "maticMumbai", {})],
   },
   {
     id: "bobb",
     fullName: "Bob Burnquist",
-    addresses: [initAddress("Personal", anonWallet, addrCt3, "avaxFuji", {})],
+    addresses: [initAddress("Personal", anonWallet, "avaxFuji", {})],
   },
 ];
 export const seedContactsMap: Map<string, Contact> = new Map<string, Contact>(
