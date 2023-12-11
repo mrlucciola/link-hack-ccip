@@ -1,21 +1,16 @@
 import { Transaction } from "ethers";
 // state
 import { makeAutoObservable } from "mobx";
-import { RootStore } from "../../../mobx/stores";
+import { RootStore } from ".";
 // interfaces
-import { Contact, StateStore } from "../../../mobx/interfaces";
-import { EnabledAddr } from "../interfaces";
+import { Contact, StateStore } from "../interfaces";
+import { StagedAddrToken } from "../../views/CreateTxn/interfaces";
 // utils
-import { fmtMktValue } from "../../../utils/fmt";
-import { buildAndSignTxn } from "./utils/transaction";
-import {
-  TestnetId,
-  fetchTxnCost,
-} from "../../../mobx/data/supportedBlockchains";
+import { fmtMktValue } from "../../utils/fmt";
+import { buildAndSignTxn } from "../../views/CreateTxn/ReviewTxn/utils/transaction";
+import { TestnetId, fetchTxnCost } from "../data/supportedBlockchains";
 // data
-import { connectionInfo } from "../../../mobx/data/connection";
-// seed
-import { sendAddrs } from "./SendAddrsOverview";
+import { connectionInfo } from "../data/connection";
 
 /** ## ReviewTxn store
  */
@@ -27,6 +22,10 @@ export class ReviewTxnStore implements StateStore {
 
   /////////////////////////////////////////////////////////
   ////////////////////// OBSERVABLES //////////////////////
+  /** Shortlist of tokens to send.
+   * A calculation is performed after enabling tokens (within the UI) to generate this list.
+   * This is used to calculate fees.*/
+  stagedTokens: StagedAddrToken[] = [];
   ////////////////////// OBSERVABLES //////////////////////
   /////////////////////////////////////////////////////////
 
@@ -59,7 +58,7 @@ export class ReviewTxnStore implements StateStore {
   //////////////////////// ACTIONS ////////////////////////
   /** @deprecated mock fxn with mock data */
   async buildFeeRowItems() {
-    const enabledAddrs = sendAddrs; // @todo replace with: this.root.createTxn.enabledAddrs
+    const enabledAddrs = this.root.createTxn.enabledAddrs;
 
     const bcStore = new Map<TestnetId, number>();
     enabledAddrs.forEach((a) => {
@@ -86,6 +85,38 @@ export class ReviewTxnStore implements StateStore {
     this.feeRowItems = rows;
     this.totalFees = totalTxnCost;
   }
+  /** Stage tokens for sending
+   * 1. Sort tokens by `balance / txn cost` in descending order;
+   * 1.  Iter thru tokens from `enabled-tokens` state prop,  */
+  async optimizeTokens() {
+    // @todo move fee property to interface
+    const enabledTokensWithFee: StagedAddrToken[] = [];
+
+    await this.root.createTxn.enabledTokens.forEach(async (t) => {
+      const enabledTokenWithFee: StagedAddrToken = {
+        ...t,
+        label: t.label,
+        lookupId: t.lookupId,
+        addrLookupId: t.addrLookupId,
+        mktValue: t.mktValue,
+        mktValueFmt: t.mktValueFmt,
+        fee: await fetchTxnCost(t.blockchainId),
+      };
+      // console.log("ET - WithFee:", enabledTokenWithFee);
+      enabledTokensWithFee.push(enabledTokenWithFee);
+    });
+
+    // Sort tokens by balance / txn cost
+    enabledTokensWithFee.sort((a, b) => {
+      const isAGtB = a.fee > b.fee;
+
+      if (isAGtB) return 1;
+      if (!isAGtB) return -1;
+      return 0;
+    });
+
+    this.stagedTokens = enabledTokensWithFee;
+  }
   //////////////////////// ACTIONS ////////////////////////
   /////////////////////////////////////////////////////////
 
@@ -95,22 +126,22 @@ export class ReviewTxnStore implements StateStore {
 
   // @todo separate build and sign to give user preview of txn data before signature is added
   async buildAndSignTxns(
-    optimizedAddrs: EnabledAddr[]
+    stagedTokens: StagedAddrToken[]
   ): Promise<Transaction[]> {
     let amtRemaining = this.root.createTxn.totalSendAmt;
 
     const signedTxns: Transaction[] = [];
-    for (let idx = 0; idx < optimizedAddrs.length; idx++) {
-      const addr = optimizedAddrs[idx];
+    for (let idx = 0; idx < stagedTokens.length; idx++) {
+      const token = stagedTokens[idx];
 
-      const sendAmtFromAddr = Math.min(addr.totalMktValue, amtRemaining);
+      const sendAmtFromAddr = Math.min(token.mktValue, amtRemaining);
 
       if (sendAmtFromAddr <= 0) break;
 
       const txn = await this.buildAndSignTxn(
-        connectionInfo[addr.blockchainId as TestnetId].contract,
+        connectionInfo[token.blockchainId as TestnetId].contract,
         sendAmtFromAddr,
-        addr,
+        token,
         {
           value: this.root.createTxn.sendAddr,
           blockchainId: this.root.createTxn.sendBlockchain as TestnetId,

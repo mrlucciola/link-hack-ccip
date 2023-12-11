@@ -1,20 +1,21 @@
 // state
 import { makeAutoObservable } from "mobx";
-import { StateStore } from "../../mobx/interfaces";
-import { RootStore } from "../../mobx/stores";
+import { StateStore } from "../interfaces";
+import { RootStore } from ".";
 // interfaces
-import { CreateTxnViewType } from ".";
-import { AddrToken } from "../../mobx/interfaces/token";
+import { CreateTxnViewType } from "../../views/CreateTxn";
+import { AddrToken, TokenLookupId } from "../interfaces/token";
 import {
   EnabledAddr,
   EnabledAddrToken,
   Recipient,
   newEnabledAddr,
   newEnabledAddrToken,
-} from "./interfaces";
-import { TestnetId } from "../../mobx/data/supportedBlockchains";
+} from "../../views/CreateTxn/interfaces";
+import { TestnetId } from "../data/supportedBlockchains";
 // utils
 import { fmtMktValue } from "../../utils/fmt";
+import { AddressLookupId } from "../interfaces/address";
 
 /** ## CreateTxn store
  */
@@ -26,16 +27,14 @@ export class CreateTxnStore implements StateStore {
 
   /////////////////////////////////////////////////////////
   ////////////////////// OBSERVABLES //////////////////////
-  currentView: CreateTxnViewType = "reviewTxn"; // default: selectRecipient
+  currentView: CreateTxnViewType = "selectRecipient";
   recipient: Recipient = {} as Recipient;
-  enabledTokens: Map<string, EnabledAddrToken> = new Map<
-    string,
+  enabledTokens: Map<TokenLookupId, EnabledAddrToken> = new Map<
+    TokenLookupId,
     EnabledAddrToken
   >();
   // @todo (separate ticket) select tokens and amounts, currently defaults to usdc
-  // @delete - testing
-  totalSendAmt: number = 38928.12;
-  // totalSendAmt: number = 0;
+  totalSendAmt: number = 0;
   // @delete - testing
   sendAddr: string = "0xd0xk3nf8ww";
   // sendAddr: string = "";
@@ -50,32 +49,38 @@ export class CreateTxnStore implements StateStore {
   /** @deprecated not configured */
   get areAllFormsValid(): boolean {
     // @delete - testing
-    return true;
-    // return false;
+    return true; // default: false
   }
-  get enabledAddrs(): Map<string, EnabledAddr> {
-    const enabledAddrsMap = new Map<string, EnabledAddr>();
+  /** Collection of addresses similar to that in user state.
+   * Generated from list of tokens selected (enabled) via the UI.*/
+  get enabledAddrs(): Map<AddressLookupId, EnabledAddr> {
+    const enabledAddrsMap = new Map<AddressLookupId, EnabledAddr>();
 
     this.enabledTokens.forEach((t) => {
-      const addrLookup = `${t.blockchainId}-${t.addrId}`;
-      const possibleEnabledAddr = enabledAddrsMap.get(addrLookup);
+      const existingAddr = enabledAddrsMap.get(t.addrLookupId);
 
       // add the token to the address
-      if (possibleEnabledAddr) {
+      if (existingAddr) {
         const updatedAddr: EnabledAddr = newEnabledAddr(
-          possibleEnabledAddr.value,
-          possibleEnabledAddr.blockchainId,
-          { ...possibleEnabledAddr.tokens, [t.id]: t }
+          existingAddr.value,
+          existingAddr.blockchainId,
+          existingAddr.wallet,
+          existingAddr.rootWalletLookupId,
+          { ...existingAddr.tokens, [t.id]: t }
         );
 
-        enabledAddrsMap.set(addrLookup, updatedAddr);
+        enabledAddrsMap.set(t.addrLookupId, updatedAddr);
       } else {
+        const userAddr = this.root.user.getUserAddress(t);
+
         const updatedAddr: EnabledAddr = newEnabledAddr(
           t.addrId,
           t.blockchainId,
+          userAddr.wallet,
+          userAddr.rootWalletLookupId,
           { [t.id]: t }
         );
-        enabledAddrsMap.set(addrLookup, updatedAddr);
+        enabledAddrsMap.set(t.addrLookupId, updatedAddr);
       }
     });
     return enabledAddrsMap;

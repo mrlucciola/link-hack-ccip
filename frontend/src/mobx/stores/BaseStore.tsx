@@ -1,7 +1,7 @@
 // state
 import { makeAutoObservable } from "mobx";
-import { StateStore } from "../../mobx/interfaces";
-import { RootStore } from "../../mobx/stores";
+import { StateStore } from "../interfaces";
+import { RootStore } from ".";
 // style
 import HomeIcon from "@mui/icons-material/Home";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
@@ -9,7 +9,7 @@ import ContactPageIcon from "@mui/icons-material/ContactPage";
 import HistoryIcon from "@mui/icons-material/History";
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 // interfaces
-import { CreateTxnViewType } from "../CreateTxn";
+import { CreateTxnViewType } from "../../views/CreateTxn";
 
 export const baseViewsMap = Object.freeze({
   home: { id: "home", label: "Home", icon: <HomeIcon /> },
@@ -48,7 +48,7 @@ export class BaseStore implements StateStore {
 
   /////////////////////////////////////////////////////////
   ////////////////////// OBSERVABLES //////////////////////
-  currentView: BaseView = "home";
+  currentView: BaseView = "portfolio"; // default: home
   navBack?: {
     // @note So far this prop seems somewhat unnecessary. Will likely remove soon.
     baseView: BaseView;

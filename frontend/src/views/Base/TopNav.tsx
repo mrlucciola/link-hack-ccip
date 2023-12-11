@@ -61,32 +61,32 @@ const NavUtil: FC = observer(() => {
   const navUtils = useBaseStore((s) => s.navUtils);
 
   // build elem logic
-  const utilIcons = navUtils.map((u) => {
+  const utilIcons = navUtils.map((u, idx) => {
     switch (u.id) {
       case "info":
         return (
-          <NavIconButton onClick={u.action}>
+          <NavIconButton onClick={u.action} key={idx}>
             <InfoIcon />
           </NavIconButton>
         );
 
       case "options":
         return (
-          <NavIconButton onClick={u.action}>
+          <NavIconButton onClick={u.action} key={idx}>
             <MoreVertIcon />
           </NavIconButton>
         );
 
       case "settings":
         return (
-          <NavIconButton onClick={u.action}>
+          <NavIconButton onClick={u.action} key={idx}>
             <SettingsIcon />
           </NavIconButton>
         );
 
       case "notifications":
         return (
-          <NavIconButton onClick={u.action}>
+          <NavIconButton onClick={u.action} key={idx}>
             <NotificationsIcon />
           </NavIconButton>
         );

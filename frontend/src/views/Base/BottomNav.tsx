@@ -2,12 +2,11 @@ import { FC } from "react";
 // state
 import { observer } from "mobx-react-lite";
 import { useBaseStore } from "../../mobx/stores";
+import { BaseView, baseViewsMap } from "../../mobx/stores/BaseStore";
 // style
 import Grid from "@mui/material/Unstable_Grid2/Grid2";
 import BottomNavigation from "@mui/material/BottomNavigation";
 import BottomNavigationAction from "@mui/material/BottomNavigationAction";
-// data
-import { BaseView, baseViewsMap } from "./store";
 
 /** Bottom navigation panel
  * Contains items for switching sub-views within the `base` view:

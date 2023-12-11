@@ -5,12 +5,12 @@ import { createUseStateHook } from "../provider/hooks";
 import { MainStore } from "./MainStore";
 import { ViewStore } from "./ViewStore";
 import { UserStore } from "./UserStore";
-import { BaseStore } from "../../views/Base/store";
-import { OnboardingStore } from "../../views/Onboarding/store";
-import { SettingsStore } from "../../views/Settings/store";
-import { CreateTxnStore } from "../../views/CreateTxn/store";
-import { ReviewTxnStore } from "../../views/CreateTxn/ReviewTxn/store";
-import { HomeStore } from "../../views/Home/store";
+import { BaseStore } from "./BaseStore";
+import { OnboardingStore } from "./OnboardingStore";
+import { SettingsStore } from "./SettingsStore";
+import { CreateTxnStore } from "./CreateTxnStore";
+import { ReviewTxnStore } from "./ReviewTxnStore";
+import { HomeStore } from "./HomeStore";
 
 /** ## Contains all of the application states.
  * Using the ["Combining Multiple Stores"](https://mobx.js.org/defining-data-stores.html#combining-multiple-stores) pattern.

@@ -1,13 +1,13 @@
 import { FC, useEffect, useState } from "react";
 // state
 import { observer } from "mobx-react-lite";
-import { useReviewTxnStore } from "../../../../mobx/stores";
+import { useReviewTxnStore } from "../../../mobx/stores";
 // style
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 // components
-import { CollapseList, CollapseSubheader } from "..";
+import { CollapseList, CollapseSubheader } from "./utils/components";
 
 const FooterSum: FC = observer(() => {
   const totalFeesFmt = useReviewTxnStore((s) => s.totalFeesFmt);

@@ -1,7 +1,7 @@
 import { FC } from "react";
 // state
 import { observer } from "mobx-react-lite";
-import { useCreateTxnStore, useReviewTxnStore } from "../../../../mobx/stores";
+import { useCreateTxnStore, useReviewTxnStore } from "../../../mobx/stores";
 // style
 import Button from "@mui/material/Button";
 // interfaces
@@ -11,6 +11,7 @@ import transferTokens from "../../../../scripts/transfer-tokens";
 const ConfirmSubmitButton: FC = () => {
   const areAllFormsValid = useCreateTxnStore((s) => s.areAllFormsValid);
   const buildAndSignTxns = useReviewTxnStore((s) => s.buildAndSignTxns);
+  const stagedTokens = useReviewTxnStore((s) => s.stagedTokens);
 
   /**
    * 1. @todo Optimize addresses to use
@@ -21,6 +22,7 @@ const ConfirmSubmitButton: FC = () => {
     // const optimizedAddrs: EnabledAddr[] = [];
 
     // const signedTxns = await buildAndSignTxns(optimizedAddrs);
+    const signedTxns = await buildAndSignTxns(stagedTokens);
 
     // signedTxns.forEach((st) => {
     //   console.log("sending signed transaction:", st);

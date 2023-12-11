@@ -9,7 +9,8 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
-import { MdExpandLess, MdExpandMore } from "react-icons/md";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 // components
 import AddrDetailCollapse from "./AddrDetailCollapse";
 // interfaces
@@ -69,7 +70,7 @@ const SrcAddr: FC<{ addr: UserAddress }> = ({ addr }) => {
           }
         />
 
-        {isCollapseOpen ? <MdExpandLess /> : <MdExpandMore />}
+        {isCollapseOpen ? <ExpandLessIcon /> : <ExpandMoreIcon />}
       </ListItemButton>
 
       <AddrDetailCollapse addr={addr} isOpen={isCollapseOpen} />

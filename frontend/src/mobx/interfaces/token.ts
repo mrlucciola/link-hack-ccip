@@ -1,7 +1,9 @@
 import { fmtMktValue } from "../../utils/fmt";
 import { TestnetId } from "../data/supportedBlockchains";
 import { TokenId, lookupTokenLabel, lookupTokenMktValue } from "../data/tokens";
+import { AddressLookupId } from "./address";
 
+export type TokenLookupId = `${string}-${AddressLookupId}`;
 // @todo fix - this is ad-hoc
 export abstract class BaseAddrToken {
   abstract mktValue: number;
@@ -12,8 +14,12 @@ export abstract class BaseAddrToken {
     public addrId: string
   ) {}
 
-  get lookupId(): string {
-    return `${this.id}-${this.blockchainId}-${this.addrId}`;
+  /** Key/Lookup value for the map in state */
+  get lookupId(): TokenLookupId {
+    return `${this.id}-${this.addrLookupId}`;
+  }
+  get addrLookupId(): AddressLookupId {
+    return `${this.blockchainId}-${this.addrId}`;
   }
   get label(): string {
     return lookupTokenLabel(this.id);
@@ -23,8 +29,9 @@ export abstract class BaseAddrToken {
   }
 }
 
-/** ## Token contained within an address.
+/** ## Token owned by an address.
  * User-owned token.
+ * @todo maybe rename to UserAddrToken
  */
 export class AddrToken extends BaseAddrToken {
   constructor(

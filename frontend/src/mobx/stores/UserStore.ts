@@ -1,14 +1,20 @@
+import { HDNodeWallet } from "ethers";
 // state
 import { makeAutoObservable } from "mobx";
 // stores
 import { RootStore } from ".";
 // interfaces
 import { Contact, StateStore } from "../interfaces";
-import { UserAddress } from "../interfaces/address";
+import {
+  AddressLookupId,
+  BaseUserAddress,
+  UserAddress,
+  newAddress,
+} from "../interfaces/address";
+import { UserWallet, WalletLookupId } from "../../mobx/interfaces/wallet";
+import { BaseAddrToken } from "../interfaces/token";
 // @delete seed data
-import { seedContactsMap, seedAddressesMap } from "../data/seed/seed-user";
-import { HDNodeWallet } from "ethers";
-import { UserWallet } from "../../views/Onboarding/interfaces";
+import { seedContactsMap } from "../data/seed/seedUser";
 
 /** ## User store
  */
@@ -21,9 +27,17 @@ export class UserStore implements StateStore {
 
   /////////////////////////////////////////////////////////
   ////////////////////// OBSERVABLES //////////////////////
+  rootWallets: Map<WalletLookupId, UserWallet> = new Map<
+    WalletLookupId,
+    UserWallet
+  >();
+  addresses: Map<AddressLookupId, UserAddress> = new Map<
+    AddressLookupId,
+    UserAddress
+  >();
   // @todo remove the seed data when done testing
+  // @todo add ContactLookupId
   contacts: Map<string, Contact> = seedContactsMap;
-  addresses: Map<string, UserAddress> = seedAddressesMap;
   ////////////////////// OBSERVABLES //////////////////////
   /////////////////////////////////////////////////////////
 
@@ -52,51 +66,125 @@ export class UserStore implements StateStore {
     this.contacts.delete(contactToRemove.value);
   }
 
+  /** ### Add single address to `addresses` collection using root wallet. */
+  addNewAddress(rootWallet: UserWallet) {
+    const newAddrWallet = rootWallet.deriveChild(
+      rootWallet.derivedKeyIdxs.length
+    );
+    const newAddr = newAddress(
+      newAddrWallet.address,
+      "ethSepolia",
+      newAddrWallet,
+      rootWallet.lookupId,
+      ""
+    );
+    this.addresses.set(newAddr.lookupId, newAddr);
+  }
   /** ### Add/update single address to `addresses` collection. */
   setAddress(addrToAddOrSet: UserAddress) {
-    this.addresses.set(addrToAddOrSet.value, addrToAddOrSet);
+    this.addresses.set(addrToAddOrSet.lookupId, addrToAddOrSet);
   }
   /** ### Set `addresses` state variable.
    * @param - if "true", replace the original set. */
   setAddresses(addrsToAddOrSet: UserAddress[], replace: boolean = false) {
     if (replace) {
-      const mapInitAddresses: [string, UserAddress][] = addrsToAddOrSet.map(
-        (a) => {
-          return [a.value, a];
-        }
+      this.addresses = new Map<AddressLookupId, UserAddress>(
+        addrsToAddOrSet.map((a) => [a.lookupId, a])
       );
-      this.addresses = new Map<string, UserAddress>(mapInitAddresses);
     } else {
-      addrsToAddOrSet.forEach((a) => this.addresses.set(a.value, a));
+      addrsToAddOrSet.forEach((a) => this.addresses.set(a.lookupId, a));
     }
   }
   /** ### Remove single address from `addresses` collection. */
   removeAddress(addressToRemove: UserAddress) {
-    this.addresses.delete(addressToRemove.value);
+    this.addresses.delete(addressToRemove.lookupId);
+  }
+  /** ### Set `rootWallets` state variable.
+   * @param - if "true", replace the original set. */
+  setRootWallets(walletsToAddOrSet: UserWallet[], replace: boolean = false) {
+    if (replace) {
+      this.rootWallets = new Map<WalletLookupId, UserWallet>(
+        walletsToAddOrSet.map((w) => [w.lookupId, w])
+      );
+    } else {
+      walletsToAddOrSet.forEach((w) => this.rootWallets.set(w.lookupId, w));
+    }
+  }
+  setWalletAlias(walletLookupId: WalletLookupId, newAlias: string) {
+    const wallet = this.rootWallets.get(walletLookupId);
+
+    if (!wallet) throw new Error(`No wallet for lookupId: ${walletLookupId}`);
+
+    wallet.alias = newAlias;
+
+    this.rootWallets.set(walletLookupId, wallet);
   }
   //////////////////////// ACTIONS ////////////////////////
   /////////////////////////////////////////////////////////
 
   /////////////////////////////////////////////////////////
   //////////////////////// HELPERS ////////////////////////
-  getUserWallet(userAddress: string): HDNodeWallet {
-    const wallets = new Map<string, UserWallet>();
-    const walletAddressIdxMap = new Map<string, number>();
-    const walletAddrIdx = walletAddressIdxMap.get(userAddress);
+  /** Get a `UserAddress` instance from an `AddrToken` instance:
+   * 1. The address string;
+   * 1. An instance of the Token type;
+   */
+  getUserAddress(
+    addrLookupOrToken: AddressLookupId | BaseAddrToken
+  ): UserAddress {
+    // Handle input type
+    const lookup =
+      addrLookupOrToken instanceof BaseAddrToken
+        ? addrLookupOrToken.addrLookupId
+        : addrLookupOrToken;
 
-    if (!walletAddrIdx)
-      throw new Error(`No wallet idx found for addr: ${userAddress}`);
+    const userAddr = this.addresses.get(lookup);
 
-    let foundWallet: HDNodeWallet | null = null;
-    wallets.forEach((w) => {
-      foundWallet = w.deriveChild(walletAddrIdx);
-      return;
-    });
+    if (!userAddr) throw new Error(`No user-address found for: ${lookup}`);
 
-    if (foundWallet === null)
-      throw new Error(`No wallet found for addr: ${userAddress}`);
+    return userAddr;
+  }
+  /** Get user wallet for an address, using:
+   * 1. The address string;
+   * 1. An instance of the BaseUserAddress type;
+   * 1. An instance of the UserToken type;
+   */
+  getAddrWallet(
+    inputWithAddrLookupId: AddressLookupId | BaseAddrToken
+  ): HDNodeWallet {
+    let addrLookupId: AddressLookupId;
+    if (inputWithAddrLookupId instanceof BaseAddrToken) {
+      addrLookupId = inputWithAddrLookupId.addrLookupId;
+    } else addrLookupId = inputWithAddrLookupId;
 
-    return foundWallet;
+    const addr = this.addresses.get(addrLookupId);
+
+    if (!addr)
+      throw new Error(
+        `No address found for lookupId: ${inputWithAddrLookupId}`
+      );
+    if (!addr.wallet)
+      throw new Error(`No wallet found for lookupId: ${inputWithAddrLookupId}`);
+
+    return addr.wallet;
+  }
+  getRootWallet(
+    inputWithRootWalletLookupId: WalletLookupId | UserAddress
+  ): UserWallet {
+    let rootWalletLookupId: WalletLookupId;
+    if (inputWithRootWalletLookupId instanceof BaseUserAddress) {
+      rootWalletLookupId = inputWithRootWalletLookupId.rootWalletLookupId;
+    } else rootWalletLookupId = inputWithRootWalletLookupId;
+
+    const rootWallet = this.rootWallets.get(rootWalletLookupId);
+
+    if (!rootWallet) {
+      console.log(JSON.stringify(inputWithRootWalletLookupId));
+      throw new Error(
+        `No wallet found for lookupId: ${inputWithRootWalletLookupId}`
+      );
+    }
+
+    return rootWallet;
   }
   //////////////////////// HELPERS ////////////////////////
   /////////////////////////////////////////////////////////

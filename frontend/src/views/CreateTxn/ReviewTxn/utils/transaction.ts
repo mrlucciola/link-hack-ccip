@@ -7,8 +7,8 @@ import {
   fetchGasAmount,
   fetchGasPrice,
 } from "../../../../mobx/data/supportedBlockchains";
-import { ReviewTxnStore } from "../store";
-import { EnabledAddr } from "../../interfaces";
+import { ReviewTxnStore } from "../../../../mobx/stores/ReviewTxnStore";
+import { StagedAddrToken } from "../../interfaces";
 
 /** @deprecated incomplete */
 export async function buildAndSignTxn(
@@ -16,7 +16,7 @@ export async function buildAndSignTxn(
   contract: Contract,
   amtToSendRemaining: number,
   /** Contains the signer + provider */
-  srcAddress: EnabledAddr,
+  srcToken: StagedAddrToken,
   /** Contains the signer + provider */
   dstAddress: BaseAddress
 ): Promise<Transaction> {
@@ -25,21 +25,18 @@ export async function buildAndSignTxn(
   console.log("Destination:", dstAddress.blockchainId, dstAddress.value);
 
   const unsignedTxnData = "";
-  // const encoded = contract.methods
+  // const unsignedTxnData = contract.methods
   //   .sendAssets(dstAddress.value, dstAddress.blockchainId, token, amt, decimals)
   //   .encodeABI();
-
-  const userWallet: HDNodeWallet = this.root.user.getUserWallet(
-    srcAddress.value
-  );
+  const tokenWallet: HDNodeWallet = this.root.user.getAddrWallet(srcToken);
 
   const unsignedTxn: TransactionLike<string> = {
     data: unsignedTxnData,
-    to: senderCcipAddress[srcAddress.blockchainId as TestnetId],
+    to: senderCcipAddress[srcToken.blockchainId as TestnetId],
     gasLimit: (await fetchGasAmount()) * 1.1,
-    gasPrice: await fetchGasPrice(srcAddress.blockchainId),
-    nonce: await userWallet.getNonce(),
-    signature: userWallet.signMessageSync(unsignedTxnData), // Signature.from(userWallet.signMessageSync(unsignedTxnData))
+    gasPrice: await fetchGasPrice(srcToken.blockchainId),
+    nonce: await tokenWallet.getNonce(),
+    signature: tokenWallet.signMessageSync(unsignedTxnData), // Signature.from(userWallet.signMessageSync(unsignedTxnData))
   };
 
   return Transaction.from(unsignedTxn);

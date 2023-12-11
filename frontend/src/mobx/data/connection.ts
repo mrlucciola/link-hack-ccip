@@ -1,4 +1,4 @@
-import { AbstractProvider, Contract, JsonRpcProvider } from "ethers";
+import { AbstractProvider, Contract } from "ethers";
 import { TestnetId } from "./supportedBlockchains";
 import { newProvider, newSenderContractInstance } from "../../utils/connection";
 
@@ -14,21 +14,25 @@ export const connectionInfo: {
 } = {
   ethSepolia: {
     provider: providers["ethSepolia"],
-    contract: newSenderContractInstance("ethSepolia", providers["ethSepolia"]),
+    // contract: newSenderContractInstance("ethSepolia", providers["ethSepolia"]),
+    contract: newSenderContractInstance(),
   },
   avaxFuji: {
     provider: providers["avaxFuji"],
-    contract: newSenderContractInstance("avaxFuji", providers["avaxFuji"]),
+    // contract: newSenderContractInstance("avaxFuji", providers["avaxFuji"]),
+    contract: newSenderContractInstance(),
   },
   maticMumbai: {
     provider: providers["maticMumbai"],
-    contract: newSenderContractInstance(
-      "maticMumbai",
-      providers["maticMumbai"]
-    ),
+    contract: newSenderContractInstance(),
+    // contract: newSenderContractInstance(
+    //   "maticMumbai",
+    //   providers["maticMumbai"]
+    // ),
   },
   opGoerli: {
     provider: providers["opGoerli"],
-    contract: newSenderContractInstance("opGoerli", providers["opGoerli"]),
+    // contract: newSenderContractInstance("opGoerli", providers["opGoerli"]),
+    contract: newSenderContractInstance(),
   },
 };

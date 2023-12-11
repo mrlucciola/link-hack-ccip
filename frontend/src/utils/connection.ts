@@ -4,11 +4,11 @@ import {
   JsonRpcProvider,
   JsonRpcApiProviderOptions,
   Wallet,
+  AbstractProvider,
 } from "ethers";
 import { TestnetId } from "../mobx/data/supportedBlockchains";
-import { senderCcipAbi, senderCcipAddress } from "../mobx/data/contract";
+// import { senderCcipAbi, senderCcipAddress } from "../mobx/data/contract";
 import { connectionInfo } from "../mobx/data/connection";
-import { AbstractProvider } from "ethers";
 
 /** ### Create a wallet with provider using a mnemonic/phrase
  * @todo improve validation
@@ -37,16 +37,20 @@ export const initWalletFromMnemonic = (
 };
 
 export const newSenderContractInstance = (
-  blockchainId: TestnetId, // @todo add address after deploying to testnet
-  provider: AbstractProvider
+  // blockchainId: TestnetId, // @todo add address after deploying to testnet
+  // provider: AbstractProvider
 ): Contract => {
-  const newContract = new Contract(
-    senderCcipAddress[blockchainId],
-    senderCcipAbi,
-    { provider }
-  );
-
-  return newContract;
+  try {
+    // const newContract = new Contract(
+    //   senderCcipAddress[blockchainId],
+    //   senderCcipAbi,
+    //   { provider }
+    // );
+    // return newContract;
+    return {} as Contract;
+  } catch (error) {
+    throw new Error("contract invalid");
+  }
 };
 
 const protocol = "https://";

@@ -5,10 +5,10 @@ import { useBaseStore } from "../../mobx/stores";
 // style
 import Button, { ButtonProps } from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
+import Grid from "@mui/material/Unstable_Grid2/Grid2";
 // import { SxProps } from "@mui/material";
 // components
 import BodyLayout from "../../layouts/BodyLayout";
-import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
 
 // const styleWaves: SxProps = {
 //   backgroundColor: "#60a4db",
@@ -65,7 +65,6 @@ const Home: FC = () => {
   useEffect(() => {
     setNavBack();
     setNavTitle("");
-    setNavTitle("");
     setNavUtils([
       // @todo add notification modal
       {
@@ -85,7 +84,7 @@ const Home: FC = () => {
 
   return (
     <BodyLayout overflow="hidden scroll">
-      <Grid2 container direction="column" pt={1} pl={1} pr={2}>
+      <Grid container direction="column" pt={1} pl={1} pr={2}>
         <MenuButton onClick={() => setCurrentView("portfolio")}>
           <Typography>Portfolio</Typography>
         </MenuButton>
@@ -104,7 +103,7 @@ const Home: FC = () => {
         >
           <Typography>Receive tokens</Typography>
         </MenuButton>
-      </Grid2>
+      </Grid>
     </BodyLayout>
   );
 };
