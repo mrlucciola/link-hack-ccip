@@ -26,10 +26,8 @@ export const initAddress = (
   blockchainId: TestnetId,
   partialTokens: { [key in TokenId]?: Pick<AddrToken, "id" | "amount"> }
 ) => {
-  console.log("init", rootWallet.derivedKeyIdxs.length);
   const derivWallet = rootWallet.deriveChild(rootWallet.derivedKeyIdxs.length);
   rootWallet.derivedKeyIdxs.push(rootWallet.derivedKeyIdxs.length);
-  console.log("after", rootWallet.derivedKeyIdxs.length);
 
   const tokens = {} as { [key in TokenId]: AddrToken };
 

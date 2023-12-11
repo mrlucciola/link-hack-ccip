@@ -5,7 +5,11 @@ import { makeAutoObservable } from "mobx";
 import { RootStore } from ".";
 // interfaces
 import { Contact, StateStore } from "../interfaces";
-import { AddressLookupId, UserAddress } from "../interfaces/address";
+import {
+  AddressLookupId,
+  UserAddress,
+  newAddress,
+} from "../interfaces/address";
 import { UserWallet, WalletLookupId } from "../../mobx/interfaces/wallet";
 import { BaseAddrToken } from "../interfaces/token";
 // @delete seed data
@@ -61,6 +65,20 @@ export class UserStore implements StateStore {
     this.contacts.delete(contactToRemove.value);
   }
 
+  /** ### Add single address to `addresses` collection using root wallet. */
+  addNewAddress(rootWallet: UserWallet) {
+    const newAddrWallet = rootWallet.deriveChild(
+      rootWallet.derivedKeyIdxs.length
+    );
+    const newAddr = newAddress(
+      newAddrWallet.address,
+      "ethSepolia",
+      newAddrWallet,
+      rootWallet.lookupId,
+      ""
+    );
+    this.addresses.set(newAddr.lookupId, newAddr);
+  }
   /** ### Add/update single address to `addresses` collection. */
   setAddress(addrToAddOrSet: UserAddress) {
     this.addresses.set(addrToAddOrSet.lookupId, addrToAddOrSet);

@@ -1,6 +1,7 @@
 import { FC } from "react";
 // state
 import { observer } from "mobx-react-lite";
+import { useBaseStore } from "../../../../mobx/stores";
 // style
 import Avatar from "@mui/material/Avatar";
 import Collapse from "@mui/material/Collapse";
@@ -15,8 +16,10 @@ import { UserAddress } from "../../../../mobx/interfaces/address";
 import { AddrToken } from "../../../../mobx/interfaces/token";
 
 const AddrTokenElem: FC<{ token: AddrToken }> = observer(({ token }) => {
+  const currentRootView = useBaseStore((s) => s.currentView);
+
   return (
-    <ListItem divider dense>
+    <ListItem divider dense component="div" ContainerComponent="div">
       <ListItemAvatar>
         <Avatar sx={{ fontSize: "0.7em", fontWeight: 900 }}>
           {token.label}
@@ -29,7 +32,7 @@ const AddrTokenElem: FC<{ token: AddrToken }> = observer(({ token }) => {
         secondary={token.mktValueFmt}
       />
 
-      <SpendLimit token={token} />
+      {currentRootView === "createTxn" && <SpendLimit token={token} />}
     </ListItem>
   );
 });
@@ -47,7 +50,11 @@ const AddrDetailCollapse: FC<{
   ));
 
   return (
-    <ListItem sx={{ py: 0, pr: 1, pt: 0.5 }} component={"div"}>
+    <ListItem
+      sx={{ py: 0, pr: 1, pt: 0.5 }}
+      component={"div"}
+      ContainerComponent="div"
+    >
       <Collapse in={isOpen} timeout="auto" unmountOnExit sx={{ flex: 1 }}>
         <List component="div" disablePadding>
           {tokenElems}

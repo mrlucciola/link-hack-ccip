@@ -7,11 +7,12 @@ import List from "@mui/material/List";
 // components
 import BodyLayout from "../../layouts/BodyLayout";
 import RootWallets from "./RootWallets";
+import UserAddresses from "./UserAddresses";
 
 /** ### Layout component for Portfolio view
  *
  * Portfolio view renders in the `Body` component, within the `Base` view.
- * 
+ *
  * @todo add a switcher
  */
 const Portfolio: FC = () => {
@@ -34,6 +35,7 @@ const Portfolio: FC = () => {
     <BodyLayout overflow="hidden scroll">
       <List>
         <RootWallets />
+        <UserAddresses />
       </List>
     </BodyLayout>
   );

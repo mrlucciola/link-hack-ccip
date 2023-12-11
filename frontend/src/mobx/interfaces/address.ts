@@ -75,6 +75,7 @@ export const newAddress = (
   value: string,
   blockchainId: TestnetId,
   wallet: HDNodeWallet,
+  rootWalletLookupId: string,
   label: string = "",
   tokens: IAddrTokens<AddrToken> = {} as IAddrTokens<AddrToken>
 ): UserAddress => {
