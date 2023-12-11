@@ -178,7 +178,7 @@ export class UserStore implements StateStore {
     const rootWallet = this.rootWallets.get(rootWalletLookupId);
 
     if (!rootWallet) {
-      console.log(JSON.stringify(inputWithRootWalletLookupId));
+      // console.log(JSON.stringify(inputWithRootWalletLookupId));
       throw new Error(
         `No wallet found for lookupId: ${inputWithRootWalletLookupId}`
       );

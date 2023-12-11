@@ -11,7 +11,6 @@ import BodyLayout from "../../../layouts/BodyLayout";
 import SendAmtField from "./SendAmtField";
 import SendAddressField from "./SendAddressField";
 import ContactSelector from "./ContactSelector";
-// data - @todo move to state DataStore
 import {
   TestnetId,
   supportedBlockchains,

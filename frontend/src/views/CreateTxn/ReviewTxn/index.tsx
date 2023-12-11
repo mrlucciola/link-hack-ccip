@@ -37,6 +37,7 @@ const ReviewTxn: FC = () => {
   const optimizeTokens = useReviewTxnStore((s) => s.optimizeTokens);
 
   useEffect(() => {
+    console.log('going to review')
     // Update the view state
     setNavBack({
       baseView: "createTxn",

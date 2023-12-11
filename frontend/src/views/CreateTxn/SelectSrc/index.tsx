@@ -36,9 +36,10 @@ const SelectSrc: FC = () => {
   useEffect(() => {
     setNavBack({
       baseView: "createTxn",
-      subView: "reviewTxn",
+      subView: "selectRecipient",
       navTo: () => setCurrentView("selectRecipient"),
     });
+    
   }, []);
 
   return (

@@ -22,9 +22,6 @@ import { useUserStore } from "../../../mobx/stores";
 const AddrElem: FC<{ addr: UserAddress }> = ({ addr }) => {
   const [isOpen, setIsOpen] = useState(false);
   const getRootWallet = useUserStore((s) => s.getRootWallet);
-  console.log("getting:", addr.label);
-  console.log("lookup :", addr.lookupId);
-  console.log("wallet :", addr.rootWalletLookupId);
   const walletAlias = getRootWallet(addr).alias;
 
   // event handlers
