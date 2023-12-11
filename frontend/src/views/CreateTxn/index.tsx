@@ -5,7 +5,7 @@ import { useCreateTxnStore, useUserStore } from "../../mobx/stores";
 // components
 import SelectRecipient from "./SelectRecipient";
 import SelectSrc from "./SelectSrc";
-import ReviewTxn from "./ReviewTxn/ConfirmSubmitButton";
+import ReviewTxn from "./ReviewTxn";
 // seed - @todo @delete
 import { userAddrsToEnable } from "../../mobx/data/seed/enabledAddrs";
 
@@ -51,8 +51,8 @@ const CreateTxn: FC = () => {
     // seed create-txn:
     userAddrsToEnable.forEach(({ addr, blockchainId, tokenId, amt }) => {
       // set form 1 - dst
-      setSendAmt("80000");
-      setSendAddr("0xd0xk3nf8ww");
+      setSendAmt("800");
+      setSendAddr("0x8F4FbBC49152163cBde8b0dA5B4cf6F5224221D4");
       // set form 2 - src
       const userAddr = addresses.get(`${blockchainId}-${addr}`)!;
       if (!userAddr) {

@@ -29,7 +29,7 @@ const SendAddressField: FC = () => {
   const bcElems = Object.values(supportedBlockchains).map((bc, idx) => {
     return (
       <MenuItem value={bc.id} key={`${bc.id}${idx}`}>
-        {bc.id.toLocaleUpperCase()}
+        {bc.label}
       </MenuItem>
     );
   });
@@ -49,7 +49,7 @@ const SendAddressField: FC = () => {
         label="Enter address"
         variant="outlined"
         autoFocus
-        sx={{ flex: 1 }}
+        sx={{ flex: 1, minWidth: "60%" }}
         // input
         value={sendAddr}
         onChange={handleTextChange}
@@ -61,9 +61,13 @@ const SendAddressField: FC = () => {
       <Select
         size="small"
         margin="none"
-        // label="Blockchain"
         value={sendBlockchain}
         onChange={handleBlockchainChange}
+        sx={{
+          overflow: "hidden",
+          textWrap: "nowrap",
+          textOverflow: "ellipsis",
+        }}
       >
         {bcElems}
       </Select>
