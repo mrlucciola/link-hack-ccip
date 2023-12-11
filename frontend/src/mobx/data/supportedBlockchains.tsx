@@ -36,7 +36,7 @@ export const supportedBlockchains: {
     id: "ethSepolia",
     label: "Ethereum (Sepolia)",
     symbol: "eth",
-    img: { sm: "", md: "" },
+    img: { sm: "https://s2.coinmarketcap.com/static/img/coins/64x64/1027.png", md: "" },
     contracts: {
       walletSrc: { address: "<walletSrc not set>" },
       walletDst: { address: "<walletDst not set>" },
@@ -56,7 +56,7 @@ export const supportedBlockchains: {
     id: "opGoerli",
     label: "Optimism (Goerli)",
     symbol: "op",
-    img: { sm: "", md: "" },
+    img: { sm: "https://external-content.duckduckgo.com/ip3/www.optimism.io.ico", md: "" },
     contracts: {
       walletSrc: { address: "<walletSrc not set>" },
       walletDst: { address: "<walletDst not set>" },
@@ -76,7 +76,7 @@ export const supportedBlockchains: {
     id: "maticMumbai",
     label: "Polygon (Mumbai)",
     symbol: "matic",
-    img: { sm: "", md: "" },
+    img: { sm: "https://external-content.duckduckgo.com/ip3/polygon.technology.ico", md: "" },
     contracts: {
       walletSrc: { address: "<walletSrc not set>" },
       walletDst: { address: "<walletDst not set>" },
@@ -96,7 +96,7 @@ export const supportedBlockchains: {
     id: "avaxFuji",
     label: "Avalanche (Fuji)",
     symbol: "avax",
-    img: { sm: "", md: "" },
+    img: { sm: "https://external-content.duckduckgo.com/ip3/www.avax.network.ico", md: "" },
     contracts: {
       walletSrc: { address: "<walletSrc not set>" },
       walletDst: { address: "<walletDst not set>" },
@@ -133,10 +133,10 @@ export const fetchGasPrice = async (_blockchainId: TestnetId) => {
 export const fetchTxnCost = async (blockchainId: TestnetId) => {
   // @todo replace with real fetch
   const txnCostLookup: { [key in TestnetId]: number } = {
-    ethSepolia: 1,
-    opGoerli: 1,
-    maticMumbai: 1,
-    avaxFuji: 1,
+    ethSepolia: 1.04,
+    opGoerli: 0.005,
+    maticMumbai: 0.01,
+    avaxFuji: 0.003,
   };
 
   return txnCostLookup[blockchainId];

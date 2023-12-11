@@ -48,7 +48,7 @@ export class BaseStore implements StateStore {
 
   /////////////////////////////////////////////////////////
   ////////////////////// OBSERVABLES //////////////////////
-  currentView: BaseView = "portfolio"; // default: home
+  currentView: BaseView = "home"; // default: home
   navBack?: {
     // @note So far this prop seems somewhat unnecessary. Will likely remove soon.
     baseView: BaseView;

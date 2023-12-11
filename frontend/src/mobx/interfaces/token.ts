@@ -1,6 +1,11 @@
 import { fmtMktValue } from "../../utils/fmt";
 import { TestnetId } from "../data/supportedBlockchains";
-import { TokenId, lookupTokenLabel, lookupTokenMktValue } from "../data/tokens";
+import {
+  TokenData,
+  TokenId,
+  getTokenInfo,
+  lookupTokenMktValue,
+} from "../data/tokens";
 import { AddressLookupId } from "./address";
 
 export type TokenLookupId = `${string}-${AddressLookupId}`;
@@ -22,10 +27,13 @@ export abstract class BaseAddrToken {
     return `${this.blockchainId}-${this.addrId}`;
   }
   get label(): string {
-    return lookupTokenLabel(this.id);
+    return this.tokenInfo.label;
   }
   get mktValueFmt(): string {
     return fmtMktValue(this.mktValue);
+  }
+  get tokenInfo(): TokenData {
+    return getTokenInfo(this.id);
   }
 }
 

@@ -9,12 +9,13 @@ import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
 import ListItemText from "@mui/material/ListItemText";
+import Paper from "@mui/material/Paper";
 // components
 import SpendLimit from "./SpendLimit";
 // interfaces
 import { UserAddress } from "../../../../mobx/interfaces/address";
 import { AddrToken } from "../../../../mobx/interfaces/token";
-import Paper from "@mui/material/Paper";
+import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
 
 const AddrTokenElem: FC<{ token: AddrToken }> = observer(({ token }) => {
   const currentRootView = useBaseStore((s) => s.currentView);
@@ -25,12 +26,32 @@ const AddrTokenElem: FC<{ token: AddrToken }> = observer(({ token }) => {
       dense
       component={Paper}
       ContainerComponent="div"
-      sx={{ backgroundColor: "#f4f6fb" }}
+      sx={{ backgroundColor: "#f4f6fb", pl: 1 }}
     >
       <ListItemAvatar>
-        <Avatar sx={{ fontSize: "0.7em", fontWeight: 900 }}>
-          {token.label}
-        </Avatar>
+        <Grid2
+          container
+          direction="column"
+          wrap="nowrap"
+          justifyContent="center"
+          alignItems="center"
+        >
+          <Avatar
+            sx={{
+              fontSize: "0.7em",
+              fontWeight: 900,
+              height: "25px",
+              width: "25px",
+            }}
+            src={token.tokenInfo.img}
+            component="div"
+          >
+            {token.label}
+          </Avatar>
+          <Grid2 fontSize="0.7em" fontWeight={900} component="div">
+            {token.tokenInfo.label}
+          </Grid2>
+        </Grid2>
       </ListItemAvatar>
 
       <ListItemText

@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useState } from "react";
 // state
 import { observer } from "mobx-react-lite";
 import { useReviewTxnStore } from "../../../mobx/stores";
@@ -10,25 +10,24 @@ import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { CollapseList, CollapseSubheader } from "./utils/components";
 
 const FooterSum: FC = observer(() => {
+  const totalFees = useReviewTxnStore((s) => s.totalFees);
   const totalFeesFmt = useReviewTxnStore((s) => s.totalFeesFmt);
+  const totalFeesStr = totalFees < 0.01 ? "< $0.01" : totalFeesFmt;
 
   return (
     <Box p={1}>
-      <Typography variant="subtitle1">Total: {totalFeesFmt}</Typography>
+      <Typography variant="subtitle1" fontWeight={800}>
+        Total fees: {totalFeesStr}
+      </Typography>
     </Box>
   );
 });
 
-const columns: GridColDef[] = [{ field: "blockchain" }, { field: "txnCost" }];
+const columns: GridColDef[] = [{ field: "blockchain" }, { field: "txnCostFmt" }];
 
 const FeesItems: FC<{ isOpen: boolean }> = observer(({ isOpen }) => {
-  const buildFeeRowItems = useReviewTxnStore((s) => s.buildFeeRowItems);
   const feeRowItems = useReviewTxnStore((s) => s.feeRowItems);
   const totalFees = useReviewTxnStore((s) => s.totalFees);
-
-  useEffect(() => {
-    buildFeeRowItems();
-  }, []);
 
   return (
     <CollapseList isOpen={isOpen}>

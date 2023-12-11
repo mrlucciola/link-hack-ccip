@@ -10,8 +10,8 @@ import ContactSearch from "./ContactSearch";
 import ContactList from "./ContactList";
 
 /**
- * @todo if click on contact w/ one addr, add to state and proceed
- * @todo if click on contact w/ mult addr, open modal/drawer to show the list of addrs
+ * If click on contact w/ one addr, add to state and proceed
+ * If click on contact w/ mult addr, open modal/drawer to show the list of addrs
  */
 const ContactSelector: FC = () => {
   const isContactsOpen = useCreateTxnStore((s) => s.isContactsOpen);

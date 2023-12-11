@@ -46,6 +46,7 @@ const SendAddressField: FC = () => {
       <TextField
         size="small"
         margin="none"
+        autoComplete="off"
         label="Enter address"
         variant="outlined"
         autoFocus

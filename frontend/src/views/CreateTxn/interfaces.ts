@@ -84,4 +84,5 @@ export const newEnabledAddrToken = (
 
 export interface StagedAddrToken extends Omit<EnabledAddrToken, "isEnabled"> {
   fee: number;
+  sendAmt: number;
 }

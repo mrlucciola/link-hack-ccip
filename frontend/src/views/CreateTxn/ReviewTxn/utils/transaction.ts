@@ -18,7 +18,7 @@ export async function buildAndSignTxn(
   /** Contains the signer + provider */
   srcToken: StagedAddrToken,
   /** Contains the signer + provider */
-  dstAddress: BaseAddress
+  dstAddress: BaseAddress | { value: string; blockchainId: TestnetId }
 ): Promise<Transaction> {
   console.log("contract addr:", await contract.getAddress());
   console.log("amountsToSend", amtToSendRemaining);

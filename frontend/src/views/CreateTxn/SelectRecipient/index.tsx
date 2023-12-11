@@ -20,8 +20,8 @@ import {
  * @todo use ethers
  * @todo move to state
  */
-const validateAddr = (_addr: string) => {
-  return true;
+const validateAddr = (addr: string) => {
+  return !!addr;
 };
 /** ### Validate blockchain
  * @todo use ethers

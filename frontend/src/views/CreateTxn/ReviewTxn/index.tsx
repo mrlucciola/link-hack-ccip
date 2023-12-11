@@ -37,7 +37,6 @@ const ReviewTxn: FC = () => {
   const optimizeTokens = useReviewTxnStore((s) => s.optimizeTokens);
 
   useEffect(() => {
-    console.log('going to review')
     // Update the view state
     setNavBack({
       baseView: "createTxn",
@@ -47,9 +46,7 @@ const ReviewTxn: FC = () => {
     setNavTitle("Review transaction");
 
     // Calculate optimal set of addresses to send from
-    console.log("(pre) optimizing");
     optimizeTokens();
-    console.log("(post) optimized");
   }, []);
 
   return (
