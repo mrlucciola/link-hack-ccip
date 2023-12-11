@@ -65,15 +65,19 @@ export class CreateTxnStore implements StateStore {
           existingAddr.value,
           existingAddr.blockchainId,
           existingAddr.wallet,
+          existingAddr.rootWalletLookupId,
           { ...existingAddr.tokens, [t.id]: t }
         );
 
         enabledAddrsMap.set(t.addrLookupId, updatedAddr);
       } else {
+        const userAddr = this.root.user.getUserAddress(t);
+
         const updatedAddr: EnabledAddr = newEnabledAddr(
           t.addrId,
           t.blockchainId,
-          this.root.user.getWallet(t),
+          userAddr.wallet,
+          userAddr.rootWalletLookupId,
           { [t.id]: t }
         );
         enabledAddrsMap.set(t.addrLookupId, updatedAddr);

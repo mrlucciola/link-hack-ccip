@@ -1,5 +1,5 @@
 import { Contact } from "../../interfaces";
-import { UserAddress } from "../../interfaces/address";
+import { UserAddress, newAddress } from "../../interfaces/address";
 import { AddrToken, newAddrToken } from "../../interfaces/token";
 import { UserWallet, newWalletFromMnemonic } from "../../interfaces/wallet";
 import { TestnetId } from "../supportedBlockchains";
@@ -42,12 +42,13 @@ export const initAddress = (
     tokens[id] = newToken;
   });
 
-  return new UserAddress(
+  return newAddress(
     derivWallet.address,
     blockchainId,
     derivWallet,
-    tokens,
-    label
+    rootWallet.lookupId,
+    label,
+    tokens
   );
 };
 

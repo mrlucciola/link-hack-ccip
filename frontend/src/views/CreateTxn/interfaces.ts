@@ -8,6 +8,7 @@ import {
   IAddrTokens,
 } from "../../mobx/interfaces/address";
 import { BaseAddrToken } from "../../mobx/interfaces/token";
+import { WalletLookupId } from "../../mobx/interfaces/wallet";
 
 export class Recipient {
   constructor(public contact: Contact, public address: UserAddress) {}
@@ -20,9 +21,10 @@ export class EnabledAddr extends BaseUserAddress<EnabledAddrToken> {
     value: string,
     blockchainId: TestnetId,
     wallet: HDNodeWallet,
+    rootWalletLookupId: WalletLookupId,
     tokens: IAddrTokens<EnabledAddrToken>
   ) {
-    super(value, blockchainId, wallet, tokens);
+    super(value, blockchainId, wallet, rootWalletLookupId, tokens);
   }
 
   /** Enabled amount, not holdings */
@@ -43,12 +45,14 @@ export const newEnabledAddr = (
   value: string,
   blockchainId: TestnetId,
   wallet: HDNodeWallet,
+  rootWalletLookupId: WalletLookupId,
   tokens?: IAddrTokens<EnabledAddrToken>
 ): EnabledAddr => {
   return new EnabledAddr(
     value,
     blockchainId,
     wallet,
+    rootWalletLookupId,
     tokens || ({} as IAddrTokens<EnabledAddrToken>)
   );
 };

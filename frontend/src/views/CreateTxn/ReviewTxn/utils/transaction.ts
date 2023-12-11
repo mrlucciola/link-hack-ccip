@@ -28,7 +28,7 @@ export async function buildAndSignTxn(
   // const unsignedTxnData = contract.methods
   //   .sendAssets(dstAddress.value, dstAddress.blockchainId, token, amt, decimals)
   //   .encodeABI();
-  const tokenWallet: HDNodeWallet = this.root.user.getWallet(srcToken);
+  const tokenWallet: HDNodeWallet = this.root.user.getAddrWallet(srcToken);
 
   const unsignedTxn: TransactionLike<string> = {
     data: unsignedTxnData,

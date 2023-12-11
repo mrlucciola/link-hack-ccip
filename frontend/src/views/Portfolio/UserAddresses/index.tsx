@@ -4,7 +4,7 @@ import { observer } from "mobx-react-lite";
 import { useUserStore } from "../../../mobx/stores";
 // style
 import Grid from "@mui/material/Unstable_Grid2/Grid2";
-import Button from "@mui/material/Button";
+// import Button from "@mui/material/Button";
 // components
 import {
   CollapseList,
@@ -20,10 +20,15 @@ const UserAddresses: FC = () => {
   // const addNewAddress = useUserStore((s) => s.addNewAddress);
 
   // event handlers
-  const onClickCreateNewAddress = (_: any) => {
-    // addNewAddress()
-  };
+  // const onClickCreateNewAddress = (_: any) => {
+  //   // addNewAddress()
+  // };
 
+  // Build wallet elems
+  // const walletElems: JSX.Element[] = [];
+  // addresses.forEach((a) => {
+  //   walletElems.push(<AddrElem addr={a} key={`addr-${a.lookupId}`} />);
+  // });
   // Build address elems
   const addrElems: JSX.Element[] = [];
   addresses.forEach((a) => {
@@ -39,13 +44,13 @@ const UserAddresses: FC = () => {
       />
       <CollapseList isOpen={isOpen}>
         <Grid container direction="row" wrap="nowrap" flex={1}>
-          <Button
+          {/* <Button
             variant="contained"
             onClick={onClickCreateNewAddress}
             sx={{ px: 1, textTransform: "none", flex: 1 }}
           >
             Create new address
-          </Button>
+          </Button> */}
         </Grid>
         {addrElems}
       </CollapseList>
