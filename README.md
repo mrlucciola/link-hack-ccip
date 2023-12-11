@@ -1,4 +1,6 @@
-# FLIP Wallet - User-friendly cross-chain wallet powered by CCIP
+# FLIP Wallet
+**User-friendly cross-chain wallet powered by CCIP**
+
 
 ## About
 Produced as part of Chainlink's Constellation 2023 hackathon.
