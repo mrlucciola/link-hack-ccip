@@ -36,6 +36,11 @@ export class UserStore implements StateStore {
     AddressLookupId,
     UserAddress
   >();
+  /** Tokens within all of a user's accounts */
+  tokenHoldings: Map<AddressLookupId, UserAddress> = new Map<
+    AddressLookupId,
+    UserAddress
+  >();
   // @todo remove the seed data when done testing
   // @todo add ContactLookupId
   contacts: Map<string, Contact> = seedContactsMap;

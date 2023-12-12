@@ -7,8 +7,8 @@ import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import ListItemSecondaryAction from "@mui/material/ListItemSecondaryAction";
 import TextField from "@mui/material/TextField";
-import { Avatar } from "@mui/material";
-import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
+import Avatar from "@mui/material/Avatar";
+import Grid from "@mui/material/Unstable_Grid2/Grid2";
 // components
 import { CollapseList, CollapseSubheader } from "./utils/components";
 // utils
@@ -23,14 +23,14 @@ const OverviewItems: FC<{ isOpen: boolean }> = observer(({ isOpen }) => {
 
   const primary = fmtCenterEllipsis(sendAddr, 6);
   const secondary = (
-    <Grid2 container component="span">
+    <Grid container component="span">
       {sendBcInfo.symbol.toLocaleUpperCase()}
       <Avatar
         src={sendBcInfo.img?.sm}
         sx={{ width: "20px", height: "20px", ml: 1 }}
         component="span"
       />
-    </Grid2>
+    </Grid>
   );
 
   return (

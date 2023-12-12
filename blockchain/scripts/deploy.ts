@@ -6,9 +6,7 @@ async function main() {
 
   const lockedAmount = ethers.parseEther("0.001");
 
-  const lock = await ethers.deployContract("Lock", [unlockTime], {
-    value: lockedAmount,
-  });
+  const lock = await ethers.deployContract("TreasuryCCIP");
 
   await lock.waitForDeployment();
 

@@ -8,6 +8,7 @@ import List from "@mui/material/List";
 import BodyLayout from "../../layouts/BodyLayout";
 import RootWallets from "./RootWallets";
 import UserAddresses from "./UserAddresses";
+import TokenHoldings from "./TokenHoldings";
 
 /** ### Layout component for Portfolio view
  *
@@ -36,6 +37,7 @@ const Portfolio: FC = () => {
       <List>
         <RootWallets />
         <UserAddresses />
+        <TokenHoldings />
       </List>
     </BodyLayout>
   );
