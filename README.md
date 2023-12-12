@@ -1,8 +1,10 @@
-# FLIP Wallet
+# FLIP Wallet 
 **User-friendly cross-chain wallet powered by CCIP**
 
+<img src="https://github.com/mrlucciola/link-hack-ccip/assets/94624740/317f24a2-8f40-4cca-877d-b62612c5d49b" width="100" height="100" alt="dolphin_">
 
 ## About
+
 Produced as part of Chainlink's Constellation 2023 hackathon.
 Flip revolutionizes the web3 experience by streamlining transactions, ensuring a seamless interaction for users of various expertise levels using Chainlink's Cross-Chain Interoperability Protocol (CCIP).
 
