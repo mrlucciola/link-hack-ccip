@@ -11,12 +11,16 @@ import {
   CollapseSubheader,
 } from "../../CreateTxn/ReviewTxn/utils/components";
 import AddrElem from "./AddrElem";
+import { trace } from "mobx";
 
 /** ### Collapsible view for a user's addresses, grouped by wallet
  */
 const UserAddresses: FC = () => {
   const [isOpen, setIsOpen] = useState(true); // @todo default: false
   const addresses = useUserStore((s) => s.addresses);
+  const rootWallets = useUserStore((s) => s.rootWallets);
+  trace(true)
+  // console.log("USERADDRESS:");
   // const addNewAddress = useUserStore((s) => s.addNewAddress);
 
   // event handlers
@@ -32,7 +36,9 @@ const UserAddresses: FC = () => {
   // Build address elems
   const addrElems: JSX.Element[] = [];
   addresses.forEach((a) => {
-    addrElems.push(<AddrElem addr={a} key={`addr-${a.lookupId}`} />);
+    addrElems.push(
+      <AddrElem addr={a} rootWallets={rootWallets} key={`addr-${a.lookupId}`} />
+    );
   });
 
   return (

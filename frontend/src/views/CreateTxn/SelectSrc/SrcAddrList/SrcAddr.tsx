@@ -4,20 +4,19 @@ import { observer } from "mobx-react-lite";
 import { useCreateTxnStore } from "../../../../mobx/stores";
 // style
 import Avatar from "@mui/material/Avatar";
-import Chip from "@mui/material/Chip";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
+import Grid from "@mui/material/Unstable_Grid2/Grid2";
 // components
 import AddrDetailCollapse from "./AddrDetailCollapse";
 // interfaces
 import { UserAddress } from "../../../../mobx/interfaces/address";
 // utils
 import { fmtCenterEllipsis } from "../../../../layouts/Text";
-import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
 
 /** ### Shows controls and info about User's address
  *
@@ -34,7 +33,7 @@ const SrcAddr: FC<{ addr: UserAddress }> = ({ addr }) => {
   const toggleCollapse = () => setIsCollapseOpen(!isCollapseOpen);
   // format values
   const addrFmt = (
-    <Grid2 container direction="row" wrap="nowrap" component="span">
+    <Grid container direction="row" wrap="nowrap" component="span">
       {fmtCenterEllipsis(addr.value)}
 
       <Avatar
@@ -44,7 +43,7 @@ const SrcAddr: FC<{ addr: UserAddress }> = ({ addr }) => {
       >
         {addr.blockchainInfo.symbol.toLocaleUpperCase()}
       </Avatar>
-    </Grid2>
+    </Grid>
   );
   const primaryText = addr.label || addrFmt;
   const secondaryText = addr.label ? addrFmt : undefined;

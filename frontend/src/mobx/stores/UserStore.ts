@@ -1,6 +1,6 @@
 import { HDNodeWallet } from "ethers";
 // state
-import { makeAutoObservable } from "mobx";
+import { action, makeAutoObservable, observable } from "mobx";
 // stores
 import { RootStore } from ".";
 // interfaces
@@ -11,7 +11,11 @@ import {
   UserAddress,
   newAddress,
 } from "../interfaces/address";
-import { UserWallet, WalletLookupId } from "../../mobx/interfaces/wallet";
+import {
+  UserWallet,
+  WalletLookupId,
+  newUserRootWallet,
+} from "../../mobx/interfaces/wallet";
 import { BaseAddrToken } from "../interfaces/token";
 // @delete seed data
 import { seedContactsMap } from "../data/seed/seedUser";
@@ -28,11 +32,16 @@ export class UserStore implements StateStore {
 
   /////////////////////////////////////////////////////////
   ////////////////////// OBSERVABLES //////////////////////
-  rootWallets: Map<WalletLookupId, UserWallet> = new Map<
+  @observable rootWallets: Map<WalletLookupId, UserWallet> = new Map<
     WalletLookupId,
     UserWallet
   >();
-  addresses: Map<AddressLookupId, UserAddress> = new Map<
+  @observable addresses: Map<AddressLookupId, UserAddress> = new Map<
+    AddressLookupId,
+    UserAddress
+  >();
+  /** Tokens within all of a user's accounts */
+  tokenHoldings: Map<AddressLookupId, UserAddress> = new Map<
     AddressLookupId,
     UserAddress
   >();
@@ -120,20 +129,31 @@ export class UserStore implements StateStore {
       walletsToAddOrSet.forEach((w) => this.rootWallets.set(w.lookupId, w));
     }
   }
+
+  @action
   setWalletAlias(walletLookupId: WalletLookupId, newAlias: string) {
     const wallet = this.rootWallets.get(walletLookupId);
 
     if (!wallet) throw new Error(`No wallet for lookupId: ${walletLookupId}`);
 
+    // const newWallet: UserWallet = newUserRootWallet(
+    //   wallet,
+    //   newAlias,
+    //   wallet.derivedKeyIdxs
+    // );
+    // console.log("setting wallet alias - ", newAlias);
+    // this.rootWallets.set(walletLookupId, newWallet);
     wallet.alias = newAlias;
-
-    this.rootWallets.set(walletLookupId, wallet);
   }
   //////////////////////// ACTIONS ////////////////////////
   /////////////////////////////////////////////////////////
 
   /////////////////////////////////////////////////////////
   //////////////////////// HELPERS ////////////////////////
+  getWalletAlias(addr: UserAddress): string | undefined {
+    // console.log("helllo", this.rootWallets.get(addr.rootWalletLookupId));
+    return this.rootWallets.get(addr.rootWalletLookupId)?.alias;
+  }
   /** Get a `UserAddress` instance from an `AddrToken` instance:
    * 1. The address string;
    * 1. An instance of the Token type;

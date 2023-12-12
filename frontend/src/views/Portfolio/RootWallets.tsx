@@ -21,8 +21,10 @@ import {
 } from "../CreateTxn/ReviewTxn/utils/components";
 // interfaces
 import { UserWallet, newUserWallet } from "../../mobx/interfaces/wallet";
+import { trace } from "mobx";
 
 const WalletLabel: FC<{ wallet: UserWallet }> = observer(({ wallet }) => {
+  trace()
   const setWalletAlias = useUserStore((s) => s.setWalletAlias);
   const [isEditing, setIsEditing] = useState(false);
   const [textField, setTextField] = useState(wallet.alias);
@@ -111,7 +113,7 @@ const WalletElem: FC<{ wallet: UserWallet }> = observer(({ wallet }) => {
   const secondaryText = (
     <>
       {addrCt}
-      {addrCt}
+      {/* {addrCt} */}
     </>
   );
 

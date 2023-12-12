@@ -7,12 +7,13 @@ import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import Collapse from "@mui/material/Collapse";
 import List from "@mui/material/List";
+import { observer } from "mobx-react-lite";
 
 export const CollapseSubheader: FC<{
   isOpen: boolean;
   setIsOpen: (input: boolean) => void;
   title: string;
-}> = ({ isOpen, setIsOpen, title }) => {
+}> = observer(({ isOpen, setIsOpen, title }) => {
   return (
     <ListSubheader sx={{ px: 0 }} component="div">
       <ListItemButton
@@ -28,12 +29,12 @@ export const CollapseSubheader: FC<{
       </ListItemButton>
     </ListSubheader>
   );
-};
+});
 
 export const CollapseList: FC<{
   isOpen: boolean;
   children: React.ReactNode;
-}> = ({ isOpen, children }) => {
+}> = observer(({ isOpen, children }) => {
   return (
     <Collapse in={isOpen} timeout={250} sx={{ flex: 1 }}>
       <List component="div" disablePadding>
@@ -41,4 +42,4 @@ export const CollapseList: FC<{
       </List>
     </Collapse>
   );
-};
+});

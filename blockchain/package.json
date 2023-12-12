@@ -2,6 +2,8 @@
   "name": "blockchain",
   "packageManager": "yarn@3.6.4",
   "devDependencies": {
+    "@chainlink/contracts": "^0.8.0",
+    "@chainlink/contracts-ccip": "^1.2.1",
     "@chainlink/env-enc": "^1.0.5",
     "@nomicfoundation/hardhat-chai-matchers": "^2.0.2",
     "@nomicfoundation/hardhat-ethers": "^3.0.5",
@@ -24,6 +26,7 @@
   },
   "scripts": {
     "test:local": "REPORT_GAS=true yarn hardhat test",
-    "deploy:local": "yarn hardhat run --network hardhat scripts/deploy.ts"
+    "deploy:local": "yarn hardhat run --network hardhat scripts/deploy.ts",
+    "compile": "npx hardhat compile --force"
   }
 }
