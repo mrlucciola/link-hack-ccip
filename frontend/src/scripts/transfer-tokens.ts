@@ -22,7 +22,7 @@ const transferTokens = async (
   tokenAddress: string,
   amount: BigNumberish,
   feeTokenAddress?: string
-): Promise<void> => {
+): Promise<string> => {
   /* 
   ==================================================
       Section: INITIALIZATION
@@ -304,6 +304,7 @@ const transferTokens = async (
     );
     clearInterval(pollingId);
   }, TIMEOUT);
+  return messageId;
 };
 
 export default transferTokens;
